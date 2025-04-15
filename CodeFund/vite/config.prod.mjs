@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 
 const phasermsg = () => {
     return {
@@ -11,18 +10,14 @@ const phasermsg = () => {
             const line = "---------------------------------------------------------";
             const msg = `❤️❤️❤️ Tell us about your game! - games@phaser.io ❤️❤️❤️`;
             process.stdout.write(`${line}\n${msg}\n${line}\n`);
-
+            
             process.stdout.write(`✨ Done ✨\n`);
         }
     }
-}
+}   
 
 export default defineConfig({
     base: './',
-    plugins: [
-        react(),
-        phasermsg()
-    ],
     logLevel: 'warning',
     build: {
         rollupOptions: {
@@ -42,5 +37,11 @@ export default defineConfig({
                 comments: false
             }
         }
-    }
+    },
+    server: {
+        port: 8080
+    },
+    plugins: [
+        phasermsg()
+    ]
 });

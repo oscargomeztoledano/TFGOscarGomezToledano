@@ -1,5 +1,5 @@
-const fs = require('fs');
-const https = require('https');
+import * as fs from 'fs';
+import * as https from 'https';
 
 const main = async () => {
     const args = process.argv.slice(2);
