@@ -6,6 +6,13 @@ export class MainMenu extends Scene
     {
         super('MainMenu');
     }
+    preload ()
+    {
+        this.load.setPath('assets');
+        this.load.image('background', 'bg.png');
+        this.load.image('logo', 'logo.png');
+
+    }
 
     create ()
     {
@@ -19,7 +26,13 @@ export class MainMenu extends Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        this.input.once('pointerdown', () => {
+        this.add.text(512, 540, 'Press Enter', {
+            fontFamily: 'Arial Black', fontSize: 20, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5);
+        
+        this.input.keyboard.once('keydown-ENTER', () => {
 
             this.scene.start('Game');
 
