@@ -1,7 +1,7 @@
 import { Game } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
-import { Level1 } from './scenes/world1/Level1';
+import { Level1 } from './scenes/world1/level1';
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
@@ -13,7 +13,8 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false,
+            debug: true,
+            
             gravity: { y: 0 }
         }
     },
@@ -30,7 +31,10 @@ const config = {
         MainMenu,
         Game,
         GameOver,
-    ]
+    ],
+    dom: {
+        createContainer: true  // <-- ESTO ES CLAVE
+    }
 };
 
 export default new Phaser.Game(config);

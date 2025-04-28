@@ -1,0 +1,58 @@
+{
+    "anslevel1": [
+        {
+            "id": "hola",
+            "answers": [
+                { "body": "string var ='hola' ", "isCorrect": true },
+                { "body": "int var = hola ", "isCorrect": false },
+                { "body": "string var = hola ", "isCorrect": false },
+                { "body": "float var = 'hola' ", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "True",
+            "answers": [
+                { "body": "bool var = true", "isCorrect": true },
+                { "body": "bool var = 1", "isCorrect": true },
+                { "body": "int var = true", "isCorrect": false },
+                { "body": "string var = 'true'", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "mundo",
+            "answers": [
+                { "body": "int var = 'mundo'", "isCorrect": false },
+                { "body": "strn var = mundo", "isCorrect": false },
+                { "body": "string var = 'mundo'", "isCorrect": true },
+                { "body": "float  var = mundo", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "200",
+            "answers": [
+                { "body": "int = 200", "isCorrect": false },
+                { "body": "float== '200'", "isCorrect": false },
+                { "body": "string = 200", "isCorrect": false },
+                { "body": "int = 200", "isCorrect": true }
+            ]
+        },
+        {
+            "id": "30,5",
+            "answers": [
+                { "body": "float = 30,5", "isCorrect": true },
+                { "body": "string = '30,5'", "isCorrect": false },
+                { "body": "int = 30,5", "isCorrect": false },
+                { "body": "bool = '30,5'", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "0",
+            "answers": [
+                { "body": "int var = 0", "isCorrect": true },
+                { "body": "bool var = 0", "isCorrect": true },
+                { "body": "floar var = '0'", "isCorrect": false },
+                { "body": "string var = 0", "isCorrect": false }
+            ]
+        }
+    ]
+}
