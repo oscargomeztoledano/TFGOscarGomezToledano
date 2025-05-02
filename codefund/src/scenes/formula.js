@@ -32,11 +32,23 @@ export function crearFormula(scene){
     ).setOrigin(0.5);
 }
 
-export function generarComponente (scene,x,y,element){
-    scene.collection.add(scene.add.text(x, y, element, {
-        fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-        stroke: '#000000', strokeThickness: 4
-    }).setOrigin(0, 1))
+export function generarComponente (scene){
+    const componentes = scene.componentes
+
+    componentes.forEach(componente => {
+        scene.collection.add(scene.add.text(
+            componente.x, 
+            componente.y, 
+            componente.value, 
+            {
+                fontFamily: 'Arial', 
+                fontSize: 24, 
+                color: '#ffffff',
+                stroke: '#000000', 
+                strokeThickness: 4
+            }
+        ).setOrigin(0, 1));
+    });
 }
 
 export function checkformula(scene){
