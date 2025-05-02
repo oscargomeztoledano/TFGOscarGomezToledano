@@ -1,7 +1,8 @@
-import { Game } from './scenes/Game';
-import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Level1 } from './scenes/world1/level1';
+import { Level2 } from './scenes/world1/level2';  
+import { Level3 } from './scenes/world1/level3';
+import { Preloader } from './preloader'; 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
@@ -27,10 +28,11 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [
+        Preloader,
         Level1,
+        Level2,
+        Level3,
         MainMenu,
-        Game,
-        GameOver,
     ],
     dom: {
         createContainer: true  // <-- ESTO ES CLAVE

@@ -1,31 +1,31 @@
 const SPRITESHEETS = [
     {
         key: 'player_idle',
-        path: 'assets/characters/1/Idle.png',
+        path: 'assets/characters/4/Idle.png',
         frameWidth: 32,
         frameHeight: 32, 
     },
     {
         key: 'player_run',
-        path: 'assets/characters/1/Run.png',
+        path: 'assets/characters/4/Run.png',
         frameWidth: 32,
         frameHeight: 32,
     },
     {
         key: 'player_jump',
-        path: 'assets/characters/1/Jump.png',
+        path: 'assets/characters/4/Jump.png',
         frameWidth: 32,
         frameHeight: 32,
     },
     {
         key: 'player_fall',
-        path: 'assets/characters/1/Fall.png',
+        path: 'assets/characters/4/Fall.png',
         frameWidth: 32,
         frameHeight: 32,
     },
     {
         key: 'player_hit',
-        path: 'assets/characters/1/Hit.png',
+        path: 'assets/characters/4/Hit.png',
         frameWidth: 32,
         frameHeight: 32,
     },
