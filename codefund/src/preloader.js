@@ -27,6 +27,7 @@ export class Preloader extends Scene {
         this.load.image('tile1', '/assets/ui/tiles/tile3.png')
         this.load.image('tile0', '/assets/ui/tiles/tile4.png')
         this.load.image('tile2', '/assets/ui/tiles/tile0.png')
+        this.load.image('tile3', '/assets/ui/tiles/tile2.png')
         this.load.image('E0', '/assets/ui/keyboard/keyboard_e.png')
         this.load.image('E1', '/assets/ui/keyboard/keyboard_e_outline.png')
         this.load.image('ans0', '/assets/ui/tiles/ans0.png')
@@ -36,10 +37,15 @@ export class Preloader extends Scene {
         this.load.image('cross', '/assets/ui/tiles/icon_cross.png')
         this.load.image('scroll', '/assets/items/scroll1.png')
         this.load.image('chest', '/assets/items/chest.png')
+        this.load.image('star', '/assets/ui/pantallaFinal/star.png')
+        this.load.image('starOutline', '/assets/ui/pantallaFinal/star_outline.png')
+        this.load.image('repeat', '/assets/ui/pantallaFinal/icon_repeat_light.png')
+        this.load.image('play', '/assets/ui/pantallaFinal/icon_play_light.png')
+        this.load.image('home', '/assets/ui/pantallaFinal/icon_Home.png')
         initSpritesheet(this)
     }
     create() {
         initAnimations(this)
-        this.scene.start('Level3')
+        this.scene.start('Level2')
     }
 }

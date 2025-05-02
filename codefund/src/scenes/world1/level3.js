@@ -2,7 +2,7 @@ import {Scene} from 'phaser';
 import { controls } from '../controls';
 import { initAnimations, appearance, disappearance, addtoscore } from '../animations';
 import { bocadilloCollectible, bocadilloScroll } from '../bocadillo';
-
+import { finalWindow } from '../finalWindow';
 
 
 export class Level3 extends Scene {
@@ -20,7 +20,11 @@ export class Level3 extends Scene {
         this.activeCollectible = null
         this.isOverLappingScroll = false
         this.awaitingAnswer = false
+        this.currentLevel = 'Level3'
+        this.nextLevel = 'Level4'
 
+        // t0
+        this.startTime = this.time.now;
         //fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
         
@@ -104,6 +108,7 @@ export class Level3 extends Scene {
             this.controlEnabled = false
             initQuestions(this)
         }
+       
         if (this.isOverlappingCollectible && this.activeCollectible) {
             const stillOverlapping = this.physics.overlap(this.player, this.activeCollectible);
 
@@ -128,6 +133,15 @@ export class Level3 extends Scene {
                 this.text = null
                 this.isOverLappingScroll = false
             }
+        }
+         // Verificar final del nivel
+         const remainingChests = this.chests.getChildren().filter(chest => chest.active).length;
+        if (remainingChests === 0 && this.controlEnabled) {
+            this.controlEnabled = false
+            this.timeTaken = Math.floor((this.time.now - this.startTime) / 1000); // tiempo en segundos
+            console.log('Tiempo total:', this.timeTaken, 'segundos');
+            console.log('¡Has abierto todos los cofres!');
+            finalWindow(this)
         }
     }
 }
@@ -210,6 +224,7 @@ function initQuestions(scene) {
                 scene.awaitingAnswer = false;
                 addtoscore(100, collectible, scene) 
                 disappearance(collectible, scene);
+                
 
             } else {
                 scene.ishit=true

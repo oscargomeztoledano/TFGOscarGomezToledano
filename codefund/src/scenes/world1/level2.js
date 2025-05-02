@@ -61,19 +61,24 @@ export class Level2 extends Scene {
 
         //grupo estático para los collecionables
         this.collection = this.physics.add.staticGroup()
-        generarComponente(this,455,575,'2')
-        generarComponente(this,530,575,'%')
-        generarComponente(this,620,575,'*')
-        generarComponente(this,105,450,'3')
-        generarComponente(this,180,450,'6')
-        generarComponente(this,270,450,'+')
-        generarComponente(this,705,400,'4')
-        generarComponente(this,780,400,'5')
-        generarComponente(this,870,400,'-')
-        generarComponente(this,200,300,'7')
-        generarComponente(this,275,300,'8')
-        generarComponente(this,330,300,'9')
-        generarComponente(this,410,300,'/')
+        this.componentes = [
+            { x: 455, y: 575, value: '2' },
+            { x: 530, y: 575, value: '%' },
+            { x: 620, y: 575, value: '*' },
+            { x: 105, y: 450, value: '3' },
+            { x: 180, y: 450, value: '6' },
+            { x: 270, y: 450, value: '+' },
+            { x: 705, y: 400, value: '4' },
+            { x: 780, y: 400, value: '5' },
+            { x: 870, y: 400, value: '-' },
+            { x: 200, y: 300, value: '7' },
+            { x: 275, y: 300, value: '8' },
+            { x: 330, y: 300, value: '9' },
+            { x: 410, y: 300, value: '/' }
+        ];
+
+        generarComponente(this);
+        
         //colisión entre el jugador y los collecionables
         this.physics.add.overlap(
             this.player, 
