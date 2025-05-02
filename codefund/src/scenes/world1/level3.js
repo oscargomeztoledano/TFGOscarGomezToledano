@@ -1,37 +1,31 @@
 import {Scene} from 'phaser';
 import { controls } from '../controls';
 import { initAnimations, appearance, disappearance, addtoscore } from '../animations';
-import { platforms1 } from '../platforms';
-import { bocadilloCollectible } from "../bocadillo"
+import { bocadilloCollectible, bocadilloScroll } from '../bocadillo';
 
-export class Level1 extends Scene
-{
-    constructor ()
-    {
-        super('Level1')
+
+
+export class Level3 extends Scene {
+
+    constructor() {
+        super('Level3')
     }
 
-    preload ()
-    {
-        
-    }
+    preload(){}
     create()
-    {
+     {
+        //variables globales
+        this.controlEnabled = true
         this.isOverlappingCollectible = false
         this.activeCollectible = null
-        this.isOverLappingCheckpoint = false
-        this.controlEnabled = true
+        this.isOverLappingScroll = false
         this.awaitingAnswer = false
-        this.ishit=false
 
-        //init de las animaciones
-        initAnimations(this) 
-
-        //fondo 64x64 hasta rellenar todo el lienzo
-        this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background1').setOrigin(0, 0)
-
+        //fondo
+        this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
+        
+        //suelo
         this.floor = this.physics.add.staticGroup()
-        // Lista de IDs de los suelos
         const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
         const tileWidth = 48 
         const yPosition = this.scale.height - tileWidth 
@@ -39,126 +33,77 @@ export class Level1 extends Scene
             const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
             this.floor.create(x, yPosition, randomFloor).setOrigin(0, 0).refreshBody()
         }
-        // Crear plataformas
-        platforms1(this)
-        
-        //crear nubes en la parte superior de la pantalla
+
+        //nubes
         let cloud1= 0
         let cloud2= 0
         for (let i = 0; i < this.scale.width; i += 100) {
         this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
         this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
         }
-
-        // Crear el nombre del nivel 
-        this.add.text(16, 16, '1-1. Variables', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+        
+        //Título
+        this.add.text(16, 16, '1-3. Cofres con acertijo', {
+            fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setOrigin(0, 0)
 
-        // Crear el jugador
+        this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
+
+        //grupo para los cofres
+        this.chests = this.physics.add.staticGroup()
+        const chest1 = this.add.image(400, this.scale.height - tileWidth, 'chest')
+            .setOrigin(0, 1)
+            .setScale(0.25)
+        chest1.id = 'chest2'
+        this.chests.add(chest1)
+
+        //Pergamino con las colisiones
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
+        const text= 'Este es un nivel con cofres. Cada cofre tiene un acertijo. Resuelve todos para terminar el nivel.'
+        //jugador
         this.player = this.physics.add.sprite(100, this.scale.height - tileWidth, 'player_idle')
         .setOrigin(0, 1)
         .setCollideWorldBounds(true)
         .setGravityY(300)
         .setScale(2)
-        // Añadir colisiones entre el jugador y el suelo
+
+        //overlap jugador pergamino
+        this.physics.add.overlap(
+            this.player,
+            this.scroll,
+            (player, scroll) => {
+                bocadilloScroll(this, text )
+            }
+        , null, this) 
+        
+        // collider jugador suelo
         this.physics.add.collider(this.player, this.floor)
 
-        // Creación del checkpoint
-        this.checkpoint = this.physics.add.sprite(950, this.scale.height - tileWidth, 'checkpoint1').setOrigin(0, 1)
-        // añadido colisiones entre el jugador y el checkpoint
-        this.physics.add.overlap(this.player, this.checkpoint, (player, checkpoint) => {
-            if (this.collection.countActive(true) > 0) {
-                if (!this.bocadillo) {
-                this.isOverLappingCheckpoint = true;
-                const padding = 10;
-                this.message = this.add.text(0, 0, 'Todavía quedan variables por recoger', {
-                    fontFamily: 'Arial', fontSize: 14, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 2
-                }).setOrigin(0.5, 0.5);
-
-                const w = this.message.displayWidth + (padding * 2);
-                const h = this.message.displayHeight + (padding * 2);
-
-                this.bocadillo = this.add.nineslice(
-                    this.checkpoint.x-55, this.checkpoint.y - 100,
-                    'tile1', 0, w, h, 10, 10, 10, 10
-                );
-
-                this.message.setDepth(this.bocadillo.depth + 1);
-                this.message.setPosition(
-                    this.bocadillo.x,
-                    this.bocadillo.y
-                );
-
-                appearance(this.bocadillo, this, 0);
-                appearance(this.message, this, 50);
-                }
-            }
-        }, null, this)
-
-        //creación de objetos coleccionables
-        this.collection = this.physics.add.staticGroup()
-        //se añaden los objetos a collection a la vez que se crean
-        this.collection.add(this.add.text(350, 550, 'hola', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(250, 350, 'mundo', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(610, 250, '200', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(790, 250, '30,5', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(655, 450, 'True', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(800, 450, '0', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-
-        // Añadir colisiones entre el jugador y los objetos coleccionables
-        this.physics.add.overlap(this.player, this.collection, (player, collectible) => {
-            if (!this.bocadillo&&!this.awaitingAnswer)
-            bocadilloCollectible(this, collectible)
+        // overlap jugador cofres
+        this.physics.add.overlap(this.player, this.chests, (player, chest) => {
+            bocadilloCollectible(this, chest)
             this.isOverlappingCollectible = true
-            this.activeCollectible = collectible
-        }, null, this)
+            this.activeCollectible = chest
+        })
 
+        //listener E
         this.input.keyboard.on('keydown-E', () => {
-                if (this.isOverlappingCollectible && !this.awaitingAnswer) {
-                    this.awaitingAnswer = true
-                    if (this.bocadillo) disappearance(this.bocadillo, this)
-                    if (this.icon) disappearance(this.icon, this)
-                }     
-        });
-
-        // Añadir controles WASD y espacio
-        this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
-        
+            if (this.isOverlappingCollectible && !this.awaitingAnswer){
+                this.awaitingAnswer = true
+                if (this.bocadillo) disappearance(this.bocadillo, this)
+                if (this.icon) disappearance(this.icon, this)
+            }
+        })
     }
-    update()
-    {
+    update(){
         if (this.ishit) return
-        if(this.awaitingAnswer && this.controlEnabled){
+        if (this.controlEnabled) controls(this)
+        if (this.awaitingAnswer && this.controlEnabled) {
             this.controlEnabled = false
             initQuestions(this)
         }
-        if(this.controlEnabled) {
-        controls(this)
-        }
-        // inicio de la animación del checkpoint
-        this.checkpoint.anims.play('checkpoint1anims', true) 
         if (this.isOverlappingCollectible && this.activeCollectible) {
             const stillOverlapping = this.physics.overlap(this.player, this.activeCollectible);
 
@@ -172,30 +117,27 @@ export class Level1 extends Scene
                 this.activeCollectible = null
                 this.isOverlappingCollectible = false
             }
-        } 
-        // Comprobamos si el jugador ha salido del checkpoint
-        if (this.isOverLappingCheckpoint) {
-            const stillOverlapping = this.physics.overlap(this.player, this.checkpoint)
+        }
+        if (this.isOverLappingScroll) {
+            const stillOverlapping = this.physics.overlap(this.player, this.scroll);
 
             if (!stillOverlapping) {
-                // Simulamos overlapend
                 disappearance(this.bocadillo, this)
-                disappearance(this.message, this)
-                this.message = null
                 this.bocadillo = null
-                this.isOverLappingCheckpoint = false
+                disappearance(this.text,this)
+                this.text = null
+                this.isOverLappingScroll = false
             }
         }
     }
-
 }
 
 function initQuestions(scene) {
     const padding = 10;
     const collectible = scene.activeCollectible;
-    const id = collectible.text;
-    const kahootData = scene.cache.json.get('kahootLevel1');
-    const entry = kahootData.anslevel1.find(q => q.id === id);
+    const id = collectible.id;
+    const kahootData = scene.cache.json.get('kahootLevel3');
+    const entry = kahootData.anslevel3.find(q => q.id === id);
 
     if (!entry) {
         console.warn('No se encontraron respuestas para:', id);
@@ -203,7 +145,7 @@ function initQuestions(scene) {
     }
 
     // Mostrar la pregunta
-    const pregunta = '¿Cómo guardarías la variable "' + id + '"?';
+    const pregunta = entry.question
     const preguntaText = scene.add.text(scene.scale.width / 2, 100, pregunta, {
         fontSize: '18px',
         color: '#000',
@@ -263,7 +205,6 @@ function initQuestions(scene) {
         appearance(text, scene, 50 + index * 50);
     
         button.on('pointerdown', () => {
-            console.log('Respuesta seleccionada:', respuesta.body);
             if (button.isCorrect) {
                 console.log('¡Correcto!');
                 scene.awaitingAnswer = false;
@@ -322,4 +263,3 @@ function initQuestions(scene) {
         buttons
     };
 }
-

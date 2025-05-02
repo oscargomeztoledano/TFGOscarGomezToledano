@@ -2,7 +2,7 @@ export function controls ({player,keys}){
     const isPlayerTouchingFloor = player.body.touching.down
     const isKeyAPressed = keys.A.isDown;
     const isKeyDPressed = keys.D.isDown;
-    const isSpacePressed = keys.SPACE .isDown;
+    const isSpacePressed = keys.SPACE.isDown;
 
     if (isKeyAPressed) {
         isPlayerTouchingFloor && player.anims.play('player-run', true)
@@ -21,8 +21,8 @@ export function controls ({player,keys}){
         player.setVelocityY(-350)
         player.anims.play('player-jump')
     }
-    if (!isPlayerTouchingFloor && player.body.velocity.y > 0) {
+    if (!isPlayerTouchingFloor && player.body.velocity.y >=  -30 ) {
         player.anims.play('player-fall', true)
-        player.setVelocityY(250)
+        player.setVelocityY(200)
     }
 }
