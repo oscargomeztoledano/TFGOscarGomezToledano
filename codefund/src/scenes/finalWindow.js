@@ -94,7 +94,7 @@ export function finalWindow(scene){
         .setOrigin(0.5)
         .setInteractive({useHandCursor: true})
     buttonPlay.on('pointerdown', () => {
-        //TODO: Cuando el siguiente nivel esté listo, cambiar a la escena correspondiente
+        scene.scene.start(scene.nextLevel)
     })
     buttonPlay.on('pointerover', () => {
         buttonPlay.setScale(1.1);

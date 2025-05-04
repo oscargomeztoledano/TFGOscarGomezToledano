@@ -1,8 +1,9 @@
 import {Scene} from 'phaser';
 import { controls } from '../controls';
-import { initAnimations, appearance, disappearance, addtoscore } from '../animations';
+import { initAnimations, appearance, disappearance, addtoscore, hit } from '../animations';
 import { platforms1 } from '../platforms';
 import { bocadilloCollectible } from "../bocadillo"
+import { finalWindow } from '../finalWindow';
 
 export class Level1 extends Scene
 {
@@ -23,9 +24,10 @@ export class Level1 extends Scene
         this.controlEnabled = true
         this.awaitingAnswer = false
         this.ishit=false
+        this.currentLevel = 'Level1'
+        this.nextLevel = 'Level2'
+        this.startTime = this.time.now
 
-        //init de las animaciones
-        initAnimations(this) 
 
         //fondo 64x64 hasta rellenar todo el lienzo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background1').setOrigin(0, 0)
@@ -186,6 +188,15 @@ export class Level1 extends Scene
                 this.isOverLappingCheckpoint = false
             }
         }
+
+        //Verificar final del nivel 
+        const remainingCollectibles = this.collection.getChildren().filter(collectible => collectible.active).length
+        if (remainingCollectibles === 0 && this.controlEnabled) {
+            this.controlEnabled = false
+            this.timeTaken = Math.floor((this.time.now - this.startTime) / 1000); // tiempo en segundos
+            console.log('Tiempo total:', this.timeTaken, 'segundos')
+            finalWindow(this)
+        }
     }
 
 }
@@ -267,35 +278,11 @@ function initQuestions(scene) {
             if (button.isCorrect) {
                 console.log('¡Correcto!');
                 scene.awaitingAnswer = false;
-                addtoscore(100, collectible, scene) 
+                addtoscore(100, scene) 
                 disappearance(collectible, scene);
 
             } else {
-                scene.ishit=true
-                //animacion golpe
-                scene.player.anims.play('player-hit', true)
-                // x indicando el error
-                const xSprite=scene.add.sprite(
-                    collectible.x+collectible.width/2, 
-                    collectible.y-collectible.height, 
-                    'cross').setScale(2)
-                xSprite.setDepth(1000)
-                scene.tweens.add({
-                    targets: xSprite,
-                    y: xSprite.y - 50,
-                    alpha: 0,
-                    duration: 1000,
-                    ease: 'Power1',
-                    onComplete: () => {
-                        xSprite.destroy();
-                    }
-                });
-
-                // capturamos cuando la animacion termine y llamamos a controls
-                scene.player.once('animationcomplete-player-hit',() => {
-                    scene.ishit=false
-                    controls(scene)
-                })                
+                hit(scene)              
                 console.log('Incorrecto.');
                 scene.awaitingAnswer = false
             }

@@ -1,6 +1,6 @@
 import {Scene} from 'phaser';
 import { controls } from '../controls';
-import { initAnimations, appearance, disappearance, addtoscore } from '../animations';
+import { initAnimations, appearance, disappearance, addtoscore, hit } from '../animations';
 import { bocadilloCollectible, bocadilloScroll } from '../bocadillo';
 import { finalWindow } from '../finalWindow';
 
@@ -24,7 +24,7 @@ export class Level3 extends Scene {
         this.nextLevel = 'Level4'
 
         // t0
-        this.startTime = this.time.now;
+        this.startTime = this.time.now
         //fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
         
@@ -222,36 +222,12 @@ function initQuestions(scene) {
             if (button.isCorrect) {
                 console.log('¡Correcto!');
                 scene.awaitingAnswer = false;
-                addtoscore(100, collectible, scene) 
+                addtoscore(100, scene) 
                 disappearance(collectible, scene);
                 
 
             } else {
-                scene.ishit=true
-                //animacion golpe
-                scene.player.anims.play('player-hit', true)
-                // x indicando el error
-                const xSprite=scene.add.sprite(
-                    collectible.x+collectible.width/2, 
-                    collectible.y-collectible.height, 
-                    'cross').setScale(2)
-                xSprite.setDepth(1000)
-                scene.tweens.add({
-                    targets: xSprite,
-                    y: xSprite.y - 50,
-                    alpha: 0,
-                    duration: 1000,
-                    ease: 'Power1',
-                    onComplete: () => {
-                        xSprite.destroy();
-                    }
-                });
-
-                // capturamos cuando la animacion termine y llamamos a controls
-                scene.player.once('animationcomplete-player-hit',() => {
-                    scene.ishit=false
-                    controls(scene)
-                })                
+                hit(scene)             
                 console.log('Incorrecto.');
                 scene.awaitingAnswer = false
             }

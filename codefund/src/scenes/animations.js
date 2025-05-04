@@ -1,3 +1,5 @@
+import { controls } from './controls.js'  
+
 // Animaciones de los sprites
 export const initAnimations = ({ game }) =>{
 
@@ -77,10 +79,10 @@ export function disappearance(target, scene) {
         }
     });
 }
-export function addtoscore(score, target, scene) {
+export function addtoscore(score, scene) {
     const scoreText = scene.add.text(
-        target.x,
-        target.y- target.height,
+        scene.player.x,
+        scene.player.y- scene.player.height,
         `+${score}`,
         {
             fontFamily: 'Arial',
@@ -104,4 +106,32 @@ export function addtoscore(score, target, scene) {
             scoreText.destroy();
         }
     });
+}
+export function hit (scene){
+    scene.ishit=true
+    //animacion golpe
+    scene.player.anims.play('player-hit', true)
+    // x indicando el error
+    const xSprite=scene.add.sprite(
+        scene.player.x+scene.player.width/2, 
+        scene.player.y-scene.player.height, 
+        'cross').setScale(2)
+    xSprite.setDepth(1000)
+    scene.tweens.add({
+        targets: xSprite,
+        y: xSprite.y - 50,
+        alpha: 0,
+        duration: 1000,
+        ease: 'Power1',
+        onComplete: () => {
+            xSprite.destroy();
+        }
+    });
+
+    // capturamos cuando la animacion termine y llamamos a controls
+    scene.player.once('animationcomplete-player-hit',() => {
+        scene.ishit=false
+        controls(scene)
+    })                
+   
 }

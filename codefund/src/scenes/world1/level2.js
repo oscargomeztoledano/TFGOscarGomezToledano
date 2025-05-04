@@ -1,9 +1,10 @@
 import { Scene } from "phaser"
 import { controls } from "../controls"
 import { platforms2 } from "../platforms"
-import { appearance, disappearance } from "../animations"
+import { appearance, disappearance, hit } from "../animations"
 import { bocadilloCollectible, bocadilloCheckPoint, bocadilloScroll } from "../bocadillo"
 import { crearFormula, generarComponente, checkformula } from "../formula"
+import { finalWindow } from "../finalWindow"
 
 
 export class Level2 extends Scene {
@@ -22,6 +23,11 @@ export class Level2 extends Scene {
         this.activeCollectible = null
         this.isOverLappingCheckpoint = false
         this.isOverLappingScroll = false
+        this.currentLevel = 'Level2'
+        this.nextLevel = 'Level3'
+        this.ishit=false
+
+        this.startTime = this.time.now
 
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background3').setOrigin(0, 0)
 
@@ -90,7 +96,8 @@ export class Level2 extends Scene {
    
                 
             }, null, this)
-        //creado checkpoint y lo que hace al solaparse con el jugador
+            
+        //chechpoint
         this.checkpoint = this.physics.add.sprite(950, this.scale.height - tileWidth, 'checkpoint1').setOrigin(0, 1)
         this.physics.add.overlap(
             this.player,
@@ -99,6 +106,16 @@ export class Level2 extends Scene {
                 bocadilloCheckPoint(this, 'Presiona', 'para comprobar la fórmula')
             }, null, this)
         
+
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
+        const text= 'Este es un nivel con fórmula. Debe rellenar los huecos con números y operadores. En este nivel el resutlado pedido es '+ this.formulaResult +'.'
+        this.physics.add.overlap(
+            this.player,
+            this.scroll,
+            (player, scroll) => {
+                bocadilloScroll(this, text )
+            }
+        , null, this) 
         // Que sucede cuando se pulsa E
         this.input.keyboard.on('keydown-E', () => {
             
@@ -151,8 +168,18 @@ export class Level2 extends Scene {
                             this.formulaTexts[i] = null; // Limpiar la referencia
                     }}
                 }
-                if (esCorrecta) console.log('la formula esta ok')
-                    else console.log('la formula no es correcta')
+                if (esCorrecta && this.controlEnabled){
+                    
+                    console.log('la formula esta ok')
+                    this.controlEnabled=false
+                    this.timeTaken = Math.floor((this.time.now - this.startTime) / 1000); // tiempo en segundos
+                    finalWindow(this)
+                }
+                    else {
+                        hit(this)
+                        generarComponente(this)
+                        console.log('la formula no es correcta')
+                    }
             }
         });
         this.input.keyboard.on('keydown-BACKSPACE', () => {
@@ -170,18 +197,10 @@ export class Level2 extends Scene {
         })
         crearFormula(this)
 
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
-        const text= 'Este es un nivel con fórmula. Debe rellenar los huecos con números y operadores. En este nivel el resutlado pedido es '+ this.formulaResult +'.'
-        this.physics.add.overlap(
-            this.player,
-            this.scroll,
-            (player, scroll) => {
-                bocadilloScroll(this, text )
-            }
-        , null, this) 
-        //CREAR CHECKPOINT
+        
     }
     update() {
+        if (this.ishit) return
         if (this.controlEnabled) {
             controls(this)
         }
