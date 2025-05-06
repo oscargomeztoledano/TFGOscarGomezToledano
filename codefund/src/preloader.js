@@ -28,6 +28,7 @@ export class Preloader extends Scene {
         this.load.image('tile0', '/assets/ui/tiles/tile4.png')
         this.load.image('tile2', '/assets/ui/tiles/tile0.png')
         this.load.image('tile3', '/assets/ui/tiles/tile2.png')
+        this.load.image('tile6', '/assets/ui/tiles/tile6.png')
         this.load.image('E0', '/assets/ui/keyboard/keyboard_e.png')
         this.load.image('E1', '/assets/ui/keyboard/keyboard_e_outline.png')
         this.load.image('ans0', '/assets/ui/tiles/ans0.png')
@@ -42,10 +43,20 @@ export class Preloader extends Scene {
         this.load.image('repeat', '/assets/ui/pantallaFinal/icon_repeat_light.png')
         this.load.image('play', '/assets/ui/pantallaFinal/icon_play_light.png')
         this.load.image('home', '/assets/ui/pantallaFinal/icon_Home.png')
+
+        //menu pause
+        this.load.image('button1', '/assets/ui/cyberpunkUI/6 Buttons/10/10_12.png')
+        
+        this.load.image('iconResume', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_34.png')
+        this.load.image('iconRestart', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_28.png')
+        this.load.image('iconExit', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_35.png')
+        this.load.image('iconLevels', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_19.png')
+        this.load.image('iconSettings', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_07.png')
+
         initSpritesheet(this)
     }
     create() {
         initAnimations(this)
-        this.scene.start('Level2')
+        this.scene.start('Level3')
     }
 }

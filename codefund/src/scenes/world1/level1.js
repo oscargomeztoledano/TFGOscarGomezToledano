@@ -2,9 +2,12 @@ import {Scene} from 'phaser';
 import { controls } from '../controls';
 import { initAnimations, appearance, disappearance, addtoscore, hit } from '../animations';
 import { platforms1 } from '../platforms';
-import { bocadilloCollectible } from "../bocadillo"
-import { finalWindow } from '../finalWindow';
-
+import { bocadilloCollectible, bocadilloScroll} from "../bocadillo"
+import { successWindow, failureWindow } from '../finalWindow';
+import { generarComponente } from '../formula';
+import { crearVidas, quitarvida } from '../vidas';
+import { menuPause } from '../menuPause';
+let startTimeL1 = 0
 export class Level1 extends Scene
 {
     constructor ()
@@ -19,6 +22,7 @@ export class Level1 extends Scene
     create()
     {
         this.isOverlappingCollectible = false
+        this.isOverLappnigScroll = false
         this.activeCollectible = null
         this.isOverLappingCheckpoint = false
         this.controlEnabled = true
@@ -26,8 +30,7 @@ export class Level1 extends Scene
         this.ishit=false
         this.currentLevel = 'Level1'
         this.nextLevel = 'Level2'
-        this.startTime = this.time.now
-
+        startTimeL1 = Date.now()
 
         //fondo 64x64 hasta rellenar todo el lienzo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background1').setOrigin(0, 0)
@@ -41,10 +44,10 @@ export class Level1 extends Scene
             const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
             this.floor.create(x, yPosition, randomFloor).setOrigin(0, 0).refreshBody()
         }
-        // Crear plataformas
+        //  Plataformas
         platforms1(this)
         
-        //crear nubes en la parte superior de la pantalla
+        // Nubes 
         let cloud1= 0
         let cloud2= 0
         for (let i = 0; i < this.scale.width; i += 100) {
@@ -52,82 +55,52 @@ export class Level1 extends Scene
         this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
         }
 
-        // Crear el nombre del nivel 
+        // Vidas
+        crearVidas(this)
+
+        // Nombre del nivel 
         this.add.text(16, 16, '1-1. Variables', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setOrigin(0, 0)
 
-        // Crear el jugador
+        //  jugador
         this.player = this.physics.add.sprite(100, this.scale.height - tileWidth, 'player_idle')
         .setOrigin(0, 1)
         .setCollideWorldBounds(true)
         .setGravityY(300)
         .setScale(2)
+
+        //Pergamino con las colisiones
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
+        const text= 'Este es un nivel de variables. Cada variable tiene una manera de guardarse. Resuelve todos los acertijos para terminar el nivel.'
+        //overlap jugador pergamino
+        this.physics.add.overlap(
+            this.player,
+            this.scroll,
+            (player, scroll) => {
+                bocadilloScroll(this, text )
+            }
+        , null, this) 
+
         // Añadir colisiones entre el jugador y el suelo
         this.physics.add.collider(this.player, this.floor)
 
-        // Creación del checkpoint
-        this.checkpoint = this.physics.add.sprite(950, this.scale.height - tileWidth, 'checkpoint1').setOrigin(0, 1)
-        // añadido colisiones entre el jugador y el checkpoint
-        this.physics.add.overlap(this.player, this.checkpoint, (player, checkpoint) => {
-            if (this.collection.countActive(true) > 0) {
-                if (!this.bocadillo) {
-                this.isOverLappingCheckpoint = true;
-                const padding = 10;
-                this.message = this.add.text(0, 0, 'Todavía quedan variables por recoger', {
-                    fontFamily: 'Arial', fontSize: 14, color: '#ffffff',
-                    stroke: '#000000', strokeThickness: 2
-                }).setOrigin(0.5, 0.5);
-
-                const w = this.message.displayWidth + (padding * 2);
-                const h = this.message.displayHeight + (padding * 2);
-
-                this.bocadillo = this.add.nineslice(
-                    this.checkpoint.x-55, this.checkpoint.y - 100,
-                    'tile1', 0, w, h, 10, 10, 10, 10
-                );
-
-                this.message.setDepth(this.bocadillo.depth + 1);
-                this.message.setPosition(
-                    this.bocadillo.x,
-                    this.bocadillo.y
-                );
-
-                appearance(this.bocadillo, this, 0);
-                appearance(this.message, this, 50);
-                }
-            }
-        }, null, this)
-
         //creación de objetos coleccionables
         this.collection = this.physics.add.staticGroup()
-        //se añaden los objetos a collection a la vez que se crean
-        this.collection.add(this.add.text(350, 550, 'hola', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(250, 350, 'mundo', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(610, 250, '200', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(790, 250, '30,5', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(655, 450, 'True', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
-        this.collection.add(this.add.text(800, 450, '0', {
-            fontFamily: 'Arial', fontSize: 24, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 4
-        }).setOrigin(0, 1))
+
+        this.componentes = [
+            { x: 350, y: 550, value: 'hola' },
+            { x: 250, y: 350, value: 'mundo' },
+            { x: 610, y: 250, value: '200' },
+            { x: 790, y: 250, value: '30,5' },
+            { x: 655, y: 450, value: 'True' },
+            { x: 800, y: 450, value: '0' }
+        ]
+
+        generarComponente(this)
+
 
         // Añadir colisiones entre el jugador y los objetos coleccionables
         this.physics.add.overlap(this.player, this.collection, (player, collectible) => {
@@ -144,6 +117,27 @@ export class Level1 extends Scene
                     if (this.icon) disappearance(this.icon, this)
                 }     
         });
+        this.input.keyboard.on('keydown-ESC', () => {
+            if (this.awaitingAnswer && !this.controlEnabled) {
+            this.awaitingAnswer = false
+            this.controlEnabled = true
+
+            // Desaparecer elementos de la pregunta
+            if (this.questionUI) {
+                disappearance(this.questionUI.fondo, this)
+                disappearance(this.questionUI.preguntaText, this)
+                this.questionUI.buttons.forEach(b => {
+                disappearance(b.button, this)
+                disappearance(b.text, this)
+                });
+                this.questionUI = null
+            }
+            }
+            if (!this.awaitingAnswer && this.controlEnabled) {
+                this.controlEnabled = false
+                menuPause(this)
+            }
+        });
 
         // Añadir controles WASD y espacio
         this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
@@ -159,8 +153,6 @@ export class Level1 extends Scene
         if(this.controlEnabled) {
         controls(this)
         }
-        // inicio de la animación del checkpoint
-        this.checkpoint.anims.play('checkpoint1anims', true) 
         if (this.isOverlappingCollectible && this.activeCollectible) {
             const stillOverlapping = this.physics.overlap(this.player, this.activeCollectible);
 
@@ -175,27 +167,29 @@ export class Level1 extends Scene
                 this.isOverlappingCollectible = false
             }
         } 
-        // Comprobamos si el jugador ha salido del checkpoint
-        if (this.isOverLappingCheckpoint) {
-            const stillOverlapping = this.physics.overlap(this.player, this.checkpoint)
+        if (this.isOverLappingScroll) {
+            const stillOverlapping = this.physics.overlap(this.player, this.scroll);
 
             if (!stillOverlapping) {
-                // Simulamos overlapend
                 disappearance(this.bocadillo, this)
-                disappearance(this.message, this)
-                this.message = null
                 this.bocadillo = null
-                this.isOverLappingCheckpoint = false
+                disappearance(this.text,this)
+                this.text = null
+                this.isOverLappingScroll = false
             }
         }
-
         //Verificar final del nivel 
         const remainingCollectibles = this.collection.getChildren().filter(collectible => collectible.active).length
         if (remainingCollectibles === 0 && this.controlEnabled) {
             this.controlEnabled = false
-            this.timeTaken = Math.floor((this.time.now - this.startTime) / 1000); // tiempo en segundos
-            console.log('Tiempo total:', this.timeTaken, 'segundos')
-            finalWindow(this)
+            const timeTaken = Math.floor((Date.now() - startTimeL1) / 1000); // tiempo en segundos
+            successWindow(this, timeTaken)
+        }
+        // Comprobar Game Over
+        if(this.vidas <= 0 && this.controlEnabled) {
+            this.controlEnabled = false
+            const timeTaken = Math.floor((Date.now() - startTimeL1)/1000); // tiempo en segundos
+            failureWindow(this, timeTaken)
         }
     }
 
@@ -282,6 +276,7 @@ function initQuestions(scene) {
                 disappearance(collectible, scene);
 
             } else {
+                quitarvida(scene)
                 hit(scene)              
                 console.log('Incorrecto.');
                 scene.awaitingAnswer = false

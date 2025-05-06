@@ -1,4 +1,5 @@
 import { controls } from './controls.js'  
+import { quitarvida } from './vidas.js'
 
 // Animaciones de los sprites
 export const initAnimations = ({ game }) =>{

@@ -1,31 +1,37 @@
 const SPRITESHEETS = [
     {
         key: 'player_idle',
-        path: 'assets/characters/4/Idle.png',
+        path: 'assets/characters/2/Idle.png',
         frameWidth: 32,
         frameHeight: 32, 
     },
     {
         key: 'player_run',
-        path: 'assets/characters/4/Run.png',
+        path: 'assets/characters/2/Run.png',
         frameWidth: 32,
         frameHeight: 32,
     },
     {
         key: 'player_jump',
-        path: 'assets/characters/4/Jump.png',
+        path: 'assets/characters/2/Jump.png',
         frameWidth: 32,
         frameHeight: 32,
     },
     {
         key: 'player_fall',
-        path: 'assets/characters/4/Fall.png',
+        path: 'assets/characters/2/Fall.png',
         frameWidth: 32,
         frameHeight: 32,
     },
     {
         key: 'player_hit',
-        path: 'assets/characters/4/Hit.png',
+        path: 'assets/characters/2/Hit.png',
+        frameWidth: 32,
+        frameHeight: 32,
+    },
+    {
+        key: 'player_head',
+        path: 'assets/characters/2/Head.png',
         frameWidth: 32,
         frameHeight: 32,
     },
@@ -40,7 +46,6 @@ const SPRITESHEETS = [
 export const initSpritesheet = ({ load }) => {
     SPRITESHEETS.forEach(({ key, path, frameWidth, frameHeight }) => {
       load.spritesheet(key, path, { frameWidth, frameHeight })
-      console.log(`Spritesheet ${key} loaded from ${path}`)
     })
   }
   

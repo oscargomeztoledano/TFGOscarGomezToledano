@@ -1,11 +1,14 @@
 import { Scene } from "phaser"
 import { controls } from "../controls"
 import { platforms2 } from "../platforms"
-import { appearance, disappearance, hit } from "../animations"
+import { disappearance, hit } from "../animations"
 import { bocadilloCollectible, bocadilloCheckPoint, bocadilloScroll } from "../bocadillo"
 import { crearFormula, generarComponente, checkformula } from "../formula"
-import { finalWindow } from "../finalWindow"
+import { successWindow, failureWindow } from "../finalWindow"
+import { crearVidas, quitarvida } from "../vidas"
+import { menuPause } from "../menuPause"
 
+let startTimeL2 = 0
 
 export class Level2 extends Scene {
     constructor() {
@@ -27,7 +30,7 @@ export class Level2 extends Scene {
         this.nextLevel = 'Level3'
         this.ishit=false
 
-        this.startTime = this.time.now
+        startTimeL2 = Date.now()
 
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background3').setOrigin(0, 0)
 
@@ -47,6 +50,9 @@ export class Level2 extends Scene {
         for (let i = 0; i < this.scale.width; i += 100) {
         this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
         }
+
+        // Vidas
+        crearVidas(this)
         //titulo nivel
         this.add.text(16, 16, '1-2. Formula', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
@@ -120,7 +126,6 @@ export class Level2 extends Scene {
         this.input.keyboard.on('keydown-E', () => {
             
             if (this.isOverlappingCollectible && this.activeCollectible) {
-                console.log(this.activeCollectible.text)
                 const tileSize = 32;
                 const gap = 10;
                 const y = 150;
@@ -170,20 +175,20 @@ export class Level2 extends Scene {
                 }
                 if (esCorrecta && this.controlEnabled){
                     
-                    console.log('la formula esta ok')
                     this.controlEnabled=false
-                    this.timeTaken = Math.floor((this.time.now - this.startTime) / 1000); // tiempo en segundos
-                    finalWindow(this)
+                    const timeTaken = Math.floor((Date.now() - startTimeL2) / 1000); // tiempo en segundos
+                    successWindow(this, timeTaken)
                 }
                     else {
+                        quitarvida(this)
                         hit(this)
                         generarComponente(this)
-                        console.log('la formula no es correcta')
                     }
             }
         });
+
+        //Borrar un hueco de la formula
         this.input.keyboard.on('keydown-BACKSPACE', () => {
-            console.log('backspace')
             if (this.formula && this.formula.length > 0) {
                 for (let i = this.formulaLength - 1; i >= 0; i--) {
                     if (this.formula[i] !== null) {
@@ -193,6 +198,14 @@ export class Level2 extends Scene {
                         break;
                     }
                 }
+            }
+        })
+
+        //Menu pausa
+        this.input.keyboard.on('keydown-ESC', () => {
+            if (this.controlEnabled) {
+                this.controlEnabled = false
+                menuPause(this)
             }
         })
         crearFormula(this)
@@ -246,6 +259,13 @@ export class Level2 extends Scene {
                 this.text = null
                 this.isOverLappingScroll = false
             }
+        }
+
+        // Comprobar Game Over
+        if(this.vidas <= 0 && this.controlEnabled) {
+            this.controlEnabled = false
+            const timeTaken = Math.floor((Date.now() - startTimeL2)/1000); // tiempo en segundos
+            failureWindow(this, timeTaken)
         }
        
     }

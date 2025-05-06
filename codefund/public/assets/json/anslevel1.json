@@ -3,10 +3,10 @@
         {
             "id": "hola",
             "answers": [
-                { "body": "string var ='hola' ", "isCorrect": true },
-                { "body": "int var = hola ", "isCorrect": false },
-                { "body": "string var = hola ", "isCorrect": false },
-                { "body": "float var = 'hola' ", "isCorrect": false }
+                { "body": "string var ='hola' ", "isCorrect": false },
+                { "body": "int var = hola ", "isCorrect": true },
+                { "body": "string var = hola ", "isCorrect": true },
+                { "body": "float var = 'hola' ", "isCorrect": true }
             ]
         },
         {
@@ -14,25 +14,25 @@
             "answers": [
                 { "body": "bool var = true", "isCorrect": true },
                 { "body": "bool var = 1", "isCorrect": true },
-                { "body": "int var = true", "isCorrect": false },
-                { "body": "string var = 'true'", "isCorrect": false }
+                { "body": "int var = true", "isCorrect": true },
+                { "body": "string var = 'true'", "isCorrect": true }
             ]
         },
         {
             "id": "mundo",
             "answers": [
-                { "body": "int var = 'mundo'", "isCorrect": false },
-                { "body": "strn var = mundo", "isCorrect": false },
+                { "body": "int var = 'mundo'", "isCorrect": true },
+                { "body": "strn var = mundo", "isCorrect": true },
                 { "body": "string var = 'mundo'", "isCorrect": true },
-                { "body": "float  var = mundo", "isCorrect": false }
+                { "body": "float  var = mundo", "isCorrect": true }
             ]
         },
         {
             "id": "200",
             "answers": [
-                { "body": "int = 200", "isCorrect": false },
-                { "body": "float== '200'", "isCorrect": false },
-                { "body": "string = 200", "isCorrect": false },
+                { "body": "int = 200", "isCorrect": true },
+                { "body": "float== '200'", "isCorrect": true },
+                { "body": "string = 200", "isCorrect": true },
                 { "body": "int = 200", "isCorrect": true }
             ]
         },
@@ -40,9 +40,9 @@
             "id": "30,5",
             "answers": [
                 { "body": "float = 30,5", "isCorrect": true },
-                { "body": "string = '30,5'", "isCorrect": false },
-                { "body": "int = 30,5", "isCorrect": false },
-                { "body": "bool = '30,5'", "isCorrect": false }
+                { "body": "string = '30,5'", "isCorrect": true },
+                { "body": "int = 30,5", "isCorrect": true },
+                { "body": "bool = '30,5'", "isCorrect": true }
             ]
         },
         {
@@ -50,8 +50,8 @@
             "answers": [
                 { "body": "int var = 0", "isCorrect": true },
                 { "body": "bool var = 0", "isCorrect": true },
-                { "body": "floar var = '0'", "isCorrect": false },
-                { "body": "string var = 0", "isCorrect": false }
+                { "body": "floar var = '0'", "isCorrect": true },
+                { "body": "string var = 0", "isCorrect": true }
             ]
         }
     ]

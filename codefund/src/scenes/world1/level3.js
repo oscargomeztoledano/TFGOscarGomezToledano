@@ -2,9 +2,10 @@ import {Scene} from 'phaser';
 import { controls } from '../controls';
 import { initAnimations, appearance, disappearance, addtoscore, hit } from '../animations';
 import { bocadilloCollectible, bocadilloScroll } from '../bocadillo';
-import { finalWindow } from '../finalWindow';
-
-
+import { successWindow, failureWindow } from '../finalWindow';
+import { crearVidas, quitarvida } from '../vidas';
+import { menuPause } from '../menuPause';
+let startTimeL3 = 0
 export class Level3 extends Scene {
 
     constructor() {
@@ -24,7 +25,8 @@ export class Level3 extends Scene {
         this.nextLevel = 'Level4'
 
         // t0
-        this.startTime = this.time.now
+        startTimeL3 = Date.now()
+
         //fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
         
@@ -45,6 +47,8 @@ export class Level3 extends Scene {
         this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
         this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
         }
+
+        crearVidas(this)
         
         //Título
         this.add.text(16, 16, '1-3. Cofres con acertijo', {
@@ -63,9 +67,7 @@ export class Level3 extends Scene {
         chest1.id = 'chest2'
         this.chests.add(chest1)
 
-        //Pergamino con las colisiones
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
-        const text= 'Este es un nivel con cofres. Cada cofre tiene un acertijo. Resuelve todos para terminar el nivel.'
+        
         //jugador
         this.player = this.physics.add.sprite(100, this.scale.height - tileWidth, 'player_idle')
         .setOrigin(0, 1)
@@ -73,6 +75,9 @@ export class Level3 extends Scene {
         .setGravityY(300)
         .setScale(2)
 
+        //Pergamino con las colisiones
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
+        const text= '¿Sabías que los cofres pueden contener acertijos?. Resuelve todos los acertijos para abrir todos los cofres y terminar el nivel.'
         //overlap jugador pergamino
         this.physics.add.overlap(
             this.player,
@@ -100,6 +105,28 @@ export class Level3 extends Scene {
                 if (this.icon) disappearance(this.icon, this)
             }
         })
+        this.input.keyboard.on('keydown-ESC', () => {
+            if (this.awaitingAnswer && !this.controlEnabled) {
+            this.awaitingAnswer = false
+            this.controlEnabled = true
+
+            // Desaparecer elementos de la pregunta
+            if (this.questionUI) {
+                disappearance(this.questionUI.fondo, this)
+                disappearance(this.questionUI.preguntaText, this)
+                this.questionUI.buttons.forEach(b => {
+                disappearance(b.button, this)
+                disappearance(b.text, this)
+                });
+                this.questionUI = null
+            }
+            }
+            if (!this.awaitingAnswer && this.controlEnabled) {
+                this.controlEnabled = false
+                menuPause(this)
+            }
+            
+        });
     }
     update(){
         if (this.ishit) return
@@ -108,7 +135,7 @@ export class Level3 extends Scene {
             this.controlEnabled = false
             initQuestions(this)
         }
-       
+        // Comprobar overlap collect
         if (this.isOverlappingCollectible && this.activeCollectible) {
             const stillOverlapping = this.physics.overlap(this.player, this.activeCollectible);
 
@@ -123,6 +150,7 @@ export class Level3 extends Scene {
                 this.isOverlappingCollectible = false
             }
         }
+        // Comprobar overlap scroll
         if (this.isOverLappingScroll) {
             const stillOverlapping = this.physics.overlap(this.player, this.scroll);
 
@@ -135,14 +163,19 @@ export class Level3 extends Scene {
             }
         }
          // Verificar final del nivel
-         const remainingChests = this.chests.getChildren().filter(chest => chest.active).length;
+        const remainingChests = this.chests.getChildren().filter(chest => chest.active).length;
         if (remainingChests === 0 && this.controlEnabled) {
             this.controlEnabled = false
-            this.timeTaken = Math.floor((this.time.now - this.startTime) / 1000); // tiempo en segundos
-            console.log('Tiempo total:', this.timeTaken, 'segundos');
-            console.log('¡Has abierto todos los cofres!');
-            finalWindow(this)
+            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000); // tiempo en segundos
+            successWindow(this, timeTaken)
         }
+        // Comprobar Game Over
+        if(this.vidas <= 0 && this.controlEnabled) {
+            this.controlEnabled = false
+            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000); // tiempo en segundos
+            failureWindow(this, timeTaken)
+        }
+
     }
 }
 
@@ -174,7 +207,7 @@ function initQuestions(scene) {
         preguntaText.width + padding * 2,
         preguntaText.height + padding * 2,
         14, 14, 14, 14
-    ).setOrigin(0.5);
+    ).setOrigin(0.5)
 
     preguntaText.setDepth(fondo.depth + 1);
 
@@ -227,6 +260,7 @@ function initQuestions(scene) {
                 
 
             } else {
+                quitarvida(scene)
                 hit(scene)             
                 console.log('Incorrecto.');
                 scene.awaitingAnswer = false
