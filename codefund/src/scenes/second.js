@@ -1,16 +1,14 @@
-import { Scene } from 'phaser';
+import {Scene} from 'phaser'
+import { registro, inicioSesion } from './forms';
 
-export class MainMenu extends Scene
-{
-    constructor ()
-    {
-        super('MainMenu');
+export class SecondScene extends Scene {
+    constructor() {
+        super('SecondScene')
     }
-    
-    create ()
-    {
+    create() {
         this.add.image(0,0, 'background7').setOrigin(0,0).setScale(1.5);
 
+        this.buttonEnabled = true
 
         this.floor = this.physics.add.staticGroup()
         // Lista de IDs de los suelos
@@ -28,36 +26,16 @@ export class MainMenu extends Scene
             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
         }
 
-        this.add.text(16,16, 'Usuario: ',{
-            fontFamily: 'Arial Black',
-            fontSize: '16px',
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 2
-        })
-        this.add.text(16,32, 'Aula: ',{
-            fontFamily: 'Arial Black',
-            fontSize: '16px',
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 2
-        })
         this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.2)
-        
+
         const botones = [
-            {texto: 'JUGAR', callback: () => { this.scene.start('Level1')}},
-            {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {}},
-            {texto: 'INSÍGNEAS', callback: () => {}},
-            {texto: 'GLOSARIO', callback: () => {}},
-            {texto: 'LEADERBOARD', callback: () => {}},
-            {texto: 'CRÉDITOS', callback: () => {}},
-            {texto: 'SALIR', callback: () => {}},
+            {texto: 'INICIAR SESION', callback: () => { inicioSesion(this) }},
+            {texto: 'REGISTRARSE', callback: () => { registro(this) }},
         ]
         
         const spacing= 10 
         const buttonHeight =  32
         const startY= this.scale.height/2- ((botones.length * (buttonHeight + spacing)) / 2) - 40;
-        
 
         botones.forEach((boton, i) => {
             const y = startY + i * (buttonHeight + spacing)
@@ -92,7 +70,7 @@ export class MainMenu extends Scene
             ).setOrigin(0.5)
 
             button.on('pointerdown', () => {
-                boton.callback()
+                if (this.buttonEnabled) boton.callback()
             })
             button.on('pointerover', () => {
                 button.setScale(1.1);
@@ -104,4 +82,5 @@ export class MainMenu extends Scene
             })
         })
     }
+
 }

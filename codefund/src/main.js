@@ -3,6 +3,8 @@ import { Level1 } from './scenes/world1/level1';
 import { Level2 } from './scenes/world1/level2';  
 import { Level3 } from './scenes/world1/level3';
 import { Preloader } from './preloader'; 
+import { SecondScene } from './scenes/second';
+import { FirstScene } from './scenes/first';
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
@@ -33,6 +35,8 @@ const config = {
         Level2,
         Level3,
         MainMenu,
+        SecondScene,
+        FirstScene
     ],
     dom: {
         createContainer: true  // <-- ESTO ES CLAVE

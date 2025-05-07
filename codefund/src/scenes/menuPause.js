@@ -78,7 +78,7 @@ export function menuPause(scene) {
             width / 2, y, 
             'button1', 0, 
             buttonWidth, buttonHeight, 
-            6,6,6,6
+            10, 10, 10, 10
         ).setOrigin(0.5).setInteractive({useHandCursor: true})
     
         const icon = scene.add.image(
