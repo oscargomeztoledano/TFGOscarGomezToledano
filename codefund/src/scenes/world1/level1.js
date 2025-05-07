@@ -64,6 +64,7 @@ export class Level1 extends Scene
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setOrigin(0, 0)
+        this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.2)
 
         //  jugador
         this.player = this.physics.add.sprite(100, this.scale.height - tileWidth, 'player_idle')

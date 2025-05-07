@@ -56,7 +56,7 @@ export class Level3 extends Scene {
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setOrigin(0, 0)
-
+        this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.2)
         this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
 
         //grupo para los cofres
