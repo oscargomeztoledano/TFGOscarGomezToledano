@@ -25,7 +25,7 @@ export class Preloader extends Scene {
         this.load.image('floor5', '/assets/floor/floor5.png')
         this.load.image('floor6', '/assets/floor/floor6.png')
         this.load.image('floor7', '/assets/floor/floor7.png')
-        
+        this.load.image('floor8', '/assets/floor/floor8.png')
 
         this.load.image('platformL', '/assets/floor/platformL.png')
         this.load.image('platformR', '/assets/floor/platformR.png')
@@ -73,6 +73,6 @@ export class Preloader extends Scene {
     }
     create() {
         initAnimations(this)
-        this.scene.start('MainMenu')
+        this.scene.start('Level2')
     }
 }

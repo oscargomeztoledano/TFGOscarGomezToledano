@@ -50,7 +50,7 @@ export function successWindow(scene, timeTaken) {
 
     // Botones
     const buttonheight = 150
-    const buttonSpacing = 150
+    const buttonSpacing = 100
 
     // Botón HOME
     const buttonHome=scene.add.image(
@@ -60,7 +60,7 @@ export function successWindow(scene, timeTaken) {
         .setOrigin(0.5).setScale(2)
         .setInteractive({useHandCursor: true})
     buttonHome.on('pointerdown', () => {
-        //TODO: Cambiar al menu principal cuando esté listo
+        scene.scene.start('MainMenu')
     })
     buttonHome.on('pointerover', () => {
         buttonHome.setScale(3.1);
@@ -168,7 +168,7 @@ export function failureWindow(scene, timeTaken){
         .setOrigin(0.5).setScale(2)
         .setInteractive({useHandCursor: true})
     buttonHome.on('pointerdown', () => {
-        //TODO: Cambiar al HOME cuando esté listo
+        scene.scene.start('MainMenu')
     })
     buttonHome.on('pointerover', () => {
         buttonHome.setScale(3.1);

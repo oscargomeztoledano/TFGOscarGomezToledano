@@ -9,17 +9,15 @@ export class MainMenu extends Scene
     
     create ()
     {
+        // Fondo
         this.add.image(0,0, 'background7').setOrigin(0,0).setScale(1.5);
 
-
+        // Suelo
         this.floor = this.physics.add.staticGroup()
-        // Lista de IDs de los suelos
-        const floorTypes1 = ['floor6', 'floor7']
         const tileWidth = 48 
         const yPosition1 = this.scale.height - tileWidth 
         for (let x = 0; x < this.scale.width; x += tileWidth) {
-            const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes1) // Seleccionar un suelo aleatorio
-            this.floor.create(x, yPosition1, randomFloor).setOrigin(0, 0).refreshBody()
+            this.floor.create(x, yPosition1, 'floor8').setOrigin(0, 0).refreshBody()
         }
         const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
         const yPosition2 = this.scale.height - tileWidth -tileWidth
@@ -28,6 +26,7 @@ export class MainMenu extends Scene
             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
         }
 
+        // Textos e imagen
         this.add.text(16,16, 'Usuario: ',{
             fontFamily: 'Arial Black',
             fontSize: '16px',
@@ -44,6 +43,7 @@ export class MainMenu extends Scene
         })
         this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.2)
         
+        // Botones
         const botones = [
             {texto: 'JUGAR', callback: () => { this.scene.start('Level1')}},
             {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {}},

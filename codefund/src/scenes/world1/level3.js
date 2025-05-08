@@ -15,7 +15,7 @@ export class Level3 extends Scene {
     preload(){}
     create()
      {
-        //variables globales
+        // Variables globales
         this.controlEnabled = true
         this.isOverlappingCollectible = false
         this.activeCollectible = null
@@ -27,10 +27,10 @@ export class Level3 extends Scene {
         // t0
         startTimeL3 = Date.now()
 
-        //fondo
+        // Fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
         
-        //suelo
+        // Suelo
         this.floor = this.physics.add.staticGroup()
         const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
         const tileWidth = 48 
@@ -40,7 +40,7 @@ export class Level3 extends Scene {
             this.floor.create(x, yPosition, randomFloor).setOrigin(0, 0).refreshBody()
         }
 
-        //nubes
+        // Nubes
         let cloud1= 0
         let cloud2= 0
         for (let i = 0; i < this.scale.width; i += 100) {
@@ -48,9 +48,10 @@ export class Level3 extends Scene {
         this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
         }
 
+        // Vidas
         crearVidas(this)
         
-        //Título
+        // Título
         this.add.text(16, 16, '1-3. Cofres con acertijo', {
             fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
@@ -59,7 +60,7 @@ export class Level3 extends Scene {
         this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.2)
         this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
 
-        //grupo para los cofres
+        // Cofres
         this.chests = this.physics.add.staticGroup()
         const chest1 = this.add.image(400, this.scale.height - tileWidth, 'chest')
             .setOrigin(0, 1)
@@ -67,18 +68,18 @@ export class Level3 extends Scene {
         chest1.id = 'chest2'
         this.chests.add(chest1)
 
-        
-        //jugador
+        // Jugador
         this.player = this.physics.add.sprite(100, this.scale.height - tileWidth, 'player_idle')
         .setOrigin(0, 1)
         .setCollideWorldBounds(true)
         .setGravityY(300)
         .setScale(2)
+        // Colisión Jugador y el Suelo
+        this.physics.add.collider(this.player, this.floor)
 
-        //Pergamino con las colisiones
+        // Scroll
         this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
         const text= '¿Sabías que los cofres pueden contener acertijos?. Resuelve todos los acertijos para abrir todos los cofres y terminar el nivel.'
-        //overlap jugador pergamino
         this.physics.add.overlap(
             this.player,
             this.scroll,
@@ -87,17 +88,15 @@ export class Level3 extends Scene {
             }
         , null, this) 
         
-        // collider jugador suelo
-        this.physics.add.collider(this.player, this.floor)
-
-        // overlap jugador cofres
+    
+        // Overlap jugador cofres
         this.physics.add.overlap(this.player, this.chests, (player, chest) => {
             bocadilloCollectible(this, chest)
             this.isOverlappingCollectible = true
             this.activeCollectible = chest
         })
 
-        //listener E
+        // Listener E
         this.input.keyboard.on('keydown-E', () => {
             if (this.isOverlappingCollectible && !this.awaitingAnswer){
                 this.awaitingAnswer = true
@@ -105,12 +104,14 @@ export class Level3 extends Scene {
                 if (this.icon) disappearance(this.icon, this)
             }
         })
+
+        // Listener ESC
         this.input.keyboard.on('keydown-ESC', () => {
+            // Salir de la pregunta
             if (this.awaitingAnswer && !this.controlEnabled) {
             this.awaitingAnswer = false
             this.controlEnabled = true
 
-            // Desaparecer elementos de la pregunta
             if (this.questionUI) {
                 disappearance(this.questionUI.fondo, this)
                 disappearance(this.questionUI.preguntaText, this)
@@ -121,6 +122,7 @@ export class Level3 extends Scene {
                 this.questionUI = null
             }
             }
+            // Menu pausa
             if (!this.awaitingAnswer && this.controlEnabled) {
                 this.controlEnabled = false
                 menuPause(this)
@@ -128,19 +130,22 @@ export class Level3 extends Scene {
             
         });
     }
+
     update(){
         if (this.ishit) return
+
         if (this.controlEnabled) controls(this)
+
         if (this.awaitingAnswer && this.controlEnabled) {
             this.controlEnabled = false
             initQuestions(this)
         }
-        // Comprobar overlap collect
+
+        // Controlar NO overlapping collectible
         if (this.isOverlappingCollectible && this.activeCollectible) {
             const stillOverlapping = this.physics.overlap(this.player, this.activeCollectible);
 
             if (!stillOverlapping) {
-                // Simulamos overlapend
                 disappearance(this.bocadillo, this)
                 disappearance(this.icon, this)
 
@@ -150,7 +155,8 @@ export class Level3 extends Scene {
                 this.isOverlappingCollectible = false
             }
         }
-        // Comprobar overlap scroll
+
+        // Controlar NO overlapping scroll
         if (this.isOverLappingScroll) {
             const stillOverlapping = this.physics.overlap(this.player, this.scroll);
 
@@ -162,17 +168,19 @@ export class Level3 extends Scene {
                 this.isOverLappingScroll = false
             }
         }
-         // Verificar final del nivel
+
+        // Verificar final nivel
         const remainingChests = this.chests.getChildren().filter(chest => chest.active).length;
         if (remainingChests === 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000); // tiempo en segundos
+            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000)
             successWindow(this, timeTaken)
         }
+        
         // Comprobar Game Over
         if(this.vidas <= 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000); // tiempo en segundos
+            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000)
             failureWindow(this, timeTaken)
         }
 
@@ -211,52 +219,50 @@ function initQuestions(scene) {
 
     preguntaText.setDepth(fondo.depth + 1);
 
-    // Crear los botones de respuesta
     const respuestas = entry.answers;
     const buttons = [];
     appearance(fondo, scene, 0);
     appearance(preguntaText, scene, 50);
 
+    // Un botón por cada respuesta
     respuestas.forEach((respuesta, index) => {
-        // Distribución en cuadrícula 2x2
-        const col = index % 2; // 0 o 1
-        const row = Math.floor(index / 2); // 0 o 1
+        const col = index % 2
+        const row = Math.floor(index / 2)
     
-        const spacingX = 125; // espacio horizontal entre botones
-        const spacingY = 125; // espacio vertical entre botones
+        const spacingX = 125
+        const spacingY = 125
     
-        const baseX = scene.scale.width / 2;
-        const baseY = 220;
+        const baseX = scene.scale.width / 2
+        const baseY = 220
     
-        const posX = baseX + (col === 0 ? -spacingX / 2 : spacingX / 2);
-        const posY = baseY + row * spacingY;
-        const tileKey = 'ans' + index;
+        const posX = baseX + (col === 0 ? -spacingX / 2 : spacingX / 2)
+        const posY = baseY + row * spacingY
+        const tileKey = 'ans' + index
     
         const button = scene.add.sprite(posX, posY, tileKey)
             .setInteractive({ useHandCursor: true })
-            .setScale(2) // Más grande para texto
-            .setOrigin(0.5);
+            .setScale(2)
+            .setOrigin(0.5)
     
         const text = scene.add.text(posX, posY, respuesta.body, {
             fontSize: '16px',
             color: '#000',
-            wordWrap: { width: 110, useAdvancedWrap: true  }, // más espacio
+            wordWrap: { width: 110, useAdvancedWrap: true  }, 
             align: 'center',
             fontFamily: 'Arial'
         }).setOrigin(0.5);
     
-        button.isCorrect = respuesta.isCorrect;
+        button.isCorrect = respuesta.isCorrect
     
-        // Animaciones de aparición
-        appearance(button, scene, 50 + index * 50);
-        appearance(text, scene, 50 + index * 50);
+        appearance(button, scene, 50 + index * 50)
+        appearance(text, scene, 50 + index * 50)
     
         button.on('pointerdown', () => {
             if (button.isCorrect) {
-                console.log('¡Correcto!');
-                scene.awaitingAnswer = false;
+                console.log('¡Correcto!')
+                scene.awaitingAnswer = false
                 addtoscore(100, scene) 
-                disappearance(collectible, scene);
+                disappearance(collectible, scene)
                 
 
             } else {
@@ -281,7 +287,6 @@ function initQuestions(scene) {
     });
     
 
-    // Guardar elementos en la escena si necesitas destruirlos luego
     scene.questionUI = {
         fondo,
         preguntaText,

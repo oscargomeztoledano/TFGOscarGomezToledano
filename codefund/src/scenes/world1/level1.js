@@ -21,6 +21,7 @@ export class Level1 extends Scene
     }
     create()
     {
+        // Variables globales   
         this.isOverlappingCollectible = false
         this.isOverLappnigScroll = false
         this.activeCollectible = null
@@ -30,20 +31,29 @@ export class Level1 extends Scene
         this.ishit=false
         this.currentLevel = 'Level1'
         this.nextLevel = 'Level2'
+
+        // t0
         startTimeL1 = Date.now()
 
-        //fondo 64x64 hasta rellenar todo el lienzo
+        // Fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background1').setOrigin(0, 0)
 
+
+         // Suelo
         this.floor = this.physics.add.staticGroup()
-        // Lista de IDs de los suelos
-        const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
         const tileWidth = 48 
-        const yPosition = this.scale.height - tileWidth 
+        const yPosition1 = this.scale.height - tileWidth 
+        for (let x = 0; x < this.scale.width; x += tileWidth) {
+            this.floor.create(x, yPosition1, 'floor8').setOrigin(0, 0).refreshBody()
+        }
+        const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
+        const yPosition2 = this.scale.height - tileWidth -tileWidth
         for (let x = 0; x < this.scale.width; x += tileWidth) {
             const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
-            this.floor.create(x, yPosition, randomFloor).setOrigin(0, 0).refreshBody()
+            this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
         }
+
+
         //  Plataformas
         platforms1(this)
         
@@ -58,25 +68,26 @@ export class Level1 extends Scene
         // Vidas
         crearVidas(this)
 
-        // Nombre del nivel 
-        this.add.text(16, 16, '1-1. Variables', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+        // Título
+        this.add.text(16, 16, '1-1. Guardado de Variables', {
+            fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setOrigin(0, 0)
         this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.2)
 
-        //  jugador
-        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth, 'player_idle')
+        //  Jugador
+        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, 'player_idle')
         .setOrigin(0, 1)
         .setCollideWorldBounds(true)
         .setGravityY(300)
         .setScale(2)
+        // Colisiones Jugador y Suelo
+        this.physics.add.collider(this.player, this.floor)
 
-        //Pergamino con las colisiones
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
+        // Scroll
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll').setOrigin(0,1)
         const text= 'Este es un nivel de variables. Cada variable tiene una manera de guardarse. Resuelve todos los acertijos para terminar el nivel.'
-        //overlap jugador pergamino
         this.physics.add.overlap(
             this.player,
             this.scroll,
@@ -85,25 +96,20 @@ export class Level1 extends Scene
             }
         , null, this) 
 
-        // Añadir colisiones entre el jugador y el suelo
-        this.physics.add.collider(this.player, this.floor)
-
-        //creación de objetos coleccionables
+        // Coleccionables
         this.collection = this.physics.add.staticGroup()
-
         this.componentes = [
             { x: 350, y: 550, value: 'hola' },
-            { x: 250, y: 350, value: 'mundo' },
+            { x: 250, y: 350, value: 'false' },
             { x: 610, y: 250, value: '200' },
-            { x: 790, y: 250, value: '30,5' },
+            { x: 790, y: 250, value: 'mundo' },
             { x: 655, y: 450, value: 'True' },
-            { x: 800, y: 450, value: '0' }
+            { x: 800, y: 450, value: '30,5' }
         ]
 
         generarComponente(this)
 
-
-        // Añadir colisiones entre el jugador y los objetos coleccionables
+        // Colisiones Jugador y Coleccionables
         this.physics.add.overlap(this.player, this.collection, (player, collectible) => {
             if (!this.bocadillo&&!this.awaitingAnswer)
             bocadilloCollectible(this, collectible)
@@ -111,6 +117,7 @@ export class Level1 extends Scene
             this.activeCollectible = collectible
         }, null, this)
 
+        // Listener E
         this.input.keyboard.on('keydown-E', () => {
                 if (this.isOverlappingCollectible && !this.awaitingAnswer) {
                     this.awaitingAnswer = true
@@ -118,12 +125,13 @@ export class Level1 extends Scene
                     if (this.icon) disappearance(this.icon, this)
                 }     
         });
+        // Listener ESC
         this.input.keyboard.on('keydown-ESC', () => {
+            // Salir de la pregunta
             if (this.awaitingAnswer && !this.controlEnabled) {
             this.awaitingAnswer = false
             this.controlEnabled = true
 
-            // Desaparecer elementos de la pregunta
             if (this.questionUI) {
                 disappearance(this.questionUI.fondo, this)
                 disappearance(this.questionUI.preguntaText, this)
@@ -134,31 +142,32 @@ export class Level1 extends Scene
                 this.questionUI = null
             }
             }
+            // Menu pausa
             if (!this.awaitingAnswer && this.controlEnabled) {
                 this.controlEnabled = false
                 menuPause(this)
             }
         });
 
-        // Añadir controles WASD y espacio
         this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
         
     }
     update()
     {
         if (this.ishit) return
-        if(this.awaitingAnswer && this.controlEnabled){
+        
+        if (this.controlEnabled) controls(this)
+
+        if (this.awaitingAnswer && this.controlEnabled) {
             this.controlEnabled = false
             initQuestions(this)
         }
-        if(this.controlEnabled) {
-        controls(this)
-        }
+
+        // Controlar NO overlapping collectible
         if (this.isOverlappingCollectible && this.activeCollectible) {
             const stillOverlapping = this.physics.overlap(this.player, this.activeCollectible);
 
             if (!stillOverlapping) {
-                // Simulamos overlapend
                 disappearance(this.bocadillo, this)
                 disappearance(this.icon, this)
 
@@ -168,6 +177,8 @@ export class Level1 extends Scene
                 this.isOverlappingCollectible = false
             }
         } 
+
+        // Controlar NO overlapping scroll
         if (this.isOverLappingScroll) {
             const stillOverlapping = this.physics.overlap(this.player, this.scroll);
 
@@ -179,17 +190,19 @@ export class Level1 extends Scene
                 this.isOverLappingScroll = false
             }
         }
-        //Verificar final del nivel 
+
+        //Verificar final  nivel 
         const remainingCollectibles = this.collection.getChildren().filter(collectible => collectible.active).length
         if (remainingCollectibles === 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL1) / 1000); // tiempo en segundos
+            const timeTaken = Math.floor((Date.now() - startTimeL1) / 1000)
             successWindow(this, timeTaken)
         }
+
         // Comprobar Game Over
         if(this.vidas <= 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL1)/1000); // tiempo en segundos
+            const timeTaken = Math.floor((Date.now() - startTimeL1)/1000)
             failureWindow(this, timeTaken)
         }
     }
@@ -197,15 +210,15 @@ export class Level1 extends Scene
 }
 
 function initQuestions(scene) {
-    const padding = 10;
-    const collectible = scene.activeCollectible;
-    const id = collectible.text;
-    const kahootData = scene.cache.json.get('kahootLevel1');
-    const entry = kahootData.anslevel1.find(q => q.id === id);
+    const padding = 10
+    const collectible = scene.activeCollectible
+    const id = collectible.text
+    const kahootData = scene.cache.json.get('kahootLevel1')
+    const entry = kahootData.anslevel1.find(q => q.id === id)
 
     if (!entry) {
-        console.warn('No se encontraron respuestas para:', id);
-        return;
+        console.warn('No se encontraron respuestas para:', id)
+        return
     }
 
     // Mostrar la pregunta
@@ -216,7 +229,7 @@ function initQuestions(scene) {
         wordWrap: { width: 400 },
         align: 'center',
         fontFamily: 'Arial'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5)
 
     const fondo = scene.add.nineslice(
         scene.scale.width / 2, 100,
@@ -224,78 +237,76 @@ function initQuestions(scene) {
         preguntaText.width + padding * 2,
         preguntaText.height + padding * 2,
         14, 14, 14, 14
-    ).setOrigin(0.5);
+    ).setOrigin(0.5)
 
-    preguntaText.setDepth(fondo.depth + 1);
+    preguntaText.setDepth(fondo.depth + 1)
 
-    // Crear los botones de respuesta
-    const respuestas = entry.answers;
-    const buttons = [];
-    appearance(fondo, scene, 0);
-    appearance(preguntaText, scene, 50);
+    // Un boton por cada respuesta
+    const respuestas = entry.answers
+    const buttons = []
+    appearance(fondo, scene, 0)
+    appearance(preguntaText, scene, 50)
 
     respuestas.forEach((respuesta, index) => {
-        // Distribución en cuadrícula 2x2
-        const col = index % 2; // 0 o 1
-        const row = Math.floor(index / 2); // 0 o 1
+        const col = index % 2
+        const row = Math.floor(index / 2)
     
-        const spacingX = 125; // espacio horizontal entre botones
-        const spacingY = 125; // espacio vertical entre botones
+        const spacingX = 125
+        const spacingY = 125
     
-        const baseX = scene.scale.width / 2;
-        const baseY = 220;
+        const baseX = scene.scale.width / 2
+        const baseY = 220
     
-        const posX = baseX + (col === 0 ? -spacingX / 2 : spacingX / 2);
-        const posY = baseY + row * spacingY;
-        const tileKey = 'ans' + index;
+        const posX = baseX + (col === 0 ? -spacingX / 2 : spacingX / 2)
+        const posY = baseY + row * spacingY
+        const tileKey = 'ans' + index
     
         const button = scene.add.sprite(posX, posY, tileKey)
             .setInteractive({ useHandCursor: true })
-            .setScale(2) // Más grande para texto
-            .setOrigin(0.5);
+            .setScale(2) 
+            .setOrigin(0.5)
     
         const text = scene.add.text(posX, posY, respuesta.body, {
             fontSize: '16px',
             color: '#000',
-            wordWrap: { width: 110, useAdvancedWrap: true  }, // más espacio
+            wordWrap: { width: 110, useAdvancedWrap: true  }, 
             align: 'center',
             fontFamily: 'Arial'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5)
     
-        button.isCorrect = respuesta.isCorrect;
+        button.isCorrect = respuesta.isCorrect
     
-        // Animaciones de aparición
-        appearance(button, scene, 50 + index * 50);
-        appearance(text, scene, 50 + index * 50);
-    
+        appearance(button, scene, 50 + index * 50)
+        appearance(text, scene, 50 + index * 50)
+
         button.on('pointerdown', () => {
-            console.log('Respuesta seleccionada:', respuesta.body);
+            console.log('Respuesta seleccionada:', respuesta.body)
             if (button.isCorrect) {
-                console.log('¡Correcto!');
-                scene.awaitingAnswer = false;
+                console.log('¡Correcto!')
+                scene.awaitingAnswer = false
                 addtoscore(100, scene) 
-                disappearance(collectible, scene);
+                disappearance(collectible, scene)
 
             } else {
                 quitarvida(scene)
                 hit(scene)              
-                console.log('Incorrecto.');
+                console.log('Incorrecto.')
                 scene.awaitingAnswer = false
             }
     
             if (!scene.awaitingAnswer) {
                 scene.controlEnabled = true
-                disappearance(fondo, scene);
-                disappearance(preguntaText, scene);
+                disappearance(fondo, scene)
+                disappearance(preguntaText, scene)
                 buttons.forEach(b => {
-                    disappearance(b.button, scene);
-                    disappearance(b.text, scene);
-                });
+                    disappearance(b.button, scene)
+                    disappearance(b.text, scene)
+                })
             }
-        });
+        })
     
-        buttons.push({ button, text });
-    });
+        buttons.push({ button, text })
+    })
     
 
     // Guardar elementos en la escena si necesitas destruirlos luego
@@ -303,6 +314,6 @@ function initQuestions(scene) {
         fondo,
         preguntaText,
         buttons
-    };
+    }
 }
 
