@@ -1,6 +1,8 @@
 import {Scene} from 'phaser'
 import { registro, inicioSesion } from './forms';
 
+
+    
 export class SecondScene extends Scene {
     constructor() {
         super('SecondScene')
@@ -12,12 +14,10 @@ export class SecondScene extends Scene {
 
         this.floor = this.physics.add.staticGroup()
         // Lista de IDs de los suelos
-        const floorTypes1 = ['floor6', 'floor7']
         const tileWidth = 48 
         const yPosition1 = this.scale.height - tileWidth 
         for (let x = 0; x < this.scale.width; x += tileWidth) {
-            const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes1) // Seleccionar un suelo aleatorio
-            this.floor.create(x, yPosition1, randomFloor).setOrigin(0, 0).refreshBody()
+            this.floor.create(x, yPosition1, 'floor8').setOrigin(0, 0).refreshBody()
         }
         const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
         const yPosition2 = this.scale.height - tileWidth -tileWidth
@@ -28,7 +28,7 @@ export class SecondScene extends Scene {
 
         this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.2)
 
-        const botones = [
+        let botones = [
             {texto: 'INICIAR SESION', callback: () => { inicioSesion(this) }},
             {texto: 'REGISTRARSE', callback: () => { registro(this) }},
         ]
@@ -36,6 +36,7 @@ export class SecondScene extends Scene {
         const spacing= 10 
         const buttonHeight =  32
         const startY= this.scale.height/2- ((botones.length * (buttonHeight + spacing)) / 2) - 40;
+
 
         botones.forEach((boton, i) => {
             const y = startY + i * (buttonHeight + spacing)
@@ -53,11 +54,12 @@ export class SecondScene extends Scene {
 
             const button = this.add.nineslice(
                 this.scale.width / 2, y, 
-                'button2', 0, 
+                'fondoBoton', 0, 
                 buttonWidth, buttonHeight, 
                 10,10,10,10
             ).setOrigin(0.5).setInteractive({useHandCursor: true})
-        
+            
+
             const buttonText = this.add.text(
                 button.x , y,
                 boton.texto, {
@@ -70,7 +72,10 @@ export class SecondScene extends Scene {
             ).setOrigin(0.5)
 
             button.on('pointerdown', () => {
-                if (this.buttonEnabled) boton.callback()
+                if (this.buttonEnabled){
+                    this.buttonEnabled = false
+                    boton.callback()
+                } 
             })
             button.on('pointerover', () => {
                 button.setScale(1.1);
@@ -82,5 +87,6 @@ export class SecondScene extends Scene {
             })
         })
     }
+    
 
 }

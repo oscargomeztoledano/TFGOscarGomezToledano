@@ -1,21 +1,41 @@
+import { appearance,disappearance } from "./animations";
+
 export function successWindow(scene, timeTaken) {
 
     const {width, height} = scene.scale;
     scene.puntosBase= 200
-
+    const container = scene.add.container(width/2, height/2)
     // Añadir el fondo
-    scene.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
-
+    const overlay =scene.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
+    
+    const fondo = scene.add.nineslice( 0, -50, 'marco3', 0,300,300,10,10,10,10).setOrigin(0.5)
+    container.add(fondo)
     //Texto final nivel
-    scene.add.text(width / 2, height / 2 - 100, 'Nivel completado', {
+    const bannerText = scene.add.text(0, 0, 'Nivel completado', {
         fontSize: '28px',
         fontFamily: 'Arial',
         stroke: '#000000',
         strokeThickness: 4,
         color: '#ffffff'
     }).setOrigin(0.5);
+
+    const padding = 20
+    const widthBannerText = bannerText.width + padding * 2
+    const heightBannerText = bannerText.height + padding
+
+    const banner = scene.add.nineslice(
+        0, - fondo.height / 2 - 60, 
+        'marco1', 0, 
+        widthBannerText, heightBannerText, 
+        10, 10, 10, 10
+    ).setOrigin(0.5)
+
+    bannerText.setPosition(banner.x, banner.y).setOrigin(0.5)
+    bannerText.setDepth(banner.depth + 1)
+    container.add([banner, bannerText])
+
     //info puntos y tiempo
-    scene.add.text(width / 2, height / 2 + 50, 
+    const puntosText =scene.add.text(0, -60, 
         'Puntos: '+ (scene.puntosBase - timeTaken), {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -23,8 +43,8 @@ export function successWindow(scene, timeTaken) {
         strokeThickness: 4,
         color: '#ffffff'
     }).setOrigin(0.5);
-
-    scene.add.text(width / 2, height / 2 + 80, 
+    container.add(puntosText)
+    const tiempoText = scene.add.text(0,  -30, 
         'Tiempo: '+ timeTaken + 's', {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -32,12 +52,13 @@ export function successWindow(scene, timeTaken) {
         strokeThickness: 4,
         color: '#ffffff'
     }).setOrigin(0.5);
+    container.add(tiempoText)
 
     // Llamada al cáculo de los puntos y estrellas
     calcularEstrellas(scene, timeTaken)
-    const starsHeight = height / 2 - 25
+    const starsHeight =  -130
     const starsSpacing = 100
-    const posx=[width / 2 - starsSpacing, width / 2, width / 2 + starsSpacing]
+    const posx=[- starsSpacing, 0,  starsSpacing]
     scene.emptyStars=[]
     scene.stars=[]
     for (let i =0; i<3; i++){
@@ -47,61 +68,57 @@ export function successWindow(scene, timeTaken) {
             scene.emptyStars.push(scene.add.image(posx[i], starsHeight, 'starOutline').setOrigin(0.5))
             
     }
+    container.add(scene.emptyStars)
+    container.add(scene.stars)
 
+    const botones = [
+        {icon: 'iconExit', callback: ()=> {
+            disappearance(container, scene)
+            scene.time.delayedCall(300, () => {
+                scene.scene.start('MainMenu')
+            });
+        }},
+        {icon: 'iconRestart', callback: ()=> {
+            disappearance(container, scene)
+            scene.time.delayedCall(300, () => {
+                scene.scene.start(scene.currentLevel)
+            });
+        }},
+        {icon: 'iconResume', callback: ()=> {
+            disappearance(container, scene)
+            scene.time.delayedCall(300, () => {
+                scene.scene.start(scene.nextLevel)
+            });
+        }}
+    ]
     // Botones
-    const buttonheight = 150
+    const buttonheight = 40
     const buttonSpacing = 100
 
-    // Botón HOME
-    const buttonHome=scene.add.image(
-        width / 2 - buttonSpacing, 
-        height / 2 + buttonheight, 
-        'iconExit')
-        .setOrigin(0.5).setScale(2)
-        .setInteractive({useHandCursor: true})
-    buttonHome.on('pointerdown', () => {
-        scene.scene.start('MainMenu')
-    })
-    buttonHome.on('pointerover', () => {
-        buttonHome.setScale(3.1);
-    });
-    buttonHome.on('pointerout', () => {
-        buttonHome.setScale(2);
-    });
+    botones.forEach((boton, i) => {
+        const y = buttonheight
+        const x = (i - 1) * buttonSpacing
 
-    // Botón REPEAT	
-    const buttonRepeat=scene.add.image(
-        width / 2 , 
-        height / 2 + buttonheight, 
-        'iconRestart')
-        .setOrigin(0.5).setScale(2)
-        .setInteractive({useHandCursor: true})
-    buttonRepeat.on('pointerdown', () => {
-        scene.scene.start(scene.currentLevel)
+        const button = scene.add.image(x,y, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true}).setScale(2)
+        container.add(button)
+        const icon = scene.add.image(x, y, boton.icon).setOrigin(0.5).setScale(2)
+        container.add(icon)
+
+        button.on('pointerdown', () => {
+            boton.callback()
+        })
+        button.on('pointerover', () => {
+            button.setScale(2.2);
+            icon.setScale(2.2);
+        })
+        button.on('pointerout', () => {
+            button.setScale(2);
+            icon.setScale(2);
+        })
     })
-    buttonRepeat.on('pointerover', () => {
-        buttonRepeat.setScale(3.1);
-    });
-    buttonRepeat.on('pointerout', () => {
-        buttonRepeat.setScale(2);
-    });
-    
-    // Botón PLAY
-    const buttonPlay=scene.add.image(
-        width / 2 + buttonSpacing, 
-        height / 2 + buttonheight, 
-        'iconResume')
-        .setOrigin(0.5).setScale(2)
-        .setInteractive({useHandCursor: true})
-    buttonPlay.on('pointerdown', () => {
-        scene.scene.start(scene.nextLevel)
-    })
-    buttonPlay.on('pointerover', () => {
-        buttonPlay.setScale(3.1);
-    });
-    buttonPlay.on('pointerout', () => {
-        buttonPlay.setScale(2);
-    });
+
+    appearance(container, scene)
+    container.setDepth(overlay.depth + 1)
 }
 
 // Función para calcular los puntos
@@ -113,22 +130,45 @@ function calcularEstrellas(scene, timeTaken){
 }
 
 export function failureWindow(scene, timeTaken){
+
+
     const {width, height} = scene.scale;
     scene.puntosBase= 200
+    const container = scene.add.container(width/2, height/2)
 
     // Añadir el fondo
-    scene.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
+    const overlay =scene.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
+    
+    const fondo = scene.add.nineslice( 0, -50, 'marco3', 0,300,300,10,10,10,10).setOrigin(0.5)
+    container.add(fondo)
+
 
     //Texto final nivel
-    scene.add.text(width / 2, height / 2 - 100, 'GAME OVER', {
+    const bannerText = scene.add.text(0, 0, 'Game Over', {
         fontSize: '28px',
         fontFamily: 'Arial',
         stroke: '#000000',
         strokeThickness: 4,
         color: '#ffffff'
     }).setOrigin(0.5);
-    //info puntos y tiempo
-    scene.add.text(width / 2, height / 2 + 50, 
+
+    const padding = 20
+    const widthBannerText = bannerText.width + padding * 2
+    const heightBannerText = bannerText.height + padding
+
+    const banner = scene.add.nineslice(
+        0, - fondo.height / 2 - 60, 
+        'marco1', 0, 
+        widthBannerText, heightBannerText, 
+        10, 10, 10, 10
+    ).setOrigin(0.5)
+
+    bannerText.setPosition(banner.x, banner.y).setOrigin(0.5)
+    bannerText.setDepth(banner.depth + 1)
+    container.add([banner, bannerText])
+
+   //info puntos y tiempo
+    const puntosText =scene.add.text(0, -60, 
         'Puntos: 0', {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -136,8 +176,9 @@ export function failureWindow(scene, timeTaken){
         strokeThickness: 4,
         color: '#ffffff'
     }).setOrigin(0.5);
+    container.add(puntosText)
 
-    scene.add.text(width / 2, height / 2 + 80, 
+    const tiempoText = scene.add.text(0,  -30, 
         'Tiempo: '+ timeTaken + 's', {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -145,54 +186,62 @@ export function failureWindow(scene, timeTaken){
         strokeThickness: 4,
         color: '#ffffff'
     }).setOrigin(0.5);
+    container.add(tiempoText)
 
     
-    const starsHeight = height / 2 - 25
+    const starsHeight = -130
     const starsSpacing = 100
-    const posx=[width / 2 - starsSpacing, width / 2, width / 2 + starsSpacing]
+    const posx=[- starsSpacing, 0,  starsSpacing]
     scene.emptyStars=[]
     for (let i =0; i<3; i++){
             scene.emptyStars.push(scene.add.image(posx[i], starsHeight, 'starOutline').setOrigin(0.5))
             
     }
-
+    container.add(scene.emptyStars)
+    
     // Botones
-    const buttonheight = 150
-    const buttonSpacing = 50
+    const botones = [
+        {icon: 'iconExit', callback: ()=> {
+            disappearance(container, scene)
+            scene.time.delayedCall(400, () => {
+                scene.scene.start('MainMenu')
+            });
+        }},
+        {icon: 'iconRestart', callback: ()=> {
+            disappearance(container, scene)
+            scene.time.delayedCall(300, () => {
+                scene.scene.start(scene.currentLevel)
+            });
+        }},
+    ]
 
-    // Botón HOME
-    const buttonHome=scene.add.image(
-        width / 2 - buttonSpacing, 
-        height / 2 + buttonheight, 
-        'iconExit')
-        .setOrigin(0.5).setScale(2)
-        .setInteractive({useHandCursor: true})
-    buttonHome.on('pointerdown', () => {
-        scene.scene.start('MainMenu')
-    })
-    buttonHome.on('pointerover', () => {
-        buttonHome.setScale(3.1);
-    });
-    buttonHome.on('pointerout', () => {
-        buttonHome.setScale(2);
-    });
+    const buttonheight = 40
+    const buttonSpacing = 80
 
-    // Botón REPEAT	
-    const buttonRepeat=scene.add.image(
-        width / 2 + buttonSpacing, 
-        height / 2 + buttonheight, 
-        'iconRestart')
-        .setOrigin(0.5).setScale(2)
-        .setInteractive({useHandCursor: true})
-    buttonRepeat.on('pointerdown', () => {
-        scene.scene.start(scene.currentLevel)
+    botones.forEach((boton, i) => {
+        const y = buttonheight
+        const x = i === 0 ? -buttonSpacing : buttonSpacing
+
+        const button = scene.add.image(x,y, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true}).setScale(2)
+        container.add(button)
+        const icon = scene.add.image(x, y, boton.icon).setOrigin(0.5).setScale(2)
+        container.add(icon)
+
+        button.on('pointerdown', () => {
+            boton.callback()
+        })
+        button.on('pointerover', () => {
+            button.setScale(2.2);
+            icon.setScale(2.2);
+        })
+        button.on('pointerout', () => {
+            button.setScale(2);
+            icon.setScale(2);
+        })
     })
-    buttonRepeat.on('pointerover', () => {
-        buttonRepeat.setScale(3.1);
-    });
-    buttonRepeat.on('pointerout', () => {
-        buttonRepeat.setScale(2);
-    });
+
+    appearance(container, scene)
+    container.setDepth(overlay.depth + 1)
     
     
 }

@@ -3,7 +3,7 @@ import { disappearance } from "./animations";
 export function crearVidas(scene){
     const vidas = [];
     const startX = 800; // Starting X position
-    const startY = 10; // Starting Y position
+    const startY = 40; // Starting Y position
     const spacing = 60; // Space between each 'player-head'
 
     for (let i = 0; i < 3; i++) { // Assuming 3 lives
