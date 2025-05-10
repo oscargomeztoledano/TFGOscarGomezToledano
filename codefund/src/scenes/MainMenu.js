@@ -41,7 +41,7 @@ export class MainMenu extends Scene
             stroke: '#000000',
             strokeThickness: 2
         })
-        this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.2)
+        this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.25)
         
         // Botones
         const botones = [
@@ -51,7 +51,7 @@ export class MainMenu extends Scene
             {texto: 'GLOSARIO', callback: () => {}},
             {texto: 'LEADERBOARD', callback: () => {}},
             {texto: 'CRÉDITOS', callback: () => {}},
-            {texto: 'SALIR', callback: () => {}},
+            {texto: 'SALIR', callback: () => {this.scene.start('FirstScene')}},
         ]
         
         const spacing= 10 
@@ -62,20 +62,11 @@ export class MainMenu extends Scene
         botones.forEach((boton, i) => {
             const y = startY + i * (buttonHeight + spacing)
 
-            const tempText = this.add.text(0,0, boton.texto, {
-                fontFamily: 'Arial Black',
-                fontSize: '14px',
-                color: '#ffffff',
-                stroke: '#000000',
-                strokeThickness: 2
-            }).setVisible(false)
-
-            const padding = 40
-            const buttonWidth = tempText.width + padding
+            const buttonWidth = 258 // Tamaño del texto más largo + padding
 
             const button = this.add.nineslice(
                 this.scale.width / 2, y, 
-                'button2', 0, 
+                'fondoBoton', 0, 
                 buttonWidth, buttonHeight, 
                 10,10,10,10
             ).setOrigin(0.5).setInteractive({useHandCursor: true})

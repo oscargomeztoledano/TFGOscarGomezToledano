@@ -30,23 +30,27 @@ export class Level3 extends Scene {
         // Fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
         
-        // Suelo
-        this.floor = this.physics.add.staticGroup()
-        const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
-        const tileWidth = 48 
-        const yPosition = this.scale.height - tileWidth 
-        for (let x = 0; x < this.scale.width; x += tileWidth) {
-            const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
-            this.floor.create(x, yPosition, randomFloor).setOrigin(0, 0).refreshBody()
-        }
+         // Suelo
+         this.floor = this.physics.add.staticGroup()
+         const tileWidth = 48 
+         const yPosition1 = this.scale.height - tileWidth 
+         for (let x = 0; x < this.scale.width; x += tileWidth) {
+             this.floor.create(x, yPosition1, 'floor8').setOrigin(0, 0).refreshBody()
+         }
+         const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
+         const yPosition2 = this.scale.height - tileWidth -tileWidth
+         for (let x = 0; x < this.scale.width; x += tileWidth) {
+             const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
+             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
+         }
 
-        // Nubes
-        let cloud1= 0
-        let cloud2= 0
-        for (let i = 0; i < this.scale.width; i += 100) {
-        this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
-        this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
-        }
+        // // Nubes
+        // let cloud1= 0
+        // let cloud2= 0
+        // for (let i = 0; i < this.scale.width; i += 100) {
+        // this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
+        // this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
+        // }
 
         // Vidas
         crearVidas(this)
@@ -57,19 +61,19 @@ export class Level3 extends Scene {
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setOrigin(0, 0)
-        this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.2)
+        this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.25)
         this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
 
         // Cofres
         this.chests = this.physics.add.staticGroup()
-        const chest1 = this.add.image(400, this.scale.height - tileWidth, 'chest')
+        const chest1 = this.add.image(400, this.scale.height - tileWidth*2, 'chest')
             .setOrigin(0, 1)
             .setScale(0.25)
         chest1.id = 'chest2'
         this.chests.add(chest1)
 
         // Jugador
-        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth, 'player_idle')
+        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, 'player_idle')
         .setOrigin(0, 1)
         .setCollideWorldBounds(true)
         .setGravityY(300)
@@ -78,7 +82,7 @@ export class Level3 extends Scene {
         this.physics.add.collider(this.player, this.floor)
 
         // Scroll
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth,'scroll').setOrigin(0,1)
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll').setOrigin(0,1)
         const text= '¿Sabías que los cofres pueden contener acertijos?. Resuelve todos los acertijos para abrir todos los cofres y terminar el nivel.'
         this.physics.add.overlap(
             this.player,
@@ -99,14 +103,16 @@ export class Level3 extends Scene {
         // Listener E
         this.input.keyboard.on('keydown-E', () => {
             if (this.isOverlappingCollectible && !this.awaitingAnswer){
+                this.player.anims.play('player_idle', true)
                 this.awaitingAnswer = true
                 if (this.bocadillo) disappearance(this.bocadillo, this)
                 if (this.icon) disappearance(this.icon, this)
             }
         })
 
-        // Listener ESC
-        this.input.keyboard.on('keydown-ESC', () => {
+         // Listener ESC
+         this.input.keyboard.on('keydown-ESC', () => {
+            
             // Salir de la pregunta
             if (this.awaitingAnswer && !this.controlEnabled) {
             this.awaitingAnswer = false
@@ -121,9 +127,8 @@ export class Level3 extends Scene {
                 });
                 this.questionUI = null
             }
-            }
-            // Menu pausa
-            if (!this.awaitingAnswer && this.controlEnabled) {
+            }// Pausar el juego
+            else if (!this.awaitingAnswer && this.controlEnabled) {
                 this.controlEnabled = false
                 menuPause(this)
             }
@@ -201,20 +206,22 @@ function initQuestions(scene) {
 
     // Mostrar la pregunta
     const pregunta = entry.question
-    const preguntaText = scene.add.text(scene.scale.width / 2, 100, pregunta, {
+    const preguntaText = scene.add.text(scene.scale.width / 2, 130, pregunta, {
         fontSize: '18px',
-        color: '#000',
+        color: '#fff',
         wordWrap: { width: 400 },
         align: 'center',
-        fontFamily: 'Arial'
+        stroke: '#000000',
+        strokeThickness: 2,
+        fontFamily: 'Arial Blanck'
     }).setOrigin(0.5);
 
     const fondo = scene.add.nineslice(
-        scene.scale.width / 2, 100,
-        'tile0', 0,
+        scene.scale.width / 2, 130,
+        'marco3', 0,
         preguntaText.width + padding * 2,
         preguntaText.height + padding * 2,
-        14, 14, 14, 14
+        10, 10, 10, 10
     ).setOrigin(0.5)
 
     preguntaText.setDepth(fondo.depth + 1);
@@ -229,8 +236,8 @@ function initQuestions(scene) {
         const col = index % 2
         const row = Math.floor(index / 2)
     
-        const spacingX = 125
-        const spacingY = 125
+        const spacingX = 135
+        const spacingY = 135
     
         const baseX = scene.scale.width / 2
         const baseY = 220
@@ -239,17 +246,18 @@ function initQuestions(scene) {
         const posY = baseY + row * spacingY
         const tileKey = 'ans' + index
     
-        const button = scene.add.sprite(posX, posY, tileKey)
+        const button = scene.add.nineslice(posX, posY, tileKey,0,128,128,2,2,5,2)
             .setInteractive({ useHandCursor: true })
-            .setScale(2)
             .setOrigin(0.5)
     
         const text = scene.add.text(posX, posY, respuesta.body, {
             fontSize: '16px',
-            color: '#000',
+            color: '#fff',
             wordWrap: { width: 110, useAdvancedWrap: true  }, 
             align: 'center',
-            fontFamily: 'Arial'
+            fontFamily: 'Arial Blanck',
+            stroke: '#000000', 
+            strokeThickness: 2
         }).setOrigin(0.5);
     
         button.isCorrect = respuesta.isCorrect
@@ -281,6 +289,14 @@ function initQuestions(scene) {
                     disappearance(b.text, scene);
                 });
             }
+        });
+        button.on('pointerover', () => {
+            button.setScale(1.1);
+            text.setScale(1.1);
+        });
+        button.on('pointerout', () => {
+            button.setScale(1);
+            text.setScale(1);
         });
     
         buttons.push({ button, text });

@@ -1,14 +1,12 @@
 import { disappearance,appearance } from "./animations"
 
 export function registro(scene){
-    const container = scene.add.container(0, 0)
     const {width, height} = scene.scale
-    scene.buttonEnabled = false
-
-    const fondo = scene.add.nineslice(width / 2, 
-        height / 2-50, 
-        'frame2',0,
-        400, 300, 10, 10, 10, 10).setOrigin(0.5)
+    const container = scene.add.container(width/2, height/2)
+    const fondo = scene.add.nineslice(0, 
+        -50, 
+        'marco3',0,
+        300, 300, 10, 10, 10, 10).setOrigin(0.5)
     container.add(fondo)
 
     const bannerText = scene.add.text(0, 0, 'REGISTRO', {
@@ -21,11 +19,10 @@ export function registro(scene){
     const padding = 20
     const widthBannerText = bannerText.width + padding * 2
     const heightBannerText = bannerText.height + padding
-    const bannerposty= height / 2 - fondo.height / 2 - 60
 
     const banner = scene.add.nineslice(
-        width / 2, bannerposty, 
-        'frame2', 0, 
+        0, - fondo.height / 2 - 60, 
+        'marco1', 0, 
         widthBannerText, heightBannerText, 
         10, 10, 10, 10
     ).setOrigin(0.5)
@@ -42,16 +39,15 @@ export function registro(scene){
     ];
 
     inputFields.forEach((field, index) => {
-        const text = scene.add.text(0, 0, field.placeholder, {
+        const text = scene.add.text(-100, field.yOffset-25 , field.placeholder, {
             fontFamily: 'Arial Black',
             fontSize: '14px',
             color: '#ffffff',
             stroke: '#000000',
             strokeThickness: 2
         }).setOrigin(0,0.5)
-        text.setPosition(width / 2 - 100, height / 2 + field.yOffset - 25)
         container.add(text)
-        const input = scene.add.dom(width / 2, height / 2 + field.yOffset).createFromHTML(`
+        const input = scene.add.dom(0, field.yOffset).createFromHTML(`
             <input type="text" id="input-${field.placeholder}" style="width: 200px; padding: 5px;" />
         `)
         container.add(input)
@@ -65,14 +61,14 @@ export function registro(scene){
     ]
     const spacing= 15
     const buttonHeight =  32
-    const startX=width/2-(buttonHeight+spacing)
-    const startY= height/2+50
+    const startX=-(buttonHeight+spacing)
+    const startY= 50
 
     botones.forEach((boton, i) => {
         const x = startX + i * ((buttonHeight + spacing)*2)
         const y = startY
 
-        const button = scene.add.image(x, y, 'frame1').setOrigin(0.5).setInteractive({useHandCursor: true})
+        const button = scene.add.image(x, y, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true})
         container.add(button)
         const icon = scene.add.image(x, y, boton.icon).setOrigin(0.5)
         container.add(icon)
@@ -93,13 +89,11 @@ export function registro(scene){
     appearance(container, scene)
 }   
 export function inicioSesion(scene){
-    const container = scene.add.container(0, 0)
     const {width, height} = scene.scale
-    scene.buttonEnabled = false
-
-    const fondo = scene.add.nineslice(width / 2, 
-        height / 2-50, 
-        'frame2',0,
+    const container = scene.add.container(width/2, height/2)
+    const fondo = scene.add.nineslice(0, 
+        -50, 
+        'marco3',0,
         300, 200, 10, 10, 10, 10).setOrigin(0.5)
     container.add(fondo)
 
@@ -113,11 +107,10 @@ export function inicioSesion(scene){
     const padding = 20
     const widthBannerText = bannerText.width + padding * 2
     const heightBannerText = bannerText.height + padding
-    const bannerposty= height / 2 - fondo.height / 2 - 60
 
     const banner = scene.add.nineslice(
-        width / 2, bannerposty, 
-        'frame2', 0, 
+        0, - fondo.height / 2 - 60, 
+        'marco1', 0, 
         widthBannerText, heightBannerText, 
         10, 10, 10, 10
     ).setOrigin(0.5)
@@ -132,16 +125,15 @@ export function inicioSesion(scene){
     ];
 
     inputFields.forEach((field, index) => {
-        const text = scene.add.text(0, 0, field.placeholder, {
+        const text = scene.add.text(-100, field.yOffset - 25, field.placeholder, {
             fontFamily: 'Arial Black',
             fontSize: '14px',
             color: '#ffffff',
             stroke: '#000000',
             strokeThickness: 2
         }).setOrigin(0,0.5)
-        text.setPosition(width / 2 - 100, height / 2 + field.yOffset - 25)
         container.add(text)
-        const input = scene.add.dom(width / 2, height / 2 + field.yOffset).createFromHTML(`
+        const input = scene.add.dom(0, field.yOffset).createFromHTML(`
             <input type="text" id="input-${field.placeholder}" style="width: 200px; padding: 5px;" />
         `)
         container.add(input)
@@ -155,14 +147,14 @@ export function inicioSesion(scene){
     ]
     const spacing= 15
     const buttonHeight =  32
-    const startX=width/2-(buttonHeight+spacing)
-    const startY= height/2
+    const startX=-(buttonHeight+spacing)
+    const startY= 0 
 
     botones.forEach((boton, i) => {
         const x = startX + i * ((buttonHeight + spacing)*2)
         const y = startY
 
-        const button = scene.add.image(x, y, 'frame1').setOrigin(0.5).setInteractive({useHandCursor: true})
+        const button = scene.add.image(x, y, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true})
         container.add(button)
         const icon = scene.add.image(x, y, boton.icon).setOrigin(0.5)
         container.add(icon)

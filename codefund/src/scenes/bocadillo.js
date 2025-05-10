@@ -9,7 +9,7 @@ export function bocadilloCollectible (scene, collectible){
 
         scene.bocadillo = scene.add.nineslice(
             collectible.x+(collectible.width/2), collectible.y - 80,
-            'tile1', 0, w, h, 10, 10, 10, 10
+            'marco3', 0, w, h, 10, 10, 10, 10
         )
         scene.icon.setDepth(scene.bocadillo.depth + 1)
         
@@ -35,12 +35,12 @@ export function bocadilloCheckPoint (scene, prevText, postText){
 
         // Texto adicional
         scene.textBefore = scene.add.text(0, 0, prevText, {
-            fontFamily: 'Arial', fontSize: 14, color: '#ffffff',
+            fontFamily: 'Arial Blanck', fontSize: 14, color: '#ffffff',
             stroke: '#000000', strokeThickness: 2
         }).setOrigin(0.5, 0.5);
 
         scene.textAfter = scene.add.text(0, 0, postText, {
-            fontFamily: 'Arial', fontSize: 14, color: '#ffffff',
+            fontFamily: 'Arial Blanck', fontSize: 14, color: '#ffffff',
             stroke: '#000000', strokeThickness: 2
         }).setOrigin(0.5, 0.5);
 
@@ -50,7 +50,7 @@ export function bocadilloCheckPoint (scene, prevText, postText){
 
         scene.bocadillo = scene.add.nineslice(
             scene.checkpoint.x - 80, scene.checkpoint.y - 100,
-            'tile1', 0, totalWidth, h, 10, 10, 10, 10
+            'marco3', 0, totalWidth, h, 10, 10, 10, 10
         );
 
         // Posiciones relativas
@@ -82,10 +82,12 @@ export function bocadilloScroll(scene, text){
         scene.isOverLappingScroll = true;
         scene.text= scene.add.text(0, 0, text, {
             fontSize: '16px',
-            color: '#000',
+            color: '#fff',
             wordWrap: { width: 200, useAdvancedWrap: true  }, // más espacio
             align: 'center',
-            fontFamily: 'Arial'
+            fontFamily: 'Arial Blanck',
+            stroke: '#000000',
+            strokeThickness: 2
         }).setOrigin(0.5);
         const padding = 10;
 
@@ -96,7 +98,7 @@ export function bocadilloScroll(scene, text){
         // Crear el bocadillo con nine slice
         scene.bocadillo = scene.add.nineslice(
             scene.scroll.x+100, scene.scroll.y - 150,
-            'tile1', 0, w, h, 10, 10, 10, 10
+            'marco3', 0, w, h, 10, 10, 10, 10
         );
 
         // Reubicar el texto dentro del bocadillo

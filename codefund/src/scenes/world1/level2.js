@@ -53,11 +53,11 @@ export class Level2 extends Scene {
         // Plataformas
         platforms2({floor: this.floor})
         
-        // Nubes
-        let cloud1= 0
-        for (let i = 0; i < this.scale.width; i += 100) {
-        this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
-        }
+        // // Nubes
+        // let cloud1= 0
+        // for (let i = 0; i < this.scale.width; i += 100) {
+        // this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
+        // }
 
         // Vidas
         crearVidas(this)
@@ -68,7 +68,7 @@ export class Level2 extends Scene {
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
         }).setOrigin(0, 0)
-        this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.2)
+        this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.25)
 
         // Jugador
         this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, 'player_idle')
@@ -171,9 +171,8 @@ export class Level2 extends Scene {
                 this.activeCollectible = null;
                 this.isOverlappingCollectible = false;
             }
-
             // Checkpoint
-            if (this.isOverLappingCheckpoint) {
+            else if (this.isOverLappingCheckpoint) {
                 disappearance(this.bocadillo, this)
                 disappearance(this.icon, this)
                 disappearance(this.textBefore, this)
@@ -196,6 +195,7 @@ export class Level2 extends Scene {
                     else {
                         quitarvida(this)
                         hit(this)
+                        this.collection.clear(true, true);
                         generarComponente(this)
                     }
             }
