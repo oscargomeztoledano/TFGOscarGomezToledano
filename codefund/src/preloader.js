@@ -75,6 +75,6 @@ export class Preloader extends Scene {
     }
     create() {
         initAnimations(this)
-        this.scene.start('Level1')
+        this.scene.start('MainMenu');
     }
 }

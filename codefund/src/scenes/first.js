@@ -12,12 +12,10 @@ export class FirstScene extends Scene {
 
         this.floor = this.physics.add.staticGroup()
         // Lista de IDs de los suelos
-        const floorTypes1 = ['floor6', 'floor7']
         const tileWidth = 48 
         const yPosition1 = this.scale.height - tileWidth 
         for (let x = 0; x < this.scale.width; x += tileWidth) {
-            const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes1) 
-            this.floor.create(x, yPosition1, randomFloor).setOrigin(0, 0).refreshBody()
+            this.floor.create(x, yPosition1, 'floor8').setOrigin(0, 0).refreshBody()
         }
         const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
         const yPosition2 = this.scale.height - tileWidth -tileWidth

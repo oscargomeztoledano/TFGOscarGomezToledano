@@ -57,7 +57,13 @@ export function registro(scene){
         {icon:'cross', callback:  () => {
             scene.buttonEnabled = true
             disappearance(container, scene)}},
-        {icon:'check', callback: () => {}},
+        {icon:'check', callback: () => {
+            // Llamada a la Api para comprobar si datos son correctos
+            // hay que comprobar que el aula exista y que el correo no exista
+            // si existe el aula y no el correo, se crea el alumno
+            // si no existe aula, error
+            // si existe el correo, error
+        }},
     ]
     const spacing= 15
     const buttonHeight =  32
@@ -143,7 +149,13 @@ export function inicioSesion(scene){
         {icon:'cross', callback:  () => {
             scene.buttonEnabled = true
             disappearance(container, scene)}},
-        {icon:'check', callback: () => {}},
+        {icon:'check', callback: () => {
+            // Llamada a la Api para comprobar si datos son correctos
+            // Hay que comprobar que el correo existe y la contraseña es correcta
+            // si existe el correo y la contraseña es correcta, se inicia sesion
+            // si no existe el correo, error
+            // si existe el correo pero la contraseña es incorrecta, error
+        }},
     ]
     const spacing= 15
     const buttonHeight =  32
