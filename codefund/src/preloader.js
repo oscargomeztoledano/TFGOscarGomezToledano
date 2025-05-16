@@ -1,6 +1,6 @@
 import {Scene} from 'phaser'
-import { initSpritesheet } from './scenes/spritesheet';
-import { initAnimations } from './scenes/animations'
+import { initSpritesheet } from './scenes/utils/spritesheet';
+import { initAnimations } from './scenes/utils/animations'
 
 export class Preloader extends Scene {
     constructor() {
@@ -32,11 +32,6 @@ export class Preloader extends Scene {
         this.load.image('cloud1', '/assets/enviroments/cloud1.png')
         this.load.image('cloud2', '/assets/enviroments/cloud2.png')
 
-        this.load.image('tile1', '/assets/ui/tiles/tile3.png')
-        this.load.image('tile0', '/assets/ui/tiles/tile4.png')
-        this.load.image('tile2', '/assets/ui/tiles/tile0.png')
-        this.load.image('tile3', '/assets/ui/tiles/tile2.png')
-        this.load.image('tile6', '/assets/ui/tiles/tile6.png')
 
         this.load.image('E0', '/assets/ui/keyboard/keyboard_e.png')
         this.load.image('E1', '/assets/ui/keyboard/keyboard_e_outline.png')
@@ -62,7 +57,7 @@ export class Preloader extends Scene {
         this.load.image('iconExit', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_35.png')
         this.load.image('iconLevels', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_19.png')
         this.load.image('iconSettings', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_07.png')
-
+        this.load.image('iconLock', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_08.png')
         //frames cambio pantalla final y game over
         this.load.image('fondoBoton', '/assets/ui/cyberpunkUI/1 Frames/Frame_07.png')
         this.load.image('fondoBotonX', '/assets/ui/cyberpunkUI/1 Frames/Frame_08.png')
@@ -70,11 +65,47 @@ export class Preloader extends Scene {
         this.load.image('marco2', '/assets/ui/cyberpunkUI/1 Frames/Frame_79.png')
         this.load.image('marco3', '/assets/ui/cyberpunkUI/1 Frames/Frame_80.png')
 
-        
+        this.load.image('1_1Done', '/assets/achievements/1_1Done.png')
+        this.load.image('1_2Done', '/assets/achievements/1_2Done.png')
+        this.load.image('1_3Done', '/assets/achievements/1_3Done.png')
+        this.load.image('1_4Done', '/assets/achievements/1_4Done.png')
+        this.load.image('1_5Done', '/assets/achievements/1_5Done.png')
+        this.load.image('1_6Done', '/assets/achievements/1_6Done.png')
+        this.load.image('1_1Estrellas', '/assets/achievements/1_1Estrellas.png')
+        this.load.image('1_2Estrellas', '/assets/achievements/1_2Estrellas.png')
+        this.load.image('1_3Estrellas', '/assets/achievements/1_3Estrellas.png')
+        this.load.image('1_4Estrellas', '/assets/achievements/1_4Estrellas.png')
+        this.load.image('1_5Estrellas', '/assets/achievements/1_5Estrellas.png')
+        this.load.image('1_6Estrellas', '/assets/achievements/1_6Estrellas.png')
+        this.load.image('2_1Done', '/assets/achievements/2_1Done.png')
+        this.load.image('2_2Done', '/assets/achievements/2_2Done.png')
+        this.load.image('2_3Done', '/assets/achievements/2_3Done.png')
+        this.load.image('2_4Done', '/assets/achievements/2_4Done.png')
+        this.load.image('2_5Done', '/assets/achievements/2_5Done.png')
+        this.load.image('2_6Done', '/assets/achievements/2_6Done.png')
+        this.load.image('2_1Estrellas', '/assets/achievements/2_1Estrellas.png')
+        this.load.image('2_2Estrellas', '/assets/achievements/2_2Estrellas.png')
+        this.load.image('2_3Estrellas', '/assets/achievements/2_3Estrellas.png')
+        this.load.image('2_4Estrellas', '/assets/achievements/2_4Estrellas.png')
+        this.load.image('2_5Estrellas', '/assets/achievements/2_5Estrellas.png')
+        this.load.image('2_6Estrellas', '/assets/achievements/2_6Estrellas.png')
+        this.load.image('1Done', '/assets/achievements/1Done.png')
+        this.load.image('2Done', '/assets/achievements/2Done.png')
+        this.load.image('5Estrellas', '/assets/achievements/5Estrellas.png')
+        this.load.image('10Estrellas', '/assets/achievements/10Estrellas.png')
+        this.load.image('15Estrellas', '/assets/achievements/15Estrellas.png')
+        this.load.image('20Estrellas', '/assets/achievements/20Estrellas.png')
+        this.load.image('25Estrellas', '/assets/achievements/25Estrellas.png')
+        this.load.image('30Estrellas', '/assets/achievements/30Estrellas.png')
+        this.load.image('35Estrellas', '/assets/achievements/35Estrellas.png')
+        this.load.image('40Estrellas', '/assets/achievements/40Estrellas.png')
+        this.load.image('45Estrellas', '/assets/achievements/45Estrellas.png')
+        this.load.image('50Estrellas', '/assets/achievements/50Estrellas.png')
+
         initSpritesheet(this)
     }
     create() {
         initAnimations(this)
-        this.scene.start('MainMenu');
+        this.scene.start('FirstScene');
     }
 }

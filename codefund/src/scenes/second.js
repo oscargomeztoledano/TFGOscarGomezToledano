@@ -1,5 +1,5 @@
 import {Scene} from 'phaser'
-import { registro, inicioSesion } from './forms';
+import { registro, inicioSesion } from './utils/forms';
 
 
     
@@ -26,7 +26,7 @@ export class SecondScene extends Scene {
             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
         }
 
-        this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.2)
+        this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.25)
 
         let botones = [
             {texto: 'INICIAR SESION', callback: () => { inicioSesion(this) }},

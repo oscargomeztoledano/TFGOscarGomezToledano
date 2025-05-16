@@ -1,4 +1,8 @@
 import { Scene } from 'phaser';
+import { characterSelect } from './utils/selects/characterSelect';
+import { worldSelect } from './utils/selects/worldSelect';
+import {insignias } from './utils/selects/insignias';
+const usuario = JSON.parse(localStorage.getItem('usuario'))
 
 export class MainMenu extends Scene
 {
@@ -7,8 +11,10 @@ export class MainMenu extends Scene
         super('MainMenu');
     }
     
-    create ()
+    create (data)
     {
+        this.buttonEnabledMain = true
+        console.log(this.flagWorldSelect)
         // Fondo
         this.add.image(0,0, 'background7').setOrigin(0,0).setScale(1.5);
 
@@ -27,14 +33,14 @@ export class MainMenu extends Scene
         }
 
         // Textos e imagen
-        this.add.text(16,16, 'Usuario: ',{
+        this.add.text(16,16, `Usuario: ${usuario.nombre.toUpperCase()}` ,{
             fontFamily: 'Arial Black',
             fontSize: '16px',
             color: '#ffffff',
             stroke: '#000000',
             strokeThickness: 2
         })
-        this.add.text(16,32, 'Aula: ',{
+        this.add.text(16,32, `Aula: ${usuario.aula}` ,{
             fontFamily: 'Arial Black',
             fontSize: '16px',
             color: '#ffffff',
@@ -45,13 +51,15 @@ export class MainMenu extends Scene
         
         // Botones
         const botones = [
-            {texto: 'JUGAR', callback: () => { this.scene.start('Level1')}},
-            {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {}},
-            {texto: 'INSÍGNEAS', callback: () => {}},
+            {texto: 'JUGAR', callback: () => { worldSelect(this, usuario) }},
+            {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {characterSelect(this)}},
+            {texto: 'INSÍGNEAS', callback: () => {insignias(this, usuario)}},
             {texto: 'GLOSARIO', callback: () => {}},
             {texto: 'LEADERBOARD', callback: () => {}},
             {texto: 'CRÉDITOS', callback: () => {}},
-            {texto: 'SALIR', callback: () => {this.scene.start('FirstScene')}},
+            {texto: 'SALIR', callback: () => {
+                localStorage.clear()
+                this.scene.start('SecondScene')}},
         ]
         
         const spacing= 10 
@@ -83,7 +91,10 @@ export class MainMenu extends Scene
             ).setOrigin(0.5)
 
             button.on('pointerdown', () => {
-                boton.callback()
+                if (this.buttonEnabledMain){
+                    this.buttonEnabledMain = false
+                    boton.callback()
+                }
             })
             button.on('pointerover', () => {
                 button.setScale(1.1);
@@ -94,5 +105,14 @@ export class MainMenu extends Scene
                 buttonText.setScale(1);
             })
         })
+        if (data.openWorldSelect){
+            this.buttonEnabledMain = false
+            worldSelect(this, usuario)
+        }
+            
+    }
+    update ()
+    {
+        
     }
 }

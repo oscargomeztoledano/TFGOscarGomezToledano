@@ -1,7 +1,7 @@
 import { MainMenu } from './scenes/MainMenu';
-import { Level1 } from './scenes/world1/level1';
-import { Level2 } from './scenes/world1/level2';  
-import { Level3 } from './scenes/world1/level3';
+import { nivel1 } from './scenes/mundo 1/nivel1';
+import {nivel2} from './scenes/mundo 1/nivel2';
+import {nivel3} from './scenes/mundo 1/nivel3';
 import { Preloader } from './preloader'; 
 import { SecondScene } from './scenes/second';
 import { FirstScene } from './scenes/first';
@@ -31,9 +31,9 @@ const config = {
     },
     scene: [
         Preloader,
-        Level1,
-        Level2,
-        Level3,
+        nivel1,
+        nivel2,
+        nivel3,
         MainMenu,
         SecondScene,
         FirstScene
