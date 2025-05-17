@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { characterSelect } from './utils/selects/characterSelect';
 import { worldSelect } from './utils/selects/worldSelect';
 import {insignias } from './utils/selects/insignias';
+import { biblioteca } from './utils/selects/biblioteca';
 const usuario = JSON.parse(localStorage.getItem('usuario'))
 
 export class MainMenu extends Scene
@@ -54,7 +55,7 @@ export class MainMenu extends Scene
             {texto: 'JUGAR', callback: () => { worldSelect(this, usuario) }},
             {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {characterSelect(this)}},
             {texto: 'INSÍGNEAS', callback: () => {insignias(this, usuario)}},
-            {texto: 'GLOSARIO', callback: () => {}},
+            {texto: 'BIBLIOTECA', callback: () => {biblioteca(this, usuario)}},
             {texto: 'LEADERBOARD', callback: () => {}},
             {texto: 'CRÉDITOS', callback: () => {}},
             {texto: 'SALIR', callback: () => {

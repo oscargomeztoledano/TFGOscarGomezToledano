@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var bibliotecaSchema = new Schema({
-    nombre: {
+    titulo: {
         type: String,
         required: true
     },
