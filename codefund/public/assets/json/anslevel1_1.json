@@ -1,0 +1,58 @@
+{
+    "anslevel1_1": [
+        {
+            "id": "A",
+            "answers": [
+                { "body": "char var ='A' ", "isCorrect": true },
+                { "body": "char var = A ", "isCorrect": false },
+                { "body": "short var = A ", "isCorrect": false },
+                { "body": "float var = 'A' ", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "-80",
+            "answers": [
+                { "body": "int menosOchenta = '-80'", "isCorrect": false },
+                { "body": "short menosOchenta = -80", "isCorrect": false },
+                { "body": "byte menosOchenta = -80", "isCorrect": true },
+                { "body": "long menosOchenta = -80", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "Hola Mundo",
+            "answers": [
+                { "body": "string var = 'Hola Mundo'", "isCorrect": true },
+                { "body": "char var = Hola Mundo", "isCorrect": false },
+                { "body": "string var = hola mundo", "isCorrect": false },
+                { "body": "int  var = 'holamundo'", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "2147483688",
+            "answers": [
+                { "body": "int = 2147483688", "isCorrect": false },
+                { "body": "short var = 2147483688", "isCorrect": false },
+                { "body": "long var = 2147483688", "isCorrect": false },
+                { "body": "int var = 2147483688", "isCorrect": true }
+            ]
+        },
+        {
+            "id": "9x10^17",
+            "answers": [
+                { "body": "long var = 9x10^17", "isCorrect": true },
+                { "body": "int var= 9x10^17", "isCorrect": false },
+                { "body": "short var = 9x10^17", "isCorrect": false },
+                { "body": "byte var = 9x10^17", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "128",
+            "answers": [
+                { "body": "short var = 128", "isCorrect": true },
+                { "body": "int var= 128", "isCorrect": false },
+                { "body": "long var = 128", "isCorrect": false },
+                { "body": "byte var = 128", "isCorrect": false }
+            ]
+        }        
+    ]
+}

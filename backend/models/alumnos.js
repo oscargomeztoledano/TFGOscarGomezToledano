@@ -1,6 +1,19 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var nivelesSchema = new Schema({
+    nombre: {
+        type: String,
+        required: true
+    },
+    desbloqueado: {
+        type: Boolean,
+        default: false
+    },
+    puntos: {type:Number, default: 0},
+    num: {type:Number, default: 0},
+    estrellas: {type:Number, default: 0},
+})
 var mundosSchema = new Schema({
     nombre: {
         type: String,
@@ -11,48 +24,6 @@ var mundosSchema = new Schema({
         default: false
     },
     niveles:[nivelesSchema]
-})
-var nivelesSchema = new Schema({
-    nombre: {
-        type: String,
-        required: true
-    },
-    completado: {
-        type: Boolean,
-        default: false
-    },
-    puntos: {type:number, default: 0},
-    estrellas: {type:number, default: 0},
-})
-var insignasSchema = new Schema({
-    nombre: {
-        type: String,
-        required: true
-    },
-    obtenido: {
-        type: Boolean,
-        default: false
-    },
-})
-var bibliotecaSchema = new Schema({
-    _id: {
-        type: Schema.Types.ObjectId,
-        ref: 'biblioteca'
-    },
-    obtenido: {
-        type: Boolean,
-        default: false
-    },
-})
-var puntuacionSchema = new Schema({
-    puntosTotales: {
-        type: Number,
-        default: 0
-    },
-    estrellasTotales: {
-        type: Number,
-        default: 0
-    },
 })
 
 var alumnosSchema = new Schema({
@@ -69,17 +40,15 @@ var alumnosSchema = new Schema({
         required: true
     },
     aula: {
-        _id: {
-            type: Schema.Types.ObjectId,
-            ref: 'aulas'
-        },
+        type: Number,
         required: true
     },
-    avatar: {type:number, default: 0},
+    avatar: {type: Number, default: 0},
     mundos:[mundosSchema],
-    insignas:[insignasSchema],
-    biblioteca:[bibliotecaSchema],
-    puntuacion:[puntuacionSchema],
+    insignias:{type: [String], default: []},
+    biblioteca:{type: [String], default: ['Conceptos básicos']},
+    puntosTotales: {type: Number, default: 0},
+    estrellasTotales: {type: Number, default: 0},
 })
 
 module.exports = mongoose.model('alumnos', alumnosSchema, 'alumnos');

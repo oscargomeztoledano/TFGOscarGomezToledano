@@ -15,10 +15,7 @@ var profesoresSchema = new Schema({
         required: true
     },
     aulas: [{
-        _id: {
-            type: Schema.Types.ObjectId,
-            ref: 'aulas'
-        }
+        type: Number
     }]
 
 });

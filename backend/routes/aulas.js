@@ -6,24 +6,18 @@ mongoose.set('strict', false)
 
 
 // GET all aulas
-router.get('/', async (req, res) => {
-    try {
-        const aulas = await aulas.find()
-        res.status(200).json(aulas)
-    } catch (err) {
-        res.status(500).send('Error retrieving aulas')
-    }
+router.get('/:aula', async (req, res) => {
+   var aula = req.params.aula
+   aulas.findOne({ codigo: aula }, function (err, aula) {
+       if (err) {
+           res.status(500).send('Error retrieving aula')
+       } else if(!aula) {
+           res.status(404).send('Aula not found')
+       }else {
+           res.status(200).json(aula)
+       }
+   })
 })
 
-// GET a single aulas by ID
-router.get('/:id', function (req, res) {
-    var id = req.params.id
-    aulas.findOne({ _id: mongoose.Types.ObjectId(id) }, function (err, aulas) {
-        if (err) {
-            res.status(500).send('Error retrieving aulas')
-        } else {
-            res.status(200).json(aulas)
-        }
-    })
 
-})
+module.exports = router

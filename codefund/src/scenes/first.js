@@ -24,7 +24,7 @@ export class FirstScene extends Scene {
             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
         }
 
-        this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.2)
+        this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.25)
 
         const centerX = this.scale.width / 2;
         const centerY = this.scale.height / 2;

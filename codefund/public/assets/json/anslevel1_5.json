@@ -1,0 +1,44 @@
+{
+    "anslevel1_5": [
+        {
+        "id": "chest1",
+        "question": "¿Que falta en la expresión: 3+?*2=11?",
+        "answers": [
+            { "body": "1", "isCorrect": false },
+            { "body": "4", "isCorrect": true },
+            { "body": "6", "isCorrect": false },
+            { "body": "10", "isCorrect": false }
+        ]
+        },
+        {
+        "id": "chest2",
+        "question": "¿Cuál es el resultado de la expresión: 8-4*2?",
+        "answers": [
+            { "body": "0", "isCorrect": true },
+            { "body": "8", "isCorrect": false },
+            { "body": "4", "isCorrect": false },
+            { "body": "6", "isCorrect": false }
+        ]
+        },
+         {
+        "id": "chest3",
+        "question": "¿Que falta en la siguiente expresión: 30?5-2=4?",
+        "answers": [
+            { "body": "*", "isCorrect": false },
+            { "body": "%", "isCorrect": false },
+            { "body": "/", "isCorrect": true },
+            { "body": "-", "isCorrect": false }
+        ]
+        },
+        {
+        "id": "chest4",
+        "question": "¿Cuál es el resultado de la expresión: 10+5*2?",
+        "answers": [
+            { "body": "20", "isCorrect": true },
+            { "body": "30", "isCorrect": false },
+            { "body": "15", "isCorrect": false },
+            { "body": "25", "isCorrect": false }
+        ]
+        }
+    ]
+}

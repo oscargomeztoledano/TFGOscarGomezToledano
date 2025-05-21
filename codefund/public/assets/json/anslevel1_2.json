@@ -1,0 +1,58 @@
+{
+    "anslevel1_2": [
+        {
+            "id": "true",
+            "answers": [
+                { "body": "bool var =true ", "isCorrect": true },
+                { "body": "bool var = 'true' ", "isCorrect": false },
+                { "body": "bool var = True ", "isCorrect": false },
+                { "body": "bool var = !false ", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "false",
+            "answers": [
+                { "body": "bool booleano = False", "isCorrect": false },
+                { "body": "bool boolean = 'false'", "isCorrect": false },
+                { "body": "bool True= false", "isCorrect": true },
+                { "body": "bool false= !true", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "1,3x10^-40",
+            "answers": [
+                { "body": "float variable = 1,3x10^-40", "isCorrect": true },
+                { "body": "double variable = 1,3x10^-40", "isCorrect": false },
+                { "body": "int variable = 1,3x10^-40", "isCorrect": false },
+                { "body": "long  variable = 1,3x10^-40", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "1,6x10^307",
+            "answers": [
+                { "body": "short var = 1,6x10^307", "isCorrect": false },
+                { "body": "float var = 1,6x10^307", "isCorrect": false },
+                { "body": "long var = 1,6x10^307", "isCorrect": false },
+                { "body": "double var = 1,6x10^307", "isCorrect": true }
+            ]
+        },
+        {
+            "id": "3,5x10^-300",
+            "answers": [
+                { "body": "double var = 3,5x10^-300", "isCorrect": true },
+                { "body": "int var= 3,5x10^-300", "isCorrect": false },
+                { "body": "short var = 3,5x10^-300", "isCorrect": false },
+                { "body": "float var = 3,5x10^-300", "isCorrect": false }
+            ]
+        },
+        {
+            "id": "2,8x10^20",
+            "answers": [
+                { "body": "double var = 2,8x10^20", "isCorrect": false },
+                { "body": "int var= 2,8x10^20", "isCorrect": false },
+                { "body": "float var = 2,8x10^20", "isCorrect": true },
+                { "body": "byte var = 2,8x10^20", "isCorrect": false }
+            ]
+        }        
+    ]
+}

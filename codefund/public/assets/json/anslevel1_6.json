@@ -1,0 +1,44 @@
+{
+    "anslevel1_6": [
+        {
+        "id": "chest1",
+        "question": "¿Cuál es el resultado de la siguiente expresión: (2+3)*3?",
+        "answers": [
+            { "body": "15", "isCorrect": true },
+            { "body": "20", "isCorrect": false },
+            { "body": "18", "isCorrect": false },
+            { "body": "12", "isCorrect": false }
+        ]
+        },
+        {
+        "id": "chest2",
+        "question": "¿Que falta en la expresión: 18%(5+?)=3?",
+        "answers": [
+            { "body": "2", "isCorrect": false },
+            { "body": "1", "isCorrect": true },
+            { "body": "4", "isCorrect": false },
+            { "body": "5", "isCorrect": false }
+        ]
+        },
+        {
+        "id": "chest3",
+        "question": "¿Que falta en la expresión: ((?+2)*2)%5=1?",
+        "answers": [
+            { "body": "6", "isCorrect": false },
+            { "body": "3", "isCorrect": false },
+            { "body": "2", "isCorrect": true },
+            { "body": "7", "isCorrect": false }
+        ]
+        },
+        {
+        "id": "chest4",
+        "question": "¿Cuál es el resultado de la siguiente expresión: 24/(2+4)?",
+        "answers": [
+            { "body": "10", "isCorrect": false },
+            { "body": "6", "isCorrect": false },
+            { "body": "4", "isCorrect": true },
+            { "body": "8", "isCorrect": false }
+        ]
+        }
+    ]
+}
