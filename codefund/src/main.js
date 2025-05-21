@@ -1,12 +1,14 @@
 import { MainMenu } from './scenes/MainMenu';
-import { nivel1 } from './scenes/mundo 1/nivel1';
-import {nivel2} from './scenes/mundo 1/nivel2';
-import {nivel3} from './scenes/mundo 1/nivel3';
+import { mundo1nivel1_1 } from './scenes/mundo 1/nivel1_1';
+import { mundo1nivel1_2 } from './scenes/mundo 1/nivel1_2';
+import {mundo1nivel1_3} from './scenes/mundo 1/nivel1_3';
+import {mundo1nivel1_4} from './scenes/mundo 1/nivel1_4';
+import {mundo1nivel1_5} from './scenes/mundo 1/nivel1_5';
+import {mundo1nivel1_6} from './scenes/mundo 1/nivel1_6';
 import { Preloader } from './preloader'; 
 import { SecondScene } from './scenes/second';
 import { FirstScene } from './scenes/first';
-//  Find out more information about the Game Config at:
-//  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
+
 const config = {
     type: Phaser.AUTO,
     width: 1024,
@@ -31,15 +33,18 @@ const config = {
     },
     scene: [
         Preloader,
-        nivel1,
-        nivel2,
-        nivel3,
+        mundo1nivel1_1,
+        mundo1nivel1_2,
+        mundo1nivel1_3,
+        mundo1nivel1_4,
+        mundo1nivel1_5,
+        mundo1nivel1_6,
         MainMenu,
         SecondScene,
         FirstScene
     ],
     dom: {
-        createContainer: true  // <-- ESTO ES CLAVE
+        createContainer: true  
     }
 };
 

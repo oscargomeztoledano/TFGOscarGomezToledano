@@ -53,14 +53,14 @@ export function levelSelect(scene, nombreMundo, usuario) {
     const niveles = mundo.niveles
 
     niveles.forEach((nivel, index) => {
-        const row = Math.floor(index / 3); 
-        const col = index % 3; 
+        const row = Math.floor(index / 3)
+        const col = index % 3
 
-        const xOffset = (col - 1) * 100;
+        const xOffset = (col - 1) * 100
 
-        const yOffset = row * 80 -150;
+        const yOffset = row * 100 -140+col*20
 
-        const buttonText = scene.add.text(0, 0, `${index+1}`, {
+        const buttonText = scene.add.text(0, 0, nivel.num, {
             fontSize: '16px',
             fontFamily: 'Arial',
             stroke: '#000000',
@@ -98,7 +98,8 @@ export function levelSelect(scene, nombreMundo, usuario) {
             if (nivel.desbloqueado) {
                 disappearance(container, scene) 
                 scene.time.delayedCall(300, () => {
-                    scene.scene.start(nivel.nombre)
+                    console.log(nombreMundo+nivel.nombre)
+                    scene.scene.start(nombreMundo+nivel.nombre)
                 })
             }
         });

@@ -60,11 +60,6 @@ export function registro(scene){
             scene.buttonEnabled = true
             disappearance(container, scene)}},
         {icon:'check', callback: () => {
-            // Llamada a la Api para comprobar si datos son correctos
-            // hay que comprobar que el aula exista y que el correo no exista
-            // si existe el aula y no el correo, se crea el alumno
-            // si no existe aula, error
-            // si existe el correo, error
             const emailInput = document.getElementById('input-Correo');
             const nameInput = document.getElementById('input-Nombre');
             const passwordInput = document.getElementById('input-Contraseña');
@@ -91,12 +86,12 @@ export function registro(scene){
                 };
                 postAlumno(alumno)
                     .then((response) => {
-                        console.log('Alumno creado:', response);
                         emailInput.style.border = '1px solid #ccc'
                         nameInput.style.border = '1px solid #ccc'
                         passwordInput.style.border = '1px solid #ccc'
                         classCodeInput.style.border = '1px solid #ccc'
                         disappearance(container, scene)
+                        localStorage.removeItem('usuario')
                         localStorage.setItem('usuario', JSON.stringify({
                             nombre: response.nombre,
                             correo: response.correo,
@@ -228,6 +223,7 @@ export function inicioSesion(scene){
                     if(response.password=== passwordInput.value){
                         console.log('Sesion iniciada')
                         disappearance(container, scene)
+                        localStorage.removeItem('usuario')
                         localStorage.setItem('usuario', JSON.stringify({
                             nombre: response.nombre,
                             correo: response.correo,

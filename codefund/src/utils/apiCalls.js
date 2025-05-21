@@ -1,7 +1,7 @@
 import api from "./api"
 
 function getAlumnoByCorreo(correo) {
-    return api.get(`/alumnos/${encodeURIComponent(correo)}`)
+    return api.get(`/alumnos/correo/${encodeURIComponent(correo)}`)
         .then(response => response.data)
         .catch(error => {
             console.error("Error fetching alumno by correo:", error);
@@ -17,16 +17,9 @@ function postAlumno(alumno) {
         });
 }
 
-function putAvatarByCorreo(correo, avatar) {
-    return api.put(`/alumnos/updateAvatar/${encodeURIComponent(correo)}`, { avatar })
-        .then(response => response.data)
-        .catch(error => {
-            console.error("Error updating avatar:", error);
-            throw error;
-        });
-}
+
 function getMundosByAula(aula) {
-    return api.get(`/aulas/${aula}`)
+    return api.get(`/aulas/${encodeURIComponent(aula)}`)
         .then(response => response.data)
         .catch(error => {
             console.error("Error fetching mundos by aula:", error);
@@ -34,12 +27,36 @@ function getMundosByAula(aula) {
         });
     }
         
-function updateNivelesByCorreo(correo, mundos) {
-    return api.put(`/alumnos/updateNiveles/${encodeURIComponent(correo)}`, { mundos })
+function guardarProgreso(correo, usuarioActualizado) {
+    return api.patch(`/alumnos/guardarprogreso/${encodeURIComponent(correo)}`,  usuarioActualizado)
         .then(response => response.data)
         .catch(error => {
             console.error("Error updating niveles:", error);
             throw error;
         });
 }
-export { updateNivelesByCorreo,getMundosByAula ,getAlumnoByCorreo, postAlumno, putAvatarByCorreo }
+function putAvatarByCorreo(correo, avatar) {
+    return api.patch(`/alumnos/updateAvatar/${encodeURIComponent(correo)}`,  {avatar} )
+        .then(response => response.data)
+        .catch(error => {
+            console.error("Error updating avatar:", error);
+            throw error;
+        });
+}
+
+function getAllAlumnosPuntosAula(aula) {
+    return api.get(`/alumnos/clasificacion/${aula}`)
+        .then(response => response.data)
+        .catch(error => {
+            console.error("Error fetching all alumnos puntos:", error);
+            throw error;
+        });
+}
+export { 
+    guardarProgreso, 
+    getAllAlumnosPuntosAula,
+    getMundosByAula ,
+    getAlumnoByCorreo, 
+    postAlumno, 
+    putAvatarByCorreo 
+}

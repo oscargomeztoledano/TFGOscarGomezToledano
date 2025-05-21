@@ -8,7 +8,7 @@ export function biblioteca(scene, usuario){
     const {width, height} = scene.scale
     const container = scene.add.container(width/2, height/2)
     const fondo = scene.add.nineslice(
-        0, -30, 'marco3', 0,600,450,10,10,10,10).setOrigin(0.5)
+        0, -30, 'marco3', 0,600,460,10,10,10,10).setOrigin(0.5)
     container.add(fondo)
     const bannerText = scene.add.text(0, 0, 'BIBLIOTECA', {
         fontSize: '20px',
@@ -30,9 +30,9 @@ export function biblioteca(scene, usuario){
     bannerText.setDepth(banner.depth + 1)
     container.add([banner, bannerText])
 
-    const buttonClose = scene.add.image(0, 165, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true})
+    const buttonClose = scene.add.image(0, 170, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true})
     container.add(buttonClose)
-    const icon = scene.add.image(0,165, 'cross').setOrigin(0.5)
+    const icon = scene.add.image(0,170, 'cross').setOrigin(0.5)
     container.add(icon)
     buttonClose.on('pointerdown', () => {
         scene.buttonEnabledMain = true
@@ -50,20 +50,20 @@ export function biblioteca(scene, usuario){
     const leftW  = 180;                    
     const rightW = 600 - leftW - 60;      
     const innerTop = -200;                 
-    const btnH   = 32;
+    const btnH  = 32;
     const spacing= 6;
 
-    const listContainer = scene.add.container(-600/2 + 30 + leftW/2, innerTop);
+    const listContainer = scene.add.container(-600/2 + 30 + leftW/2, innerTop-10);
     container.add(listContainer);
 
     
     const html = scene.add.dom(  
         600/2 -20- rightW/2,   
-        innerTop +150               
+        innerTop +155               
     ).createFromHTML(`
     <div id="md"  style="
         width:${rightW-30}px;
-        height:${450 - 110}px;   /* 110 = margen superior + botón cierre + margen inf */
+        height:${360}px;   /* 110 = margen superior + botón cierre + margen inf */
         overflow-y:auto;
         color:#ffffff;
         font-family: Arial, sans-serif;
@@ -72,6 +72,7 @@ export function biblioteca(scene, usuario){
         
     </div>
     `);
+    html.setAlpha(0)
     container.add(html);
     const earned = usuario.biblioteca
     console.log(usuario.biblioteca)
@@ -103,7 +104,7 @@ export function biblioteca(scene, usuario){
     listContainer.add([bg, txt]);
     if (isearned){
         bg.on('pointerdown', () => {
-
+        html.setAlpha(1)
         const mdDiv = html.getChildByID('md');
         mdDiv.innerHTML = window.marked.parse(lec.contenido); 
         mdDiv.scrollTop = 0;

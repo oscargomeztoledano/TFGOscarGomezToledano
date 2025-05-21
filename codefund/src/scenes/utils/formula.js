@@ -10,7 +10,7 @@ export function crearFormula(scene){
     scene.formulaTexts = [];
 
     for (let i = 0; i < scene.formulaLength; i++) {
-        scene.add.image(startX + i * (tileSize + gap), y, 'tile2')
+        scene.add.image(startX + i * (tileSize + gap), y, 'fondoBoton')
             .setOrigin(0.5)
             .setDisplaySize(tileSize, tileSize);
 
@@ -50,7 +50,18 @@ export function generarComponente (scene){
         ).setOrigin(0, 1));
     });
 }
-
+export function generarCofre(scene){
+    const cofres = scene.cofres
+    cofres.forEach(cofre => {
+        const chest = scene.add.image(
+            cofre.x, 
+            cofre.y, 
+            'chest'
+        ).setScale(0.25).setOrigin(0,1)
+        chest.id = cofre.id
+        scene.chests.add(chest)
+    });
+}
 export function checkformula(scene){
     const elements = scene.formula
     const expresion = elements.map(e => e ?? '').join(' ')

@@ -1,23 +1,47 @@
 function defaultMundos(){
     const niveles = [
         {
-            nombre: "nivel1",
+            nombre: "nivel1_1",
+            num: 1.1,
             desbloqueado: true,
             puntos: 0,
             estrellas: 0
         },
         {
-            nombre: "nivel2",
+            nombre: "nivel1_2",
+            num: 1.2,
             desbloqueado: false,
             puntos: 0,
             estrellas: 0
         },
         {
-            nombre: "nivel3",
+            nombre: "nivel1_3",
+            num: 1.3,
             desbloqueado: false,
             puntos: 0,
             estrellas: 0
-        }
+        },
+        {
+            nombre: "nivel1_4",
+            num: 1.4,
+            desbloqueado: false,
+            puntos: 0,
+            estrellas: 0
+        },
+        {
+            nombre: "nivel1_5",
+            num: 1.5,
+            desbloqueado: false,
+            puntos: 0,
+            estrellas: 0
+        },
+         {
+            nombre: "nivel1_6",
+            num: 1.6,
+            desbloqueado: false,
+            puntos: 0,
+            estrellas: 0
+        },
     ];
     const mundos =[]
     for (let i = 1; i <= 3; i++) {

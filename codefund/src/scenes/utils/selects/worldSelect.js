@@ -60,9 +60,6 @@ export async function worldSelect(scene, usuario){
         {texto: "MUNDO 4", callback: () => {}},
         {texto: "MUNDO 5", callback: () => {}},
         {texto: "MUNDO 6", callback: () => {}},
-        {texto: "MUNDO 7", callback: () => {}},
-        {texto: "MUNDO 8", callback: () => {}},
-        {texto: "MUNDO 9", callback: () => {}},
     ]
 
 
@@ -72,7 +69,7 @@ export async function worldSelect(scene, usuario){
 
         const xOffset = (col - 1) * 130;
 
-        const yOffset = row * 80 -160;
+        const yOffset = row * 100 -140+col*20;
 
         
         const buttonText = scene.add.text(0, 0, boton.texto, {

@@ -1,18 +1,19 @@
 import {Scene} from 'phaser';
 import { controls } from '../utils/controls';
 import { initAnimations, appearance, disappearance, addtoscore, hit } from '../utils/animations';
-import { platforms1 } from '../utils/platforms';
+import { platforms1_1 } from '../utils/platforms';
 import { bocadilloCollectible, bocadilloScroll} from "../utils/bocadillo"
 import { successWindow, failureWindow } from '../utils/finalWindow';
 import { generarComponente } from '../utils/formula';
 import { crearVidas, quitarvida } from '../utils/vidas';
 import { menuPause } from '../utils/menuPause';
-let startTimeL1 = 0
-export class nivel1 extends Scene
+let startTimeM1L1_1 = 0
+
+export class mundo1nivel1_1 extends Scene
 {
     constructor ()
     {
-        super('nivel1')
+        super('mundo 1'+'nivel1_1')
     }
 
     preload ()
@@ -29,13 +30,13 @@ export class nivel1 extends Scene
         this.controlEnabled = true
         this.awaitingAnswer = false
         this.ishit=false
-        this.currentLevel = 'nivel1'
-        this.nextLevel = 'nivel2'
+        this.currentLevel = 'mundo 1'+'nivel1_1'
+        this.nextLevel = 'mundo 1'+'nivel1_2'
         this.currentWorldIndex = 0
         this.currentLevelIndex = 0
         
         // t0
-        startTimeL1 = Date.now()
+        startTimeM1L1_1 = Date.now()
 
         // Fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background1').setOrigin(0, 0)
@@ -55,23 +56,14 @@ export class nivel1 extends Scene
             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
         }
 
-
         //  Plataformas
-        platforms1(this)
-        
-        // // Nubes 
-        // let cloud1= 0
-        // let cloud2= 0
-        // for (let i = 0; i < this.scale.width; i += 100) {
-        // this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
-        // this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
-        // }
+        platforms1_1(this)
 
         // Vidas
         crearVidas(this)
 
         // Título
-        this.add.text(16, 16, '1-1. Guardado de Variables', {
+        this.add.text(16, 16, '1-1. Guardado de Variables I', {
             fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
@@ -89,7 +81,7 @@ export class nivel1 extends Scene
         this.physics.add.collider(this.player, this.floor)
 
         // Scroll
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll').setOrigin(0,1)
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll1').setOrigin(0,1)
         const text= 'Este es un nivel de variables. Cada variable tiene una manera de guardarse. Resuelve todos los acertijos para terminar el nivel.'
         this.physics.add.overlap(
             this.player,
@@ -102,12 +94,12 @@ export class nivel1 extends Scene
         // Coleccionables
         this.collection = this.physics.add.staticGroup()
         this.componentes = [
-            { x: 350, y: 550, value: 'hola' },
-            { x: 250, y: 350, value: 'false' },
-            { x: 610, y: 250, value: '200' },
-            { x: 790, y: 250, value: 'mundo' },
-            { x: 655, y: 450, value: 'True' },
-            { x: 800, y: 450, value: '30,5' }
+            { x:  790, y: 250, value: 'A' },
+            { x: 250, y: 350, value: '-80' },
+            { x: 610, y: 250, value: '128' },
+            { x: 340, y: 550, value: 'Hola Mundo' },
+            { x: 700, y: this.scale.height-tileWidth*2, value: '2147483688' },
+            { x: 690, y: 450, value: '9x10^17' }
         ]
 
         generarComponente(this)
@@ -199,14 +191,14 @@ export class nivel1 extends Scene
         const remainingCollectibles = this.collection.getChildren().filter(collectible => collectible.active).length
         if (remainingCollectibles === 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL1) / 1000)
-            successWindow(this, timeTaken)
+            const timeTaken = Math.floor((Date.now() - startTimeM1L1_1) / 1000)
+            successWindow(this, timeTaken,600)
         }
 
         // Comprobar Game Over
         if(this.vidas <= 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL1)/1000)
+            const timeTaken = Math.floor((Date.now() - startTimeM1L1_1)/1000)
             failureWindow(this, timeTaken)
         }
     }
@@ -217,8 +209,8 @@ function initQuestions(scene) {
     const padding = 10
     const collectible = scene.activeCollectible
     const id = collectible.text
-    const kahootData = scene.cache.json.get('kahootLevel1')
-    const entry = kahootData.anslevel1.find(q => q.id === id)
+    const kahootData = scene.cache.json.get('kahootLevel1_1')
+    const entry = kahootData.anslevel1_1.find(q => q.id === id)
 
     if (!entry) {
         console.warn('No se encontraron respuestas para:', id)

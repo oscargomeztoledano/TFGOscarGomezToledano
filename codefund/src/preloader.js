@@ -8,8 +8,10 @@ export class Preloader extends Scene {
     }
     preload(){
         this.load.image('logo', '/assets/ui/logo_ccss_talavera.jpg')  
-        this.load.json('kahootLevel1', 'assets/json/anslevel1.json'); // Asegúrate de que la ruta sea correcta
-        this.load.json('kahootLevel3', 'assets/json/anslevel3.json'); 
+        this.load.json('kahootLevel1_1', 'assets/json/anslevel1_1.json') 
+        this.load.json('kahootLevel1_2', 'assets/json/anslevel1_2.json')
+        this.load.json('kahootLevel1_5', 'assets/json/anslevel1_5.json')
+        this.load.json('kahootLevel1_6', 'assets/json/anslevel1_6.json')
         this.load.image('background1', '/assets/Backgrounds/1.png')
         this.load.image('background2', '/assets/Backgrounds/2.png')
         this.load.image('background3', '/assets/Backgrounds/3.png')
@@ -43,7 +45,14 @@ export class Preloader extends Scene {
 
         this.load.image('cross', '/assets/ui/tiles/icon_cross.png')
         this.load.image('check', '/assets/ui/tiles/icon_checkmark.png')
-        this.load.image('scroll', '/assets/items/scroll1.png')
+        this.load.image('scroll1', '/assets/items/scroll1.png')
+        this.load.image('scroll2', '/assets/items/scroll2.png')
+        this.load.image('scroll3', '/assets/items/scroll3.png')
+        this.load.image('scroll4', '/assets/items/scroll4.png')
+        this.load.image('scroll5', '/assets/items/scroll5.png')
+        this.load.image('scroll6', '/assets/items/scroll6.png')
+        this.load.image('scroll7', '/assets/items/scroll7.png')
+        this.load.image('scroll8', '/assets/items/scroll8.png')
         this.load.image('chest', '/assets/items/chest.png')
 
         this.load.image('star', '/assets/ui/pantallaFinal/star.png')
@@ -58,6 +67,7 @@ export class Preloader extends Scene {
         this.load.image('iconLevels', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_19.png')
         this.load.image('iconSettings', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_07.png')
         this.load.image('iconLock', '/assets/ui/cyberpunkUI/3 Icons/Icons/Icon_08.png')
+        
         //frames cambio pantalla final y game over
         this.load.image('fondoBoton', '/assets/ui/cyberpunkUI/1 Frames/Frame_07.png')
         this.load.image('fondoBotonX', '/assets/ui/cyberpunkUI/1 Frames/Frame_08.png')
@@ -65,30 +75,30 @@ export class Preloader extends Scene {
         this.load.image('marco2', '/assets/ui/cyberpunkUI/1 Frames/Frame_79.png')
         this.load.image('marco3', '/assets/ui/cyberpunkUI/1 Frames/Frame_80.png')
 
-        this.load.image('1_1Done', '/assets/achievements/1_1Done.png')
-        this.load.image('1_2Done', '/assets/achievements/1_2Done.png')
-        this.load.image('1_3Done', '/assets/achievements/1_3Done.png')
-        this.load.image('1_4Done', '/assets/achievements/1_4Done.png')
-        this.load.image('1_5Done', '/assets/achievements/1_5Done.png')
-        this.load.image('1_6Done', '/assets/achievements/1_6Done.png')
-        this.load.image('1_1Estrellas', '/assets/achievements/1_1Estrellas.png')
-        this.load.image('1_2Estrellas', '/assets/achievements/1_2Estrellas.png')
-        this.load.image('1_3Estrellas', '/assets/achievements/1_3Estrellas.png')
-        this.load.image('1_4Estrellas', '/assets/achievements/1_4Estrellas.png')
-        this.load.image('1_5Estrellas', '/assets/achievements/1_5Estrellas.png')
-        this.load.image('1_6Estrellas', '/assets/achievements/1_6Estrellas.png')
-        this.load.image('2_1Done', '/assets/achievements/2_1Done.png')
-        this.load.image('2_2Done', '/assets/achievements/2_2Done.png')
-        this.load.image('2_3Done', '/assets/achievements/2_3Done.png')
-        this.load.image('2_4Done', '/assets/achievements/2_4Done.png')
-        this.load.image('2_5Done', '/assets/achievements/2_5Done.png')
-        this.load.image('2_6Done', '/assets/achievements/2_6Done.png')
-        this.load.image('2_1Estrellas', '/assets/achievements/2_1Estrellas.png')
-        this.load.image('2_2Estrellas', '/assets/achievements/2_2Estrellas.png')
-        this.load.image('2_3Estrellas', '/assets/achievements/2_3Estrellas.png')
-        this.load.image('2_4Estrellas', '/assets/achievements/2_4Estrellas.png')
-        this.load.image('2_5Estrellas', '/assets/achievements/2_5Estrellas.png')
-        this.load.image('2_6Estrellas', '/assets/achievements/2_6Estrellas.png')
+        this.load.image('1.1Done', '/assets/achievements/1_1Done.png')
+        this.load.image('1.2Done', '/assets/achievements/1_2Done.png')
+        this.load.image('1.3Done', '/assets/achievements/1_3Done.png')
+        this.load.image('1.4Done', '/assets/achievements/1_4Done.png')
+        this.load.image('1.5Done', '/assets/achievements/1_5Done.png')
+        this.load.image('1.6Done', '/assets/achievements/1_6Done.png')
+        this.load.image('1.1Estrellas', '/assets/achievements/1_1Estrellas.png')
+        this.load.image('1.2Estrellas', '/assets/achievements/1_2Estrellas.png')
+        this.load.image('1.3Estrellas', '/assets/achievements/1_3Estrellas.png')
+        this.load.image('1.4Estrellas', '/assets/achievements/1_4Estrellas.png')
+        this.load.image('1.5Estrellas', '/assets/achievements/1_5Estrellas.png')
+        this.load.image('1.6Estrellas', '/assets/achievements/1_6Estrellas.png')
+        this.load.image('2.1Done', '/assets/achievements/2_1Done.png')
+        this.load.image('2.2Done', '/assets/achievements/2_2Done.png')
+        this.load.image('2.3Done', '/assets/achievements/2_3Done.png')
+        this.load.image('2.4Done', '/assets/achievements/2_4Done.png')
+        this.load.image('2.5Done', '/assets/achievements/2_5Done.png')
+        this.load.image('2.6Done', '/assets/achievements/2_6Done.png')
+        this.load.image('2.1Estrellas', '/assets/achievements/2_1Estrellas.png')
+        this.load.image('2.2Estrellas', '/assets/achievements/2_2Estrellas.png')
+        this.load.image('2.3Estrellas', '/assets/achievements/2_3Estrellas.png')
+        this.load.image('2.4Estrellas', '/assets/achievements/2_4Estrellas.png')
+        this.load.image('2.5Estrellas', '/assets/achievements/2_5Estrellas.png')
+        this.load.image('2.6Estrellas', '/assets/achievements/2_6Estrellas.png')
         this.load.image('1Done', '/assets/achievements/1Done.png')
         this.load.image('2Done', '/assets/achievements/2Done.png')
         this.load.image('5Estrellas', '/assets/achievements/5Estrellas.png')
@@ -100,12 +110,11 @@ export class Preloader extends Scene {
         this.load.image('35Estrellas', '/assets/achievements/35Estrellas.png')
         this.load.image('40Estrellas', '/assets/achievements/40Estrellas.png')
         this.load.image('45Estrellas', '/assets/achievements/45Estrellas.png')
-        this.load.image('50Estrellas', '/assets/achievements/50Estrellas.png')
 
         initSpritesheet(this)
     }
     create() {
         initAnimations(this)
-        this.scene.start('FirstScene');
+        this.scene.start('SecondScene');
     }
 }

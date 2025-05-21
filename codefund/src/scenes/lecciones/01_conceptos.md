@@ -1,4 +1,4 @@
-# 1. Conceptos Básicos
+# Conceptos Básicos
 
 - **Hardware:** Representa los componentes físicos del ordenador.
 - **Software:** Conjunto de programas usados por un ordenador. Existen dos tipos: Sistemas operativos y Aplicaciones.

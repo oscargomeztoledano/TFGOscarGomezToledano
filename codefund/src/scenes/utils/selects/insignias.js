@@ -46,9 +46,9 @@ export function insignias(scene, usuario){
     const earned = usuario.insignias
     console.log(earned)          
     const cols = 7;                                  
-    const cellW = 60, cellH = 60;
+    const cellW = 65, cellH = 65;
     const startX = -cellW * (cols-1)/2;
-    const startY = -185;
+    const startY = -170;
 
     
     ALL_ACHIEVEMENTS.forEach((ach, idx) => {

@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 })
 
 // GET a single alumno by ID
-router.get('/:correo', function (req, res) {
+router.get('/correo/:correo', function (req, res) {
     var correo = decodeURIComponent(req.params.correo).trim().toLowerCase()
     alumnos.findOne({ correo: correo }, function (err, alumno) {
         if (err) {
@@ -28,6 +28,17 @@ router.get('/:correo', function (req, res) {
             res.status(200).json(alumno)
         }
     })
+})
+
+router.get('/clasificacion/:aula', async (req, res) => {
+    var codigoAula = Number(req.params.aula)
+    try {
+            const alumnosOrdenados = await alumnos.find({ aula: codigoAula }).sort({ puntosTotales: -1 })
+            res.status(200).json(alumnosOrdenados)
+        }
+     catch (err) {
+        res.status(500).send('Error retrieving alumnos by aula')
+    }
 })
 
 // POST a new alumno
@@ -59,7 +70,7 @@ router.post('/', async (req, res)=> {
 })
 
 // PUT update avatar by correo
-router.put('/updateAvatar/:correo', async (req, res) => {
+router.patch('/updateAvatar/:correo', async (req, res) => {
     try {
         var correo = decodeURIComponent(req.params.correo).trim().toLowerCase()
         const { avatar } = req.body
@@ -80,20 +91,26 @@ router.put('/updateAvatar/:correo', async (req, res) => {
 })
 
 
-router.put('/updateNiveles/:correo', async (req, res) => {
+router.patch('/guardarprogreso/:correo', async (req, res) => {
     try {
         var correo = decodeURIComponent(req.params.correo).trim().toLowerCase()
-        const { mundos } = req.body
-
+        const { mundos, puntosTotales, estrellasTotales, insignias,biblioteca } = req.body
+        const update= {}
+        if (biblioteca) update.biblioteca = biblioteca
+        if (insignias) update.insignias = insignias
+        if (mundos) update.mundos = mundos
+        if (puntosTotales && typeof puntosTotales === 'number') update.puntosTotales = puntosTotales
+        if (estrellasTotales && typeof estrellasTotales === 'number') update.estrellasTotales = estrellasTotales
+        console.log(correo, mundos, puntosTotales, estrellasTotales, update)
         const updatedAlumno = await alumnos.findOneAndUpdate(
             { correo: correo },
-            { mundos: mundos },
+            { $set: update },
             { new: true }
         )
 
         if (!updatedAlumno)
             return res.status(404).send('Alumno not found')
-        else res.status(200).json(updatedAlumno.mundos)
+        else res.status(200).json(updatedAlumno)
 
     } catch (err) {
         res.status(500).send('Error updating niveles')

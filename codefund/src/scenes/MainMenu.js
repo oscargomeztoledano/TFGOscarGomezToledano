@@ -1,9 +1,9 @@
-import { Scene } from 'phaser';
-import { characterSelect } from './utils/selects/characterSelect';
-import { worldSelect } from './utils/selects/worldSelect';
-import {insignias } from './utils/selects/insignias';
-import { biblioteca } from './utils/selects/biblioteca';
-const usuario = JSON.parse(localStorage.getItem('usuario'))
+import { Scene } from 'phaser'
+import { tablaClasificacion } from './utils/selects/tablaClasificacion'
+import { characterSelect } from './utils/selects/characterSelect'
+import { worldSelect } from './utils/selects/worldSelect'
+import {insignias } from './utils/selects/insignias'
+import { biblioteca } from './utils/selects/biblioteca'
 
 export class MainMenu extends Scene
 {
@@ -15,7 +15,6 @@ export class MainMenu extends Scene
     create (data)
     {
         this.buttonEnabledMain = true
-        console.log(this.flagWorldSelect)
         // Fondo
         this.add.image(0,0, 'background7').setOrigin(0,0).setScale(1.5);
 
@@ -32,16 +31,15 @@ export class MainMenu extends Scene
             const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
         }
-
         // Textos e imagen
-        this.add.text(16,16, `Usuario: ${usuario.nombre.toUpperCase()}` ,{
+        this.add.text(16,16, `Usuario: ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}` ,{
             fontFamily: 'Arial Black',
             fontSize: '16px',
             color: '#ffffff',
             stroke: '#000000',
             strokeThickness: 2
         })
-        this.add.text(16,32, `Aula: ${usuario.aula}` ,{
+        this.add.text(16,32, `Aula: ${JSON.parse(localStorage.getItem('usuario')).aula}` ,{
             fontFamily: 'Arial Black',
             fontSize: '16px',
             color: '#ffffff',
@@ -52,11 +50,11 @@ export class MainMenu extends Scene
         
         // Botones
         const botones = [
-            {texto: 'JUGAR', callback: () => { worldSelect(this, usuario) }},
+            {texto: 'JUGAR', callback: () => { worldSelect(this, JSON.parse(localStorage.getItem('usuario'))) }},
             {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {characterSelect(this)}},
-            {texto: 'INSÍGNEAS', callback: () => {insignias(this, usuario)}},
-            {texto: 'BIBLIOTECA', callback: () => {biblioteca(this, usuario)}},
-            {texto: 'LEADERBOARD', callback: () => {}},
+            {texto: 'INSÍGNEAS', callback: () => {insignias(this, JSON.parse(localStorage.getItem('usuario')))}},
+            {texto: 'BIBLIOTECA', callback: () => {biblioteca(this, JSON.parse(localStorage.getItem('usuario')))}},
+            {texto: 'TABLA DE CLASIFICACIÓN', callback: () => {tablaClasificacion(this, JSON.parse(localStorage.getItem('usuario')))}},
             {texto: 'CRÉDITOS', callback: () => {}},
             {texto: 'SALIR', callback: () => {
                 localStorage.clear()
@@ -108,12 +106,9 @@ export class MainMenu extends Scene
         })
         if (data.openWorldSelect){
             this.buttonEnabledMain = false
-            worldSelect(this, usuario)
+            worldSelect(this, JSON.parse(localStorage.getItem('usuario')))
         }
             
     }
-    update ()
-    {
-        
-    }
+   
 }

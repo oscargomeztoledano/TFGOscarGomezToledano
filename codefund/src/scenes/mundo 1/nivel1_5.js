@@ -5,11 +5,13 @@ import { bocadilloCollectible, bocadilloScroll } from '../utils/bocadillo';
 import { successWindow, failureWindow } from '../utils/finalWindow';
 import { crearVidas, quitarvida } from '../utils/vidas';
 import { menuPause } from '../utils/menuPause';
-let startTimeL3 = 0
-export class nivel3 extends Scene {
+import { platforms3_1 } from '../utils/platforms';
+import { generarCofre } from '../utils/formula';
+let startTimeM1L1_5 = 0
+export class mundo1nivel1_5 extends Scene {
 
     constructor() {
-        super('nivel3')
+        super('mundo 1'+'nivel1_5')
     }
 
     preload(){}
@@ -21,12 +23,12 @@ export class nivel3 extends Scene {
         this.activeCollectible = null
         this.isOverLappingScroll = false
         this.awaitingAnswer = false
-        this.currentLevel = 'nivel3'
-        this.nextLevel = 'nivel4'
+        this.currentLevel = 'mundo 1'+'nivel1_5'
+        this.nextLevel = 'mundo 1'+'nivel1_6'
         this.currentWorldIndex = 0
-        this.currentLevelIndex = 2
+        this.currentLevelIndex = 4
         // t0
-        startTimeL3 = Date.now()
+        startTimeM1L1_5 = Date.now()
 
         // Fondo
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
@@ -52,7 +54,7 @@ export class nivel3 extends Scene {
         // this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
         // this.add.image(cloud2+i,80, 'cloud2').setScale(0.5).setOrigin(0, 0)
         // }
-
+        platforms3_1({floor: this.floor})
         // Vidas
         crearVidas(this)
         
@@ -67,11 +69,14 @@ export class nivel3 extends Scene {
 
         // Cofres
         this.chests = this.physics.add.staticGroup()
-        const chest1 = this.add.image(400, this.scale.height - tileWidth*2, 'chest')
-            .setOrigin(0, 1)
-            .setScale(0.25)
-        chest1.id = 'chest2'
-        this.chests.add(chest1)
+        this.cofres = [
+            { x: 700, y: 450, id: 'chest1' },
+            { x: 300, y: 350, id: 'chest2' },
+            { x: 700, y: 250, id: 'chest3' },
+            { x: 800, y: this.scale.height - tileWidth*2, id: 'chest4' },
+        ]
+        generarCofre(this)
+       
 
         // Jugador
         this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, 'player_idle')
@@ -83,7 +88,7 @@ export class nivel3 extends Scene {
         this.physics.add.collider(this.player, this.floor)
 
         // Scroll
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll').setOrigin(0,1)
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll1').setOrigin(0,1)
         const text= '¿Sabías que los cofres pueden contener acertijos?. Resuelve todos los acertijos para abrir todos los cofres y terminar el nivel.'
         this.physics.add.overlap(
             this.player,
@@ -179,14 +184,14 @@ export class nivel3 extends Scene {
         const remainingChests = this.chests.getChildren().filter(chest => chest.active).length;
         if (remainingChests === 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000)
-            successWindow(this, timeTaken)
+            const timeTaken = Math.floor((Date.now() - startTimeM1L1_5)/1000)
+            successWindow(this, timeTaken,400)
         }
         
         // Comprobar Game Over
         if(this.vidas <= 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL3)/1000)
+            const timeTaken = Math.floor((Date.now() - startTimeM1L1_5)/1000)
             failureWindow(this, timeTaken)
         }
 
@@ -197,8 +202,8 @@ function initQuestions(scene) {
     const padding = 10;
     const collectible = scene.activeCollectible;
     const id = collectible.id;
-    const kahootData = scene.cache.json.get('kahootLevel3');
-    const entry = kahootData.anslevel3.find(q => q.id === id);
+    const kahootData = scene.cache.json.get('kahootLevel1_5');
+    const entry = kahootData.anslevel1_5.find(q => q.id === id);
 
     if (!entry) {
         console.warn('No se encontraron respuestas para:', id);

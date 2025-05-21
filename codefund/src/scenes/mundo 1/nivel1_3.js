@@ -8,11 +8,11 @@ import { successWindow, failureWindow } from "../utils/finalWindow"
 import { crearVidas, quitarvida } from "../utils/vidas"
 import { menuPause } from "../utils/menuPause"
 
-let startTimeL2 = 0
+let startTimeM1L1_3 = 0
 
-export class nivel2 extends Scene {
+export class mundo1nivel1_3 extends Scene {
     constructor() {
-        super("nivel2")
+        super('mundo 1'+'nivel1_3')
     }
 
     preload(){
@@ -21,20 +21,20 @@ export class nivel2 extends Scene {
     create() {
         // Variables globales
         this.formulaLength = 5
-        this.formulaResult = 10
+        this.formulaResult = 12
         this.controlEnabled = true
         this.isOverlappingCollectible = false
         this.activeCollectible = null
         this.isOverLappingCheckpoint = false
         this.isOverLappingScroll = false
-        this.currentLevel = 'nivel2'
-        this.nextLevel = 'nivel3'
+        this.currentLevel = 'mundo 1'+'nivel1_3'
+        this.nextLevel = 'mundo 1'+'nivel1_4'
         this.ishit=false
         this.currentWorldIndex = 0
-        this.currentLevelIndex = 1
+        this.currentLevelIndex = 2
 
         // t0
-        startTimeL2 = Date.now()
+        startTimeM1L1_3 = Date.now()
 
         this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background3').setOrigin(0, 0)
 
@@ -55,17 +55,11 @@ export class nivel2 extends Scene {
         // Plataformas
         platforms2({floor: this.floor})
         
-        // // Nubes
-        // let cloud1= 0
-        // for (let i = 0; i < this.scale.width; i += 100) {
-        // this.add.image(cloud1+i,50, 'cloud1').setScale(0.5).setOrigin(0, 0)
-        // }
-
         // Vidas
         crearVidas(this)
         
         //Título
-        this.add.text(16, 16, '1-2. Formula', {
+        this.add.text(16, 16, '2-1. Nivel con Formula I', {
             fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'left'
@@ -78,6 +72,7 @@ export class nivel2 extends Scene {
         .setCollideWorldBounds(true)
         .setGravityY(300)
         .setScale(2)
+
         //colisión Jugador y el Suelo
         this.physics.add.collider(this.player, this.floor)
 
@@ -86,18 +81,18 @@ export class nivel2 extends Scene {
         // Collecionables
         this.collection = this.physics.add.staticGroup()
         this.componentes = [
-            { x: 455, y: 525, value: '2' },
+            { x: 460, y: 525, value: '2' },
             { x: 530, y: 525, value: '%' },
             { x: 620, y: 525, value: '*' },
-            { x: 105, y: 400, value: '3' },
-            { x: 180, y: 400, value: '6' },
-            { x: 270, y: 400, value: '+' },
-            { x: 705, y: 350, value: '4' },
-            { x: 780, y: 350, value: '5' },
-            { x: 870, y: 350, value: '-' },
-            { x: 200, y: 250, value: '7' },
-            { x: 275, y: 250, value: '8' },
-            { x: 330, y: 250, value: '9' },
+            { x: 115, y: 400, value: '3' },
+            { x: 860, y: this.scale.height-tileWidth*2, value: '6' },
+            { x: 260, y: 400, value: '+' },
+            { x: 705, y: this.scale.height-tileWidth*2, value: '4' },
+            { x: 710, y: 350, value: '2' },
+            { x: 860, y: 350, value: '5' },
+            { x: 500, y: this.scale.height-tileWidth*2, value: '(' },
+            { x: 250, y: 250, value: '8' },
+            { x: 330, y: this.scale.height-tileWidth*2, value: ')' },
             { x: 410, y: 250, value: '/' }
         ];
 
@@ -125,8 +120,8 @@ export class nivel2 extends Scene {
             }, null, this)
         
         // Scroll
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll').setOrigin(0,1)
-        const text= 'Este es un nivel con fórmula. Debe rellenar los huecos con números y operadores. En este nivel el resutlado pedido es '+ this.formulaResult +'.'
+        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll1').setOrigin(0,1)
+        const text= 'Este es un nivel con fórmula. Debe rellenar todos los huecos con números u operadores. En este nivel el resutlado pedido es '+ this.formulaResult +'.'
         this.physics.add.overlap(
             this.player,
             this.scroll,
@@ -180,6 +175,18 @@ export class nivel2 extends Scene {
                 disappearance(this.textBefore, this)
                 disappearance(this.textAfter, this)
                 const esCorrecta= checkformula(this)
+                
+                if (esCorrecta && this.controlEnabled && !this.formula.includes(null)){
+                    this.controlEnabled=false
+                    const timeTaken = Math.floor((Date.now() - startTimeM1L1_3) / 1000); // tiempo en segundos
+                    successWindow(this, timeTaken,300)
+                }
+                    else {
+                        quitarvida(this)
+                        hit(this)
+                        this.collection.clear(true, true);
+                        generarComponente(this)
+                    }
                 if (this.formula && this.formula.length > 0) {
                     for (let i = this.formulaLength - 1; i >= 0; i--) {
                         if (this.formula[i] !== null) {
@@ -188,18 +195,6 @@ export class nivel2 extends Scene {
                             this.formulaTexts[i] = null; 
                     }}
                 }
-                if (esCorrecta && this.controlEnabled){
-                    
-                    this.controlEnabled=false
-                    const timeTaken = Math.floor((Date.now() - startTimeL2) / 1000); // tiempo en segundos
-                    successWindow(this, timeTaken)
-                }
-                    else {
-                        quitarvida(this)
-                        hit(this)
-                        this.collection.clear(true, true);
-                        generarComponente(this)
-                    }
             }
         });
 
@@ -284,7 +279,7 @@ export class nivel2 extends Scene {
         // Comprobar Game Over
         if(this.vidas <= 0 && this.controlEnabled) {
             this.controlEnabled = false
-            const timeTaken = Math.floor((Date.now() - startTimeL2)/1000); 
+            const timeTaken = Math.floor((Date.now() - startTimeM1L1_3)/1000); 
             failureWindow(this, timeTaken)
         }
        

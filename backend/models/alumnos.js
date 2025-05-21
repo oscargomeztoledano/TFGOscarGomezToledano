@@ -11,6 +11,7 @@ var nivelesSchema = new Schema({
         default: false
     },
     puntos: {type:Number, default: 0},
+    num: {type:Number, default: 0},
     estrellas: {type:Number, default: 0},
 })
 var mundosSchema = new Schema({
@@ -45,7 +46,7 @@ var alumnosSchema = new Schema({
     avatar: {type: Number, default: 0},
     mundos:[mundosSchema],
     insignias:{type: [String], default: []},
-    biblioteca:{type: [String], default: []},
+    biblioteca:{type: [String], default: ['Conceptos básicos']},
     puntosTotales: {type: Number, default: 0},
     estrellasTotales: {type: Number, default: 0},
 })
