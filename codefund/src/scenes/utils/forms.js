@@ -1,5 +1,5 @@
 import { disappearance,appearance } from "./animations"
-import { getAlumnoByCorreo, postAlumno } from "../../utils/apiCalls"
+import { getAlumnoByCorreo, postAlumno, getProfesorByCorreo } from "../../utils/apiCalls"
 
 export function registro(scene){
     const {width, height} = scene.scale
@@ -213,46 +213,9 @@ export function inicioSesion(scene){
             scene.buttonEnabled = true
             disappearance(container, scene)}},
         {icon:'check', callback: () => {
-            
             const emailInput = document.getElementById('input-Correo');
             const passwordInput = document.getElementById('input-Contraseña');
-
-            getAlumnoByCorreo(emailInput.value)
-                .then((response) => {
-                    emailInput.style.border = '1px solid #ccc'
-                    if(response.password=== passwordInput.value){
-                        console.log('Sesion iniciada')
-                        disappearance(container, scene)
-                        localStorage.removeItem('usuario')
-                        localStorage.setItem('usuario', JSON.stringify({
-                            nombre: response.nombre,
-                            correo: response.correo,
-                            aula: response.aula,
-                            avatar: response.avatar,
-                            mundos: response.mundos,
-                            insignias: response.insignias,
-                            biblioteca: response.biblioteca,
-                            puntosTotales: response.puntosTotales,
-                            estrellasTotales: response.estrellasTotales,
-                        }))
-                        scene.time.delayedCall(200, () => {
-                            scene.scene.start('MainMenu')
-                        })
-                    }
-                    else{
-                        console.log('Contraseña incorrecta')
-                        passwordInput.style.border = '4px solid red'
-                    }
-
-                }).catch((error) => {
-                    if (error.response.status === 404) {
-                        console.log('El correo no existe')
-                        emailInput.style.border = '4px solid red'
-                    }
-                    else (console.log('Error:', error))
-
-                })
-    
+            intentarlogin(emailInput, passwordInput,scene) 
         }}
     
     ]
@@ -284,4 +247,72 @@ export function inicioSesion(scene){
 
     })
     appearance(container, scene)
+}
+
+async function intentarlogin(email, password,scene){
+    const emailInput = email.value
+    const passwordInput = password.value
+    try{
+        const profesor = await getProfesorByCorreo(emailInput)
+        if(profesor.password=== passwordInput){
+            console.log('Sesion iniciada')
+            localStorage.removeItem('usuario')
+            localStorage.setItem('usuario', JSON.stringify({
+                nombre: profesor.nombre,
+                correo: profesor.correo,
+                profesor: true,
+                aula: profesor.aula,
+                avatar: profesor.avatar,
+                aulas: profesor.aulas,
+                mundos: profesor.mundos,
+                insignias: profesor.insignias,
+                biblioteca: profesor.biblioteca,
+                puntosTotales: profesor.puntosTotales,
+                estrellasTotales: profesor.estrellasTotales,
+            }))
+            scene.time.delayedCall(200, () => {
+                scene.scene.start('MainMenuProfesor')
+            })
+            }
+            else{
+                console.log('Contraseña incorrecta')
+                password.style.border = '4px solid red'
+            }
+    }catch (error) {
+        if (error.response?.status !== 404) {
+            console.error('Error al intentar iniciar sesión:', error);
+        }
+        try{
+            const alumno = await getAlumnoByCorreo(email.value)
+            if(alumno.password=== password.value){
+                console.log('Sesion iniciada')
+                localStorage.removeItem('usuario')
+                localStorage.setItem('usuario', JSON.stringify({
+                    nombre: alumno.nombre,
+                    correo: alumno.correo,
+                    profesor: false,
+                    aula: alumno.aula,
+                    avatar: alumno.avatar,
+                    mundos: alumno.mundos,
+                    insignias: alumno.insignias,
+                    biblioteca: alumno.biblioteca,
+                    puntosTotales: alumno.puntosTotales,
+                    estrellasTotales: alumno.estrellasTotales,
+                }))
+                scene.time.delayedCall(200, () => {
+                    scene.scene.start('MainMenu')
+                })
+
+            }else{
+                console.log('Contraseña incorrecta')
+                passwordInput.style.border = '4px solid red'
+            }
+        }catch (error2) {
+                if (error2.response?.status === 404) {
+                    console.log('El correo no existe')
+                    email.style.border = '4px solid red'
+                }
+                else (console.log('Error al comprobar el alumno:', error2))
+        }
+    }
 }

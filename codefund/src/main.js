@@ -1,4 +1,5 @@
 import { MainMenu } from './scenes/MainMenu';
+import { MainMenuProfesor } from './scenes/MainMenuProfesor';
 import { mundo1nivel1_1 } from './scenes/mundo 1/nivel1_1';
 import { mundo1nivel1_2 } from './scenes/mundo 1/nivel1_2';
 import {mundo1nivel1_3} from './scenes/mundo 1/nivel1_3';
@@ -39,6 +40,7 @@ const config = {
         mundo1nivel1_4,
         mundo1nivel1_5,
         mundo1nivel1_6,
+        MainMenuProfesor,
         MainMenu,
         SecondScene,
         FirstScene

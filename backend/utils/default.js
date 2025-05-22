@@ -3,7 +3,7 @@ function defaultMundos(){
         {
             nombre: "nivel1_1",
             num: 1.1,
-            desbloqueado: true,
+            desbloqueado: false,
             puntos: 0,
             estrellas: 0
         },
@@ -44,11 +44,14 @@ function defaultMundos(){
         },
     ];
     const mundos =[]
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 6; i++) {
         mundos.push({
             nombre: `mundo ${i}`,
             desbloqueado: false,
-            niveles: [...niveles]
+            niveles: niveles.map((nivel, idx) => ({
+                ...nivel,
+                desbloqueado: i === 1 && idx === 0 ? true : false
+            })),
         })
     }
     return mundos

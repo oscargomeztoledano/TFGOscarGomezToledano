@@ -1,5 +1,6 @@
 import { appearance,disappearance } from "../animations";
-import { putAvatarByCorreo } from "../../../utils/apiCalls";
+import { guardarProgreso, guardarProgresoProfesor } from "../../../utils/apiCalls";
+
 export function characterSelect(scene){
     const {width, height} = scene.scale;
     const container = scene.add.container(width/2, height/2)
@@ -31,34 +32,70 @@ export function characterSelect(scene){
     const botonesPrincipales = [
         {character: 'player_idle0', texto: 'PERSONAJE 1',
              callback: () => {
-                putAvatarByCorreo(usuario.correo, 0).then((res) => {
-                    localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                    console.log('avatar actualizado', res.avatar)
-                })
+                const usuarioActualizado ={avatar:0}
+                if (usuario.profesor){
+                    guardarProgresoProfesor(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }else{
+                    guardarProgreso(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }
+                
              }
         },
         {character: 'player_idle1', texto: 'PERSONAJE 2',
              callback: () => {
-                putAvatarByCorreo(usuario.correo, 1).then((res) => {
-                    localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                    console.log('avatar actualizado', res.avatar)
-                })
+                const usuarioActualizado ={avatar:1}
+                if (usuario.profesor){
+                    guardarProgresoProfesor(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }else{
+                    guardarProgreso(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }
+                
              }
         },
         {character: 'player_idle2', texto: 'PERSONAJE 3',
              callback: () => {
-                putAvatarByCorreo(usuario.correo, 2).then((res) => {
-                    localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                    console.log('avatar actualizado', res.avatar)
-                })
+                const usuarioActualizado ={avatar:2}
+                if (usuario.profesor){
+                    guardarProgresoProfesor(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }else{
+                    guardarProgreso(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }
+                
              }
         },
         {character: 'player_idle3', texto: 'PERSONAJE 4',
              callback: () => {
-                putAvatarByCorreo(usuario.correo, 3).then((res) => {
-                    localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                    console.log('avatar actualizado', res.avatar)
-                })
+                const usuarioActualizado ={avatar:3}
+                if (usuario.profesor){
+                    guardarProgresoProfesor(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }else{
+                    guardarProgreso(usuario.correo, usuarioActualizado).then((res) => {
+                        localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
+                        console.log('avatar actualizado', res.avatar)
+                    })
+                }
+                
              }
         },
     ]

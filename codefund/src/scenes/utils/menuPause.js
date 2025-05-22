@@ -1,7 +1,8 @@
 import { appearance, disappearance} from "./animations";
-import { worldSelect } from './selects/worldSelect';
 
-export function menuPause(scene) {
+
+
+export function menuPause(scene,usuario) {
     const {width, height} = scene.scale;
     const container = scene.add.container(width/2, height/2)
 
@@ -46,8 +47,11 @@ export function menuPause(scene) {
             }
         },
         {icono: 'iconLevels', texto: 'LEVELS', callback: () => {
-            
-            scene.scene.start('MainMenu', {openWorldSelect: true})
+            if (usuario.profesor){
+                scene.scene.start('MainMenuProfesor', {openWorldSelect: true})
+            }else{
+                scene.scene.start('MainMenu', {openWorldSelect: true})
+            }
             console.log('Levels')
             }
         },
@@ -57,7 +61,9 @@ export function menuPause(scene) {
             }
         },
         {icono: 'iconExit', texto: 'EXIT', callback: () => {
-            scene.scene.start('MainMenu')
+            if (usuario.profesor)
+                scene.scene.start('MainMenuProfesor', {openWorldSelect: false})
+            else scene.scene.start('MainMenu', {openWorldSelect: false})
             console.log('Exit')
             }
         }

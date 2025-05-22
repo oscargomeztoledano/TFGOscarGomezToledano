@@ -79,7 +79,8 @@ export class mundo1nivel1_5 extends Scene {
        
 
         // Jugador
-        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, 'player_idle')
+        const usuario = JSON.parse(localStorage.getItem('usuario'))
+        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, `player_idle${usuario.avatar}`)
         .setOrigin(0, 1)
         .setCollideWorldBounds(true)
         .setGravityY(300)
@@ -136,7 +137,7 @@ export class mundo1nivel1_5 extends Scene {
             }// Pausar el juego
             else if (!this.awaitingAnswer && this.controlEnabled) {
                 this.controlEnabled = false
-                menuPause(this)
+                menuPause(this, usuario)
             }
             
         });
