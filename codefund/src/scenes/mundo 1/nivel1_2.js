@@ -139,7 +139,7 @@ export class mundo1nivel1_2 extends Scene
             }// Pausar el juego
             else if (!this.awaitingAnswer && this.controlEnabled) {
                 this.controlEnabled = false
-                menuPause(this)
+                menuPause(this, usuario)
             }
             
         });

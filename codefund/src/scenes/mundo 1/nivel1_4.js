@@ -73,7 +73,8 @@ export class mundo1nivel1_4 extends Scene {
         this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.25)
 
         // Jugador
-        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, 'player_idle')
+        const usuario = JSON.parse(localStorage.getItem('usuario'))
+        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, `player_idle${usuario.avatar}`)
         .setOrigin(0, 1)
         .setCollideWorldBounds(true)
         .setGravityY(300)
@@ -220,7 +221,7 @@ export class mundo1nivel1_4 extends Scene {
         this.input.keyboard.on('keydown-ESC', () => {
             if (this.controlEnabled) {
                 this.controlEnabled = false
-                menuPause(this)
+                menuPause(this,usuario)
             }
         })
         crearFormula(this)

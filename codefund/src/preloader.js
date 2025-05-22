@@ -7,6 +7,7 @@ export class Preloader extends Scene {
         super('Preloader')
     }
     preload(){
+        
         this.load.image('logo', '/assets/ui/logo_ccss_talavera.jpg')  
         this.load.json('kahootLevel1_1', 'assets/json/anslevel1_1.json') 
         this.load.json('kahootLevel1_2', 'assets/json/anslevel1_2.json')

@@ -1,5 +1,5 @@
 import { appearance,disappearance } from "./animations"
-import { guardarProgreso } from "../../utils/apiCalls"
+import { guardarProgreso, guardarProgresoProfesor } from "../../utils/apiCalls"
 
 export function successWindow(scene, timeTaken, puntosFijo) {
 
@@ -193,7 +193,20 @@ export function successWindow(scene, timeTaken, puntosFijo) {
             insignias: usuario.insignias,
             biblioteca: usuario.biblioteca
         }
-        guardarProgreso(usuario.correo, usuarioActualizado).then((res) => {
+        if (usuario.profesor){
+            guardarProgresoProfesor(usuario.correo, usuarioActualizado).then((res) => {
+            localStorage.setItem('usuario', JSON.stringify({
+                ...usuario, 
+                mundos: res.mundos, 
+                puntosTotales: res.puntosTotales,
+                estrellasTotales: res.estrellasTotales,
+                insignias: res.insignias,
+            }))
+            }).catch((err) => {
+                console.error('Error al actualizar los niveles', err)
+            })
+        }else{
+            guardarProgreso(usuario.correo, usuarioActualizado).then((res) => {
             localStorage.setItem('usuario', JSON.stringify({
                 ...usuario, 
                 mundos: res.mundos, 
@@ -205,16 +218,26 @@ export function successWindow(scene, timeTaken, puntosFijo) {
             }).catch((err) => {
                 console.error('Error al actualizar los niveles', err)
             })
+        }
     }
 
     
     // Botones success window
     const botones = [
         {icon: 'iconExit', callback: ()=> {
+            if (usuario.profesor){
+
             disappearance(container, scene)
             scene.time.delayedCall(300, () => {
-                scene.scene.start('MainMenu')
+                scene.scene.start('MainMenuProfesor')
             });
+            }
+            else{
+                disappearance(container, scene)
+                scene.time.delayedCall(300, () => {
+                    scene.scene.start('MainMenu')
+                });
+            }           
         }},
         {icon: 'iconRestart', callback: ()=> {
             disappearance(container, scene)
@@ -317,7 +340,7 @@ export function failureWindow(scene, timeTaken){
     const {width, height} = scene.scale;
     scene.puntosBase= 200
     const container = scene.add.container(width/2, height/2)
-
+    const usuario = JSON.parse(localStorage.getItem('usuario'))
     // Añadir el fondo
     const overlay =scene.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
     
@@ -384,10 +407,19 @@ export function failureWindow(scene, timeTaken){
     // Botones
     const botones = [
         {icon: 'iconExit', callback: ()=> {
+            if (usuario.profesor){
+
             disappearance(container, scene)
-            scene.time.delayedCall(400, () => {
-                scene.scene.start('MainMenu')
+            scene.time.delayedCall(300, () => {
+                scene.scene.start('MainMenuProfesor')
             });
+            }
+            else{
+                disappearance(container, scene)
+                scene.time.delayedCall(300, () => {
+                    scene.scene.start('MainMenu')
+                });
+            }           
         }},
         {icon: 'iconRestart', callback: ()=> {
             disappearance(container, scene)

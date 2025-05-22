@@ -19,5 +19,26 @@ router.get('/:aula', async (req, res) => {
    })
 })
 
+router.patch('/guardarMundo/:aula', async (req, res) => {
+    try {
+        var aula = decodeURIComponent(req.params.aula).toLowerCase()
+        const {mundos} = req.body
+        const update= {}
+        if (mundos) update.mundos = mundos
+        console.log(aula, update)
+        const updatedAula = await aulas.findOneAndUpdate(
+            { codigo: aula },
+            { $set: update },
+            { new: true }
+        )
+        if (!updatedAula) 
+            return res.status(404).send('Aula not found')
+        else res.status(200).json(updatedAula)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Error updating aula')
+    }
+})
+
 
 module.exports = router

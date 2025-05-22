@@ -69,39 +69,19 @@ router.post('/', async (req, res)=> {
 
 })
 
-// PUT update avatar by correo
-router.patch('/updateAvatar/:correo', async (req, res) => {
-    try {
-        var correo = decodeURIComponent(req.params.correo).trim().toLowerCase()
-        const { avatar } = req.body
-
-        const updatedAlumno = await alumnos.findOneAndUpdate(
-            { correo: correo },
-            { avatar: avatar },
-            { new: true }
-        )
-
-        if (!updatedAlumno)
-            return res.status(404).send('Alumno not found')
-        else res.status(200).json(updatedAlumno)
-
-    } catch (err) {
-        res.status(500).send('Error updating avatar')
-    }
-})
-
 
 router.patch('/guardarprogreso/:correo', async (req, res) => {
     try {
         var correo = decodeURIComponent(req.params.correo).trim().toLowerCase()
-        const { mundos, puntosTotales, estrellasTotales, insignias,biblioteca } = req.body
+        const { mundos, puntosTotales, estrellasTotales, insignias, biblioteca, avatar} = req.body
         const update= {}
+        if (avatar) update.avatar = avatar
         if (biblioteca) update.biblioteca = biblioteca
         if (insignias) update.insignias = insignias
         if (mundos) update.mundos = mundos
         if (puntosTotales && typeof puntosTotales === 'number') update.puntosTotales = puntosTotales
         if (estrellasTotales && typeof estrellasTotales === 'number') update.estrellasTotales = estrellasTotales
-        console.log(correo, mundos, puntosTotales, estrellasTotales, update)
+        console.log(correo, update)
         const updatedAlumno = await alumnos.findOneAndUpdate(
             { correo: correo },
             { $set: update },

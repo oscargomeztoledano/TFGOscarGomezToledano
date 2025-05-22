@@ -5,7 +5,7 @@ export function levelSelect(scene, nombreMundo, usuario) {
     const {width, height} = scene.scale
     const container = scene.add.container(width/2, height/2)
     const fondo = scene.add.nineslice(
-        0, -60, 'marco3', 0,400,300,10,10,10,10).setOrigin(0.5)
+        0, -60, 'marco3', 0,400,330,10,10,10,10).setOrigin(0.5)
     container.add(fondo)
     const bannerText = scene.add.text(0, 0, 'SELECCIONA UN NIVEL', {
         fontSize: '20px',
@@ -20,19 +20,19 @@ export function levelSelect(scene, nombreMundo, usuario) {
     const banner = scene.add.nineslice(
         0, - fondo.height / 2 - 70, 
         'marco1', 0, 
-        widthBannerText, heightBannerText, 
+        widthBannerText+20, heightBannerText, 
         10, 10, 10, 10
     ).setOrigin(0.5)
     bannerText.setPosition(banner.x, banner.y).setOrigin(0.5)
     bannerText.setDepth(banner.depth + 1)
     container.add([banner, bannerText])
 
-    const buttonClose = scene.add.image(0, 60, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true})
+    const buttonClose = scene.add.image(0, 75, 'fondoBoton').setOrigin(0.5).setInteractive({useHandCursor: true})
     container.add(buttonClose)
-    const icon = scene.add.image(0, 60, 'cross').setOrigin(0.5)
+    const icon = scene.add.image(0, 75, 'cross').setOrigin(0.5)
     container.add(icon)
     buttonClose.on('pointerdown', () => {
-        scene.buttonEnabledMain = true
+        scene.buttonEnabledWorld = true
         disappearance(container, scene)
     })
     buttonClose.on('pointerover', () => {
