@@ -1,5 +1,6 @@
-import { appearance,disappearance } from "./animations"
-import { guardarProgreso, guardarProgresoProfesor } from "../../utils/apiCalls"
+import { appearance,disappearance } from "../../utils/animations"
+import { guardarProgreso, guardarProgresoProfesor } from "../../api/apiCalls"
+import { panelCarga } from "../../utils/panelCarga"
 
 export function successWindow(scene, timeTaken, puntosFijo) {
 
@@ -225,31 +226,38 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     // Botones success window
     const botones = [
         {icon: 'iconExit', callback: ()=> {
-            if (usuario.profesor){
-
-            disappearance(container, scene)
-            scene.time.delayedCall(300, () => {
-                scene.scene.start('MainMenuProfesor')
-            });
-            }
-            else{
-                disappearance(container, scene)
-                scene.time.delayedCall(300, () => {
-                    scene.scene.start('MainMenu')
-                });
-            }           
+            const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
+            const panel = panelCarga(scene, 'LOADING MENU')
+            setTimeout(() => {
+                scene.scene.start(tipoMenu, {openWorldSelect: false}).then(() => {
+                    panel.destroy()
+                }).catch((error) => {
+                    console.error("Error loading levels:", error)
+                    panel.destroy()
+                })         
+            },500) 
         }},
         {icon: 'iconRestart', callback: ()=> {
-            disappearance(container, scene)
-            scene.time.delayedCall(300, () => {
-                scene.scene.start(scene.currentLevel)
-            });
+            const panel = panelCarga(scene, 'RESTARTING LEVEL')
+            setTimeout(() => {
+                scene.scene.start(scene.currentLevel).then(() => {
+                    panel.destroy()
+                }).catch((error) => {
+                    console.error("Error restarting level:", error)
+                    panel.destroy()
+                })
+            }, 500)
         }},
         {icon: 'iconResume', callback: ()=> {
-            disappearance(container, scene)
-            scene.time.delayedCall(300, () => {
-                scene.scene.start(scene.nextLevel)
-            });
+            const panel = panelCarga(scene, 'CARGANDO SIGUIENTE NIVEL...')
+            setTimeout(() => {
+            scene.scene.start(scene.nextLevel).then(() => {
+                panel.destroy()
+            }).catch((error) => {
+                console.error("Error loading next level:", error)
+                panel.destroy()
+            })
+            },500)
         }}
     ]
     // Botones
@@ -407,25 +415,27 @@ export function failureWindow(scene, timeTaken){
     // Botones
     const botones = [
         {icon: 'iconExit', callback: ()=> {
-            if (usuario.profesor){
-
-            disappearance(container, scene)
-            scene.time.delayedCall(300, () => {
-                scene.scene.start('MainMenuProfesor')
-            });
-            }
-            else{
-                disappearance(container, scene)
-                scene.time.delayedCall(300, () => {
-                    scene.scene.start('MainMenu')
-                });
-            }           
+            const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
+            const panel = panelCarga(scene, 'LOADING MENU')
+            setTimeout(() => {
+                scene.scene.start(tipoMenu, {openWorldSelect: false}).then(() => {
+                    panel.destroy()
+                }).catch((error) => {
+                    console.error("Error loading levels:", error)
+                    panel.destroy()
+                })         
+            },500)          
         }},
         {icon: 'iconRestart', callback: ()=> {
-            disappearance(container, scene)
-            scene.time.delayedCall(300, () => {
-                scene.scene.start(scene.currentLevel)
-            });
+            const panel = panelCarga(scene, 'RESTARTING LEVEL')
+            setTimeout(() => {
+                scene.scene.start(scene.currentLevel).then(() => {
+                    panel.destroy()
+                }).catch((error) => {
+                    console.error("Error restarting level:", error)
+                    panel.destroy()
+                })
+            }, 500)
         }},
     ]
 

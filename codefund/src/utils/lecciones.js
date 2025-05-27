@@ -1,13 +1,13 @@
-import conceptos from '../lecciones/01_conceptos.md?raw'
-import dataTypesI from '../lecciones/02_dataTypes.md?raw'
-import dataTypesII from '../lecciones/03_dataTypes.md?raw'
-import operadoresI from '../lecciones/03_operadores.md?raw'
-import operadoresII from '../lecciones/04_operadores.md?raw'
-import estructurasControl from '../lecciones/04_estructurasControl.md?raw'
-import condicionales from '../lecciones/04.1_condicionales.md?raw'
-import bucles from '../lecciones/04.2_bucles.md?raw'
-import arrays from '../lecciones/04.3_arrays.md?raw'
-import modularizacion from '../lecciones/05_modularizacion.md?raw'
+import conceptos from '../assets/md/01_conceptos.md?raw'
+import dataTypesI from '../assets/md/02_dataTypes.md?raw'
+import dataTypesII from '../assets/md/03_dataTypes.md?raw'
+import operadoresI from '../assets/md/03_operadores.md?raw'
+import operadoresII from '../assets/md/04_operadores.md?raw'
+import estructurasControl from '../assets/md/04_estructurasControl.md?raw'
+import condicionales from '../assets/md/04.1_condicionales.md?raw'
+import bucles from '../assets/md/04.2_bucles.md?raw'
+import arrays from '../assets/md/04.3_arrays.md?raw'
+import modularizacion from '../assets/md/05_modularizacion.md?raw'
 
 export const lecciones = [
     {

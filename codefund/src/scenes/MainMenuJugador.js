@@ -1,20 +1,20 @@
 import { Scene } from 'phaser'
-import { tablaClasificaciones } from './windows/tablaClasificaciones'
+import { tablaClasificacion } from './windows/tablaClasificacion'
 import { characterSelect } from './windows/characterSelect'
 import { worldSelect } from './windows/worldSelect'
 import {insignias } from './windows/insignias'
 import { biblioteca } from './windows/biblioteca'
-import { habilitaciones } from './windows/habilitaciones'
-import { panelCarga } from '../utils/panelCarga'
+import { panelCarga} from '../utils/panelCarga'
 
-export class MainMenuProfesor extends Scene
+
+export class MainMenuJugador extends Scene
 {
     constructor ()
     {
-        super('MainMenuProfesor');
+        super('MainMenuJugador');
     }
     
-    create (data)
+    async create (data)
     {
         return new Promise((resolve) => {
             try {
@@ -37,7 +37,14 @@ export class MainMenuProfesor extends Scene
                     this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
                 }
                 // Textos e imagen
-                this.add.text(16,32, `Usuario: ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}` ,{
+                this.add.text(16,16, `Usuario: ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}` ,{
+                    fontFamily: 'Arial Black',
+                    fontSize: '16px',
+                    color: '#ffffff',
+                    stroke: '#000000',
+                    strokeThickness: 2
+                })
+                this.add.text(16,32, `Aula: ${JSON.parse(localStorage.getItem('usuario')).aula}` ,{
                     fontFamily: 'Arial Black',
                     fontSize: '16px',
                     color: '#ffffff',
@@ -48,7 +55,7 @@ export class MainMenuProfesor extends Scene
                 
                 // Botones
                 const botones = [
-                    {texto: 'JUGAR', callback: () => {
+                    {texto: 'JUGAR', callback: () => { 
                         const panel = panelCarga(this, 'CARGANDO MUNDOS...') 
                         worldSelect(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
                             panel.setMensaje('MUNDOS CARGADOS')
@@ -69,7 +76,7 @@ export class MainMenuProfesor extends Scene
                         }).catch((error) => {
                             console.error("Error al cargar personajes:", error)
                         })
-                    }},                    
+                    }},
                     {texto: 'INSÍGNEAS', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO INSIGNIAS...')
                         insignias(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
@@ -79,7 +86,7 @@ export class MainMenuProfesor extends Scene
                             }, 500)                }).catch((error) => {
                             console.error("Error al cargar insignias:", error)
                         })
-                    }},                    
+                    }},
                     {texto: 'BIBLIOTECA', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO BIBLIOTECA...')
                         biblioteca(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
@@ -90,27 +97,16 @@ export class MainMenuProfesor extends Scene
                         }).catch((error) => {
                             console.error("Error al cargar biblioteca:", error)
                         })
-                    }},                    
-                    {texto: 'CLASIFICACIONES', callback: () => {
-                        const panel = panelCarga(this, 'CARGANDO CLASIFICACIONES...')
-                        tablaClasificaciones(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                    }},
+                    {texto: 'TABLA DE CLASIFICACIÓN', callback: () => {
+                        const panel = panelCarga(this, 'CARGANDO TABLA DE CLASIFICACIÓN...')
+                        tablaClasificacion(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
                             panel.setMensaje('TABLA CARGADA')
                             setTimeout(() => {
                                 panel.destroy()
                             }, 500)
                         }).catch((error) => {
                             console.error("Error al cargar tabla de clasificación:", error)
-                        })
-                    }},                    
-                    {texto: 'HABILITAR MUNDOS', callback: () => {
-                        const panel = panelCarga(this, 'CARGANDO HABILITACIONES...')
-                        habilitaciones(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('HABILITACIONES CARGADAS')
-                            setTimeout(() => {
-                                panel.destroy()
-                            }, 500)
-                        }).catch((error) => {
-                            console.error("Error al cargar habilitaciones:", error)
                         })
                     }},
                     {texto: 'CRÉDITOS', callback: () => {}},
@@ -151,6 +147,7 @@ export class MainMenuProfesor extends Scene
                         if (this.buttonEnabledMain){
                             this.buttonEnabledMain = false
                             boton.callback()
+                            
                         }
                     })
                     button.on('pointerover', () => {
@@ -168,9 +165,9 @@ export class MainMenuProfesor extends Scene
                 }
                 resolve(true)
             } catch (error) {
-                console.error("Error in MainMenuProfesor create:", error);
+                console.error("Error in MainMenuJugador create:", error);
                 resolve(false);
             }
-        })
+        })  
     }
 }

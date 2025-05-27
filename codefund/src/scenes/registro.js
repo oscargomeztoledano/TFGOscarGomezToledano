@@ -1,11 +1,11 @@
 import {Scene} from 'phaser'
-import { registro, inicioSesion } from './utils/forms';
+import { registro, inicioSesion } from './windows/forms';
 
 
     
-export class SecondScene extends Scene {
+export class Registro extends Scene {
     constructor() {
-        super('SecondScene')
+        super('Registro')
     }
     create() {
         this.add.image(0,0, 'background7').setOrigin(0,0).setScale(1.5);

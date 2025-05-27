@@ -1,5 +1,5 @@
-import { disappearance,appearance } from "./animations"
-import { getAlumnoByCorreo, postAlumno, getProfesorByCorreo } from "../../utils/apiCalls"
+import { disappearance,appearance } from "../../utils/animations"
+import { getAlumnoByCorreo, postAlumno, getProfesorByCorreo } from "../../api/apiCalls"
 
 export function registro(scene){
     const {width, height} = scene.scale
@@ -104,7 +104,7 @@ export function registro(scene){
                             estrellasTotales: response.estrellasTotales,
                         }))
                         scene.time.delayedCall(200, () => {
-                            scene.scene.start('MainMenu')
+                            scene.scene.start('MainMenuJugador')
                         })
                     })
                     .catch((error) => {
@@ -300,7 +300,7 @@ async function intentarlogin(email, password,scene){
                     estrellasTotales: alumno.estrellasTotales,
                 }))
                 scene.time.delayedCall(200, () => {
-                    scene.scene.start('MainMenu')
+                    scene.scene.start('MainMenuJugador')
                 })
 
             }else{

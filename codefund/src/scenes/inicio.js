@@ -1,10 +1,10 @@
 import {Scene} from 'phaser'
 
 
-export class FirstScene extends Scene {
+export class Inicio extends Scene {
 
     constructor() {
-        super('FirstScene')
+        super('Inicio')
     }
 
     create() {
@@ -44,7 +44,7 @@ export class FirstScene extends Scene {
         }).setOrigin(0.5);
 
         this.input.keyboard.once('keydown-ENTER', () => {
-            this.scene.start('SecondScene'); 
+            this.scene.start('Registro'); 
         });
     }
 }

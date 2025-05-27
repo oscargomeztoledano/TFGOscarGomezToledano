@@ -1,12 +1,12 @@
 import {Scene} from 'phaser';
-import { controls } from '../utils/controls';
-import { initAnimations, appearance, disappearance, addtoscore, hit } from '../utils/animations';
-import { bocadilloCollectible, bocadilloScroll } from '../utils/bocadillo';
-import { successWindow, failureWindow } from '../utils/finalWindow';
-import { crearVidas, quitarvida } from '../utils/vidas';
-import { menuPause } from '../utils/menuPause';
-import { platforms3_2 } from '../utils/platforms';
-import { generarCofre } from '../utils/formula';
+import { controls } from '../../utils/controls';
+import { initAnimations, appearance, disappearance, addtoscore, hit } from '../../utils/animations';
+import { bocadilloCollectible, bocadilloScroll } from '../../utils/bocadillo';
+import { successWindow, failureWindow } from '../windows/finalWindow';
+import { crearVidas, quitarvida } from '../../utils/vidas';
+import { menuPause } from '../windows/menuPause';
+import { platforms3_2 } from '../../utils/platforms';
+import { generarCofre } from '../../utils/formula';
 
 let startTimeM1L1_6 = 0
 export class mundo1nivel1_6 extends Scene {
@@ -18,122 +18,130 @@ export class mundo1nivel1_6 extends Scene {
     preload(){}
     create()
      {
-        // Variables globales
-        this.controlEnabled = true
-        this.isOverlappingCollectible = false
-        this.activeCollectible = null
-        this.isOverLappingScroll = false
-        this.awaitingAnswer = false
-        this.currentLevel = 'mundo 1'+'nivel1_6'
-        this.nextLevel = 
-        this.currentWorldIndex = 0
-        this.currentLevelIndex = 5
-        // t0
-        startTimeM1L1_6 = Date.now()
+        return new Promise((resolve) => {
+            try {
+                // Variables globales
+                this.controlEnabled = true
+                this.isOverlappingCollectible = false
+                this.activeCollectible = null
+                this.isOverLappingScroll = false
+                this.awaitingAnswer = false
+                this.currentLevel = 'mundo 1'+'nivel1_6'
+                this.nextLevel = 
+                this.currentWorldIndex = 0
+                this.currentLevelIndex = 5
+                // t0
+                startTimeM1L1_6 = Date.now()
 
-        // Fondo
-        this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
-        
-         // Suelo
-         this.floor = this.physics.add.staticGroup()
-         const tileWidth = 48 
-         const yPosition1 = this.scale.height - tileWidth 
-         for (let x = 0; x < this.scale.width; x += tileWidth) {
-             this.floor.create(x, yPosition1, 'floor8').setOrigin(0, 0).refreshBody()
-         }
-         const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
-         const yPosition2 = this.scale.height - tileWidth -tileWidth
-         for (let x = 0; x < this.scale.width; x += tileWidth) {
-             const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
-             this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
-         }
-        platforms3_2({floor: this.floor})
-        
-        // Vidas
-        crearVidas(this)
-        
-        // Título
-        this.add.text(16, 16, '1-3. Cofres con acertijo', {
-            fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'left'
-        }).setOrigin(0, 0)
-        this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.25)
-        this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
+                // Fondo
+                this.background = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'background4').setOrigin(0, 0)
+                
+                // Suelo
+                this.floor = this.physics.add.staticGroup()
+                const tileWidth = 48 
+                const yPosition1 = this.scale.height - tileWidth 
+                for (let x = 0; x < this.scale.width; x += tileWidth) {
+                    this.floor.create(x, yPosition1, 'floor8').setOrigin(0, 0).refreshBody()
+                }
+                const floorTypes = ['floor1', 'floor2', 'floor3', 'floor4', 'floor5']
+                const yPosition2 = this.scale.height - tileWidth -tileWidth
+                for (let x = 0; x < this.scale.width; x += tileWidth) {
+                    const randomFloor = Phaser.Utils.Array.GetRandom(floorTypes) // Seleccionar un suelo aleatorio
+                    this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
+                }
+                platforms3_2({floor: this.floor})
+                
+                // Vidas
+                crearVidas(this)
+                
+                // Título
+                this.add.text(16, 16, '1-3. Cofres con acertijo', {
+                    fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
+                    stroke: '#000000', strokeThickness: 8,
+                    align: 'left'
+                }).setOrigin(0, 0)
+                this.add.image(25, 55, 'logo').setOrigin(0, 0).setScale(0.25)
+                this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
 
-        // Cofres
-        this.chests = this.physics.add.staticGroup()
-        this.cofres = [
-            { x: 700, y: 200, id: 'chest1' },
-            { x: 750, y: 400, id: 'chest2' },
-            { x: 275, y: 350, id: 'chest3' },
-            { x: 600, y: this.scale.height - tileWidth*2, id: 'chest4' },
-        ]
-        generarCofre(this)
+                // Cofres
+                this.chests = this.physics.add.staticGroup()
+                this.cofres = [
+                    { x: 700, y: 200, id: 'chest1' },
+                    { x: 750, y: 400, id: 'chest2' },
+                    { x: 275, y: 350, id: 'chest3' },
+                    { x: 600, y: this.scale.height - tileWidth*2, id: 'chest4' },
+                ]
+                generarCofre(this)
 
-        // Jugador
-        const usuario = JSON.parse(localStorage.getItem('usuario'))
-        this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, `player_idle${usuario.avatar}`)
-        .setOrigin(0, 1)
-        .setCollideWorldBounds(true)
-        .setGravityY(300)
-        .setScale(2)
-        // Colisión Jugador y el Suelo
-        this.physics.add.collider(this.player, this.floor)
+                // Jugador
+                const usuario = JSON.parse(localStorage.getItem('usuario'))
+                this.player = this.physics.add.sprite(100, this.scale.height - tileWidth*2, `player_idle${usuario.avatar}`)
+                .setOrigin(0, 1)
+                .setCollideWorldBounds(true)
+                .setGravityY(300)
+                .setScale(2)
+                // Colisión Jugador y el Suelo
+                this.physics.add.collider(this.player, this.floor)
 
-        // Scroll
-        this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll1').setOrigin(0,1)
-        const text= '¿Sabías que los cofres pueden contener acertijos?. Resuelve todos los acertijos para abrir todos los cofres y terminar el nivel.'
-        this.physics.add.overlap(
-            this.player,
-            this.scroll,
-            (player, scroll) => {
-                bocadilloScroll(this, text )
-            }
-        , null, this) 
-        
-    
-        // Overlap jugador cofres
-        this.physics.add.overlap(this.player, this.chests, (player, chest) => {
-            bocadilloCollectible(this, chest)
-            this.isOverlappingCollectible = true
-            this.activeCollectible = chest
-        })
-
-        // Listener E
-        this.input.keyboard.on('keydown-E', () => {
-            if (this.isOverlappingCollectible && !this.awaitingAnswer){
-                this.player.anims.play('player_idle', true)
-                this.awaitingAnswer = true
-                if (this.bocadillo) disappearance(this.bocadillo, this)
-                if (this.icon) disappearance(this.icon, this)
-            }
-        })
-
-         // Listener ESC
-         this.input.keyboard.on('keydown-ESC', () => {
+                // Scroll
+                this.scroll= this.physics.add.image(200,this.scale.height-tileWidth*2,'scroll1').setOrigin(0,1)
+                const text= '¿Sabías que los cofres pueden contener acertijos?. Resuelve todos los acertijos para abrir todos los cofres y terminar el nivel.'
+                this.physics.add.overlap(
+                    this.player,
+                    this.scroll,
+                    (player, scroll) => {
+                        bocadilloScroll(this, text )
+                    }
+                , null, this) 
+                
             
-            // Salir de la pregunta
-            if (this.awaitingAnswer && !this.controlEnabled) {
-            this.awaitingAnswer = false
-            this.controlEnabled = true
+                // Overlap jugador cofres
+                this.physics.add.overlap(this.player, this.chests, (player, chest) => {
+                    bocadilloCollectible(this, chest)
+                    this.isOverlappingCollectible = true
+                    this.activeCollectible = chest
+                })
 
-            if (this.questionUI) {
-                disappearance(this.questionUI.fondo, this)
-                disappearance(this.questionUI.preguntaText, this)
-                this.questionUI.buttons.forEach(b => {
-                disappearance(b.button, this)
-                disappearance(b.text, this)
+                // Listener E
+                this.input.keyboard.on('keydown-E', () => {
+                    if (this.isOverlappingCollectible && !this.awaitingAnswer){
+                        this.player.anims.play('player_idle', true)
+                        this.awaitingAnswer = true
+                        if (this.bocadillo) disappearance(this.bocadillo, this)
+                        if (this.icon) disappearance(this.icon, this)
+                    }
+                })
+
+                // Listener ESC
+                this.input.keyboard.on('keydown-ESC', () => {
+                    
+                    // Salir de la pregunta
+                    if (this.awaitingAnswer && !this.controlEnabled) {
+                    this.awaitingAnswer = false
+                    this.controlEnabled = true
+
+                    if (this.questionUI) {
+                        disappearance(this.questionUI.fondo, this)
+                        disappearance(this.questionUI.preguntaText, this)
+                        this.questionUI.buttons.forEach(b => {
+                        disappearance(b.button, this)
+                        disappearance(b.text, this)
+                        });
+                        this.questionUI = null
+                    }
+                    }// Pausar el juego
+                    else if (!this.awaitingAnswer && this.controlEnabled) {
+                        this.controlEnabled = false
+                        menuPause(this, usuario)
+                    }
+                    
                 });
-                this.questionUI = null
+                respolve(true)
+            } catch (error) {
+                console.error("Error al crear el nivel:", error);
+                respolve(false)
             }
-            }// Pausar el juego
-            else if (!this.awaitingAnswer && this.controlEnabled) {
-                this.controlEnabled = false
-                menuPause(this, usuario)
-            }
-            
-        });
+        })
     }
 
     update(){
