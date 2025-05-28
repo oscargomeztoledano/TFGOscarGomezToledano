@@ -37,8 +37,8 @@ export function menuPause(scene,usuario) {
     container.add([banner, bannerText])
 
     const botones = [
-        {icono: 'iconResume', texto: 'RESUME', callback: () => {
-            const panel = panelCarga(scene, 'RESUMING GAME')
+        {icono: 'iconResume', texto: 'CONTINUAR', callback: () => {
+            const panel = panelCarga(scene, 'CONTINUAR JUEGO')
             setTimeout(() => {
             overlay.destroy()
             disappearance(container, scene)
@@ -47,53 +47,32 @@ export function menuPause(scene,usuario) {
             },500)  
         }
         },
-        {icono: 'iconRestart', texto: 'RESTART', callback: () => {
-            const panel = panelCarga(scene, 'RESTARTING LEVEL')
+        {icono: 'iconRestart', texto: 'REINICIAR', callback: () => {
+            panelCarga(scene, 'REINICIANDO NIVEL...')
             setTimeout(() => {
-                scene.scene.start(scene.currentLevel).then(() => {
-                    panel.destroy()
-                }).catch((error) => {
-                    console.error("Error restarting level:", error)
-                    panel.destroy()
-                })
+                scene.scene.start(scene.currentLevel)                
             }, 500)
         }
         },
-        {icono: 'iconLevels', texto: 'LEVELS', callback: () => {
+        {icono: 'iconLevels', texto: 'MUNDOS', callback: () => {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
-            const panel = panelCarga(scene, 'LOADING LEVELS')
+            panelCarga(scene, 'CARGANDO SELECCIÓN DE MUNDO...')
             setTimeout(() => {
-                scene.scene.start(tipoMenu, {openWorldSelect: true}).then(() => {
-                    panel.destroy()
-                }).catch((error) => {
-                    console.error("Error loading levels:", error)
-                    panel.destroy()
-                })
+                scene.scene.start(tipoMenu, {openWorldSelect: true})
             }, 500)
             }
         },
-        {icono: 'iconSettings', texto: 'SETTINGS', callback: () => {
-            //TODO abrir menu de configuracion cuando esté implementado
-            scene.buttonEnabledPause = true
-            console.log('Settings')
-            }
-        },
-        {icono: 'iconExit', texto: 'EXIT', callback: () => {
+        {icono: 'iconExit', texto: 'SALIR', callback: () => {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
-            const panel = panelCarga(scene, 'LOADING MENU')
+            panelCarga(scene, 'SALIENDO...')
             setTimeout(() => {
-                scene.scene.start(tipoMenu, {openWorldSelect: false}).then(() => {
-                    panel.destroy()
-                }).catch((error) => {
-                    console.error("Error loading levels:", error)
-                    panel.destroy()
-                })
+                scene.scene.start(tipoMenu, {openWorldSelect: false})
             }, 500)
             }
         }
     ]
 
-    const buttonSpacing = 10
+    const buttonSpacing = 15
     const buttonHeight =  32
     const buttonWidth =  160
     const startY = - ((botones.length * (buttonHeight + buttonSpacing)) / 2) -30;

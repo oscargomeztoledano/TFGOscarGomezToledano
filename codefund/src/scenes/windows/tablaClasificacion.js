@@ -1,5 +1,6 @@
 import { appearance, disappearance } from "../../utils/animations"
 import {getAllAlumnosPuntosAula} from "../../api/apiCalls"
+import { panelCarga } from "../../utils/panelCarga"
 
 var alumnos = []
 export async function tablaClasificacion(scene, usuario) {
@@ -44,8 +45,12 @@ export async function tablaClasificacion(scene, usuario) {
             const icon = scene.add.image(0,165, 'cross').setOrigin(0.5)
             container.add(icon)
             buttonClose.on('pointerdown', () => {
-                scene.buttonEnabledMain = true
-                disappearance(container, scene)
+                const panel = panelCarga(scene, 'CERRANDO CLASIFICACIÓN...')
+                setTimeout(() => {
+                    panel.destroy()
+                    scene.buttonEnabledMain = true
+                    disappearance(container, scene)
+                },500)
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);

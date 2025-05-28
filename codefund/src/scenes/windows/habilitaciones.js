@@ -1,5 +1,7 @@
 import { appearance, disappearance } from "../../utils/animations"
 import { getMundosByAula, guardarMundoAula } from "../../api/apiCalls"
+import { panelCarga } from "../../utils/panelCarga"
+
 var tabla = ''
 var listaMundos = []
 export  function habilitaciones(scene,usuario) {
@@ -32,11 +34,16 @@ export  function habilitaciones(scene,usuario) {
 
             const botones = [
                 {icon: 'cross', callback: () => {
-                scene.buttonEnabledMain = true
-                disappearance(container, scene)
+                const panel = panelCarga(scene, 'CERRANDO HABILITACIONES...')
+                    setTimeout(() => {
+                        panel.destroy()
+                        scene.buttonEnabledMain = true
+                        disappearance(container, scene)
+                    },500)
                 } 
                 },
                 {icon: 'check', callback: async () => {
+                    const panel = panelCarga(scene, 'GUARDANDO...')
                     const aulaSelected = selectorDom.getChildByID('selAula').value
                     const habilitados = [];
                     tabla.getChildByID('tabla')
@@ -44,15 +51,17 @@ export  function habilitaciones(scene,usuario) {
                         .forEach(sel => {
                             if (sel.value === 'HABILITADO') {
                                 const idx = parseInt(sel.dataset.mundo, 10);
-                                habilitados.push(listaMundos[idx]);   // nombre en mayúsculas
+                                habilitados.push(listaMundos[idx]);   
                             }
                         });
-                    console.log("Mundos habilitados:", habilitados)
                     const aulaActualizada={
                         mundos: habilitados
                     }
                     await guardarMundoAula(aulaSelected, aulaActualizada).then((response) => {
-                        console.log("Mundos updated successfully:", response)
+                        panel.setMensaje('GUARDADO CORRECTAMENTE')
+                        setTimeout(() => {
+                            panel.destroy()
+                        }, 500)
                         updateTabla(aulaSelected)
                     }).catch((error) => {
                         console.error("Error updating mundos:", error)
@@ -114,7 +123,13 @@ export  function habilitaciones(scene,usuario) {
 
             listaMundos = usuario.mundos.map(m => m.nombre.toUpperCase())
 
-            selectorDom.getChildByID('selAula').addEventListener('change', e=> updateTabla(e.target.value))
+            selectorDom.getChildByID('selAula').addEventListener('change', e=> {
+                const panel = panelCarga(scene, 'ACTUALIZANDO TABLA...')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+                updateTabla(e.target.value)
+            })
             updateTabla(usuario.aulas[0])
             resolve(true)
         } catch (error) {

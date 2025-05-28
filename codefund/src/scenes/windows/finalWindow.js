@@ -227,36 +227,21 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     const botones = [
         {icon: 'iconExit', callback: ()=> {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
-            const panel = panelCarga(scene, 'LOADING MENU')
+            panelCarga(scene, 'CARGANDO MENÚ...')
             setTimeout(() => {
-                scene.scene.start(tipoMenu, {openWorldSelect: false}).then(() => {
-                    panel.destroy()
-                }).catch((error) => {
-                    console.error("Error loading levels:", error)
-                    panel.destroy()
-                })         
+                scene.scene.start(tipoMenu, {openWorldSelect: false})         
             },500) 
         }},
         {icon: 'iconRestart', callback: ()=> {
-            const panel = panelCarga(scene, 'RESTARTING LEVEL')
+            panelCarga(scene, 'REINICIANDO NIVEL...')
             setTimeout(() => {
-                scene.scene.start(scene.currentLevel).then(() => {
-                    panel.destroy()
-                }).catch((error) => {
-                    console.error("Error restarting level:", error)
-                    panel.destroy()
-                })
+                scene.scene.start(scene.currentLevel)
             }, 500)
         }},
         {icon: 'iconResume', callback: ()=> {
-            const panel = panelCarga(scene, 'CARGANDO SIGUIENTE NIVEL...')
+            panelCarga(scene, 'CARGANDO SIGUIENTE NIVEL...')
             setTimeout(() => {
-            scene.scene.start(scene.nextLevel).then(() => {
-                panel.destroy()
-            }).catch((error) => {
-                console.error("Error loading next level:", error)
-                panel.destroy()
-            })
+            scene.scene.start(scene.nextLevel)
             },500)
         }}
     ]
@@ -416,25 +401,15 @@ export function failureWindow(scene, timeTaken){
     const botones = [
         {icon: 'iconExit', callback: ()=> {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
-            const panel = panelCarga(scene, 'LOADING MENU')
+            panelCarga(scene, 'CARGANDO MENÚ...')
             setTimeout(() => {
-                scene.scene.start(tipoMenu, {openWorldSelect: false}).then(() => {
-                    panel.destroy()
-                }).catch((error) => {
-                    console.error("Error loading levels:", error)
-                    panel.destroy()
-                })         
-            },500)          
+                scene.scene.start(tipoMenu, {openWorldSelect: false})         
+            },500) 
         }},
         {icon: 'iconRestart', callback: ()=> {
-            const panel = panelCarga(scene, 'RESTARTING LEVEL')
+            panelCarga(scene, 'REINICIANDO NIVEL...')
             setTimeout(() => {
-                scene.scene.start(scene.currentLevel).then(() => {
-                    panel.destroy()
-                }).catch((error) => {
-                    console.error("Error restarting level:", error)
-                    panel.destroy()
-                })
+                scene.scene.start(scene.currentLevel)
             }, 500)
         }},
     ]

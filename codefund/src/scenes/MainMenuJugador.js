@@ -16,10 +16,8 @@ export class MainMenuJugador extends Scene
     
     async create (data)
     {
-        return new Promise((resolve) => {
-            try {
-
                 this.buttonEnabledMain = true
+
                 // Fondo
                 this.add.image(0,0, 'background7').setOrigin(0,0).setScale(1.5);
 
@@ -57,62 +55,52 @@ export class MainMenuJugador extends Scene
                 const botones = [
                     {texto: 'JUGAR', callback: () => { 
                         const panel = panelCarga(this, 'CARGANDO MUNDOS...') 
-                        worldSelect(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('MUNDOS CARGADOS')
-                            setTimeout(() => {
-                            panel.destroy()
-                            }, 500)
-                        }).catch((error) => {
-                            console.error("Error al cargar mundos:", error)
-                        })
+                        setTimeout(() => {
+                            worldSelect(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                                panel.destroy()
+                            })
+                        }, 500)
                     }},
                     {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO PERSONAJES...')
-                        characterSelect(this).then(() => {
-                            panel.setMensaje('PERSONAJES CARGADOS')
-                            setTimeout(() => {
-                            panel.destroy()
-                            }, 500)
-                        }).catch((error) => {
-                            console.error("Error al cargar personajes:", error)
-                        })
+                        setTimeout(() => {
+                            characterSelect(this).then(() => {
+                                panel.destroy()
+                            })
+                        },500)
                     }},
-                    {texto: 'INSÍGNEAS', callback: () => {
+                    {texto: 'INSIGNIAS', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO INSIGNIAS...')
-                        insignias(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('INSIGNIAS CARGADAS')
-                            setTimeout(() => {
-                            panel.destroy()
-                            }, 500)                }).catch((error) => {
-                            console.error("Error al cargar insignias:", error)
-                        })
+                        setTimeout(() => {
+                            insignias(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                                panel.destroy()
+                            })
+                        },500)
                     }},
                     {texto: 'BIBLIOTECA', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO BIBLIOTECA...')
-                        biblioteca(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('BIBLIOTECA CARGADA')
-                            setTimeout(() => {
-                            panel.destroy()
-                            }, 500)
-                        }).catch((error) => {
-                            console.error("Error al cargar biblioteca:", error)
-                        })
+                        setTimeout(() => {
+                            biblioteca(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                                panel.destroy()
+                            })
+                        },500)
                     }},
                     {texto: 'TABLA DE CLASIFICACIÓN', callback: () => {
-                        const panel = panelCarga(this, 'CARGANDO TABLA DE CLASIFICACIÓN...')
-                        tablaClasificacion(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('TABLA CARGADA')
-                            setTimeout(() => {
-                                panel.destroy()
-                            }, 500)
-                        }).catch((error) => {
-                            console.error("Error al cargar tabla de clasificación:", error)
-                        })
+                        const panel = panelCarga(this, 'CARGANDO CLASIFICACIÓN...')
+                        setTimeout(() => {
+                            tablaClasificacion(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                                    panel.destroy()
+                            })
+                        },500)
                     }},
                     {texto: 'CRÉDITOS', callback: () => {}},
                     {texto: 'SALIR', callback: () => {
+                        panelCarga(this, 'SALIENDO...')
                         localStorage.clear()
-                        this.scene.start('Inicio')}},
+                        setTimeout(() => {
+                            this.scene.start('Inicio')
+                        }, 500)                   
+                    }},
                 ]
                 
                 const spacing= 10 
@@ -162,12 +150,10 @@ export class MainMenuJugador extends Scene
                 if (data.openWorldSelect){
                     this.buttonEnabledMain = false
                     worldSelect(this, JSON.parse(localStorage.getItem('usuario')))
-                }
-                resolve(true)
-            } catch (error) {
-                console.error("Error in MainMenuJugador create:", error);
-                resolve(false);
-            }
-        })  
+                }   
+                const panelBienvenida = panelCarga(this, `HOLA ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}`)
+                setTimeout(() => {
+                    panelBienvenida.destroy()
+                }, 1000)             
     }
 }

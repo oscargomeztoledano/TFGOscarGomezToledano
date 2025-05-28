@@ -1,5 +1,6 @@
 import { appearance, disappearance } from "../../utils/animations"
 import {getAllAlumnosPuntosAula} from "../../api/apiCalls"
+import { panelCarga } from "../../utils/panelCarga"
 var tabla = ''
 export async function tablaClasificaciones(scene, usuario) {
     return new Promise((resolve) => {
@@ -34,8 +35,12 @@ export async function tablaClasificaciones(scene, usuario) {
             const icon = scene.add.image(0,190, 'cross').setOrigin(0.5)
             container.add(icon)
             buttonClose.on('pointerdown', () => {
-                scene.buttonEnabledMain = true
-                disappearance(container, scene)
+                const panel = panelCarga(scene, 'CERRANDO CLASIFICACIONES...')
+                setTimeout(() => {
+                    panel.destroy()
+                    scene.buttonEnabledMain = true
+                    disappearance(container, scene)
+                },500)
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);
@@ -73,7 +78,13 @@ export async function tablaClasificaciones(scene, usuario) {
 
             appearance(container, scene)    
 
-            selectorDom.getChildByID('selAula').addEventListener('change', e => updateTabla(e.target.value))
+            selectorDom.getChildByID('selAula').addEventListener('change', e =>{
+                const panel = panelCarga(scene, 'ACTUALIZANDO TABLA...')
+                updateTabla(e.target.value)
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+            })
             updateTabla(usuario.aulas[0])
             resolve(true)
         } catch (error) {

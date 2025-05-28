@@ -16,8 +16,6 @@ export class MainMenuProfesor extends Scene
     
     create (data)
     {
-        return new Promise((resolve) => {
-            try {
 
                 this.buttonEnabledMain = true
                 // Fondo
@@ -37,7 +35,14 @@ export class MainMenuProfesor extends Scene
                     this.floor.create(x, yPosition2, randomFloor).setOrigin(0, 0).refreshBody()
                 }
                 // Textos e imagen
-                this.add.text(16,32, `Usuario: ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}` ,{
+                this.add.text(16,16, `Usuario: ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}` ,{
+                    fontFamily: 'Arial Black',
+                    fontSize: '16px',
+                    color: '#ffffff',
+                    stroke: '#000000',
+                    strokeThickness: 2
+                })
+                this.add.text(16,32, `Rol: Profesor` ,{
                     fontFamily: 'Arial Black',
                     fontSize: '16px',
                     color: '#ffffff',
@@ -51,7 +56,6 @@ export class MainMenuProfesor extends Scene
                     {texto: 'JUGAR', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO MUNDOS...') 
                         worldSelect(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('MUNDOS CARGADOS')
                             setTimeout(() => {
                             panel.destroy()
                             }, 500)
@@ -62,7 +66,6 @@ export class MainMenuProfesor extends Scene
                     {texto: 'SELECCIÓN DE PERSONAJE', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO PERSONAJES...')
                         characterSelect(this).then(() => {
-                            panel.setMensaje('PERSONAJES CARGADOS')
                             setTimeout(() => {
                             panel.destroy()
                             }, 500)
@@ -73,7 +76,6 @@ export class MainMenuProfesor extends Scene
                     {texto: 'INSÍGNEAS', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO INSIGNIAS...')
                         insignias(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('INSIGNIAS CARGADAS')
                             setTimeout(() => {
                             panel.destroy()
                             }, 500)                }).catch((error) => {
@@ -83,7 +85,6 @@ export class MainMenuProfesor extends Scene
                     {texto: 'BIBLIOTECA', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO BIBLIOTECA...')
                         biblioteca(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('BIBLIOTECA CARGADA')
                             setTimeout(() => {
                             panel.destroy()
                             }, 500)
@@ -94,7 +95,6 @@ export class MainMenuProfesor extends Scene
                     {texto: 'CLASIFICACIONES', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO CLASIFICACIONES...')
                         tablaClasificaciones(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('TABLA CARGADA')
                             setTimeout(() => {
                                 panel.destroy()
                             }, 500)
@@ -105,7 +105,6 @@ export class MainMenuProfesor extends Scene
                     {texto: 'HABILITAR MUNDOS', callback: () => {
                         const panel = panelCarga(this, 'CARGANDO HABILITACIONES...')
                         habilitaciones(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
-                            panel.setMensaje('HABILITACIONES CARGADAS')
                             setTimeout(() => {
                                 panel.destroy()
                             }, 500)
@@ -115,8 +114,12 @@ export class MainMenuProfesor extends Scene
                     }},
                     {texto: 'CRÉDITOS', callback: () => {}},
                     {texto: 'SALIR', callback: () => {
+                        panelCarga(this, 'SALIENDO...')
                         localStorage.clear()
-                        this.scene.start('Inicio')}},
+                        setTimeout(() => {
+                        this.scene.start('Inicio')
+                        }, 500)
+                    }},
                 ]
                 
                 const spacing= 10 
@@ -166,11 +169,9 @@ export class MainMenuProfesor extends Scene
                     this.buttonEnabledMain = false
                     worldSelect(this, JSON.parse(localStorage.getItem('usuario')))
                 }
-                resolve(true)
-            } catch (error) {
-                console.error("Error in MainMenuProfesor create:", error);
-                resolve(false);
-            }
-        })
+                const panelBienvenida = panelCarga(this, `HOLA ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}`)
+                setTimeout(() => {
+                    panelBienvenida.destroy()
+                }, 1000)
     }
 }

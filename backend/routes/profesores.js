@@ -21,8 +21,6 @@ router.get('/correo/:correo', function (req, res) {
     profesores.findOne({ correo: correo }, function (err, profesor) {
         if (err) {
             res.status(500).send('Error retrieving alumno')
-        } else if(!profesor) {
-            res.status(404).send('profesor not found')
         }else {
             res.status(200).json(profesor)
         }

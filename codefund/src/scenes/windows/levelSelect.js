@@ -35,8 +35,12 @@ export function levelSelect(scene, nombreMundo, usuario) {
         const icon = scene.add.image(0, 75, 'cross').setOrigin(0.5)
         container.add(icon)
         buttonClose.on('pointerdown', () => {
-            scene.buttonEnabledWorld = true
-            disappearance(container, scene)
+            const panel = panelCarga(scene, `CERRANDO ${nombreMundo.toUpperCase()}...`)
+                scene.buttonEnabledWorld = true
+                setTimeout(() => {
+                panel.destroy()
+                disappearance(container, scene)
+                },500)
         })
         buttonClose.on('pointerover', () => {
             buttonClose.setScale(1.1);
@@ -100,11 +104,9 @@ export function levelSelect(scene, nombreMundo, usuario) {
             buttonBackground.on('pointerdown', () => {
                 if (nivel.desbloqueado && scene.buttonEnabledLevel) {
                     scene.buttonEnabledLevel = false    
-                    const panel = panelCarga(scene, `CARGANDO ${nivel.nombre}...`) 
+                    panelCarga(scene, `CARGANDO ${nivel.nombre}...`) 
                     setTimeout(() => {               
-                        scene.scene.start(nombreMundo+nivel.nombre).then(() => {
-                            panel.destroy()
-                        })
+                        scene.scene.start(nombreMundo+nivel.nombre)
                     }, 500)
                 }
             });

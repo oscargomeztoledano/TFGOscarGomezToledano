@@ -14,11 +14,9 @@ export class mundo1nivel1_5 extends Scene {
         super('mundo 1'+'nivel1_5')
     }
 
-    preload(){}
     create()
      {
-        return new Promise((resolve) => {
-            try {
+        
                 // Variables globales
                 this.controlEnabled = true
                 this.isOverlappingCollectible = false
@@ -143,13 +141,6 @@ export class mundo1nivel1_5 extends Scene {
                     }
                     
                 });
-                resolve(true)
-            } catch (error) {
-                console.error("Error en la creación del nivel:", error);
-                resolve(false);
-            }
-        })
-
     }
 
     update(){

@@ -1,5 +1,6 @@
 import { appearance,disappearance } from "../../utils/animations";
 import { ALL_ACHIEVEMENTS } from "../../utils/achivements";
+import { panelCarga } from "../../utils/panelCarga";
 
 export function insignias(scene, usuario){
     return new Promise((resolve) => {
@@ -34,8 +35,12 @@ export function insignias(scene, usuario){
             const icon = scene.add.image(0, 165, 'cross').setOrigin(0.5)
             container.add(icon)
             buttonClose.on('pointerdown', () => {
+                const panel = panelCarga(scene, 'CERRANDO INSIGNIAS...')
+                setTimeout(() => {
+                panel.destroy()
                 scene.buttonEnabledMain = true
                 disappearance(container, scene)
+                },500)
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);

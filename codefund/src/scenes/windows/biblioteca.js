@@ -1,6 +1,8 @@
 import { appearance,disappearance } from "../../utils/animations";
 import { lecciones } from "../../utils/lecciones"
 import {marked} from "marked"
+import { panelCarga } from "../../utils/panelCarga"
+
 window.marked = marked
 
 export function biblioteca(scene, usuario){
@@ -38,8 +40,12 @@ export function biblioteca(scene, usuario){
             const icon = scene.add.image(0,170, 'cross').setOrigin(0.5)
             container.add(icon)
             buttonClose.on('pointerdown', () => {
-                scene.buttonEnabledMain = true
-                disappearance(container, scene)
+                const panel = panelCarga(scene, 'CERRANDO BIBLIOTECA...')
+                setTimeout(() => {
+                    panel.destroy()
+                    scene.buttonEnabledMain = true
+                    disappearance(container, scene)
+                },500)
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);
@@ -107,10 +113,14 @@ export function biblioteca(scene, usuario){
             listContainer.add([bg, txt]);
             if (isearned){
                 bg.on('pointerdown', () => {
-                html.setAlpha(1)
-                const mdDiv = html.getChildByID('md');
-                mdDiv.innerHTML = window.marked.parse(lec.contenido); 
-                mdDiv.scrollTop = 0;
+                const panel = panelCarga(scene, 'CARGANDO LECCIÓN...')
+                setTimeout(() => {
+                    html.setAlpha(1)
+                    const mdDiv = html.getChildByID('md');
+                    mdDiv.innerHTML = window.marked.parse(lec.contenido); 
+                    mdDiv.scrollTop = 0;
+                    panel.destroy()
+                }, 500)
                 });
 
                 bg.on('pointerover', ()=> { bg.setScale(1.05); txt.setScale(1.05); });

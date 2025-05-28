@@ -46,8 +46,12 @@ export async function worldSelect(scene, usuario){
             const icon = scene.add.image(0, 75, 'cross').setOrigin(0.5)
             container.add(icon)
             buttonClose.on('pointerdown', () => {
+                const panel = panelCarga(scene, 'CERRANDO MUNDOS...')
+                setTimeout(() => {
+                panel.destroy()
                 scene.buttonEnabledMain = true
                 disappearance(container, scene)
+                },500)
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);
@@ -112,16 +116,12 @@ export async function worldSelect(scene, usuario){
                 buttonBackground.on('pointerdown', () => {
                     if (mundos.includes(boton.texto)&& scene.buttonEnabledWorld) {
                         scene.buttonEnabledWorld = false
-                        const panel = panelCarga(scene, 'Cargando '+ boton.texto + '...')
-                        levelSelect(scene, boton.texto.toLowerCase(), usuario).then(() => {
-                            panel.setMensaje('Niveles Cargados')
-                            setTimeout(() => {
+                        const panel = panelCarga(scene, 'CARGANDO '+ boton.texto + '...')
+                        setTimeout(() => {
+                            levelSelect(scene, boton.texto.toLowerCase(), usuario).then(() => {
                                 panel.destroy()
-                            }, 1000)
-                        }).catch((error) => {
-                            panel.setMensaje('Error al cargar niveles')
-                            console.error("Error loading levels:", error)
-                        })
+                            })
+                        }, 500)
                     }
                 });
 

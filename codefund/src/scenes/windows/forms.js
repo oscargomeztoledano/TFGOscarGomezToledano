@@ -1,5 +1,6 @@
 import { disappearance,appearance } from "../../utils/animations"
 import { getAlumnoByCorreo, postAlumno, getProfesorByCorreo } from "../../api/apiCalls"
+import { panelCarga } from "../../utils/panelCarga"
 
 export function registro(scene){
     const {width, height} = scene.scale
@@ -64,8 +65,9 @@ export function registro(scene){
             const nameInput = document.getElementById('input-Nombre');
             const passwordInput = document.getElementById('input-Contraseña');
             const classCodeInput = document.getElementById('input-Código de clase');
+            const panel = panelCarga(scene, 'REGISTRANDO...')
 
-           if (!emailInput.value || 
+            if (!emailInput.value || 
             !nameInput.value  || 
             !passwordInput.value  || 
             !classCodeInput.value ) {
@@ -73,7 +75,7 @@ export function registro(scene){
                 !nameInput.value ? nameInput.style.border = '4px solid red' : nameInput.style.border = '1px solid #ccc'
                 !passwordInput.value ? passwordInput.style.border = '4px solid red' : passwordInput.style.border = '1px solid #ccc'
                 !classCodeInput.value ? classCodeInput.style.border = '4px solid red' : classCodeInput.style.border = '1px solid #ccc'
-           }else{
+            }else{
                 emailInput.style.border = '1px solid #ccc'
                 nameInput.style.border = '1px solid #ccc'
                 passwordInput.style.border = '1px solid #ccc'
@@ -103,21 +105,35 @@ export function registro(scene){
                             puntosTotales: response.puntosTotales,
                             estrellasTotales: response.estrellasTotales,
                         }))
-                        scene.time.delayedCall(200, () => {
-                            scene.scene.start('MainMenuJugador')
-                        })
+                        panel.setMensaje('REGISTRO EXITOSO') 
+                        setTimeout(() => {
+                            scene.scene.start('MainMenuJugador')  
+                        }, 500)
                     })
                     .catch((error) => {
                         if (error.response.status === 400) {
+
                             console.log('Error: ',error)
                             emailInput.style.border = '4px solid red'
+                            panel.setMensaje('Error al registrar')
+                            setTimeout(() => {
+                                panel.destroy()
+                            }, 1000)
                         }else if (error.response.status === 404) {
                             emailInput.style.border = '1px solid #ccc'
                             console.log('Error: ',error)
                             classCodeInput.style.border = '4px solid red'
+                            panel.setMensaje('Error al registrar')
+                            setTimeout(() => {
+                                panel.destroy()
+                            }, 1000)
                         } 
                         else {
                             console.log('Error:', error)
+                            panel.setMensaje('Error inesperado ')
+                            setTimeout(() => {
+                                panel.destroy()
+                            }, 1000)
                         }
                     });
 
@@ -155,8 +171,6 @@ export function registro(scene){
     appearance(container, scene)
 }   
 export function inicioSesion(scene){
-
-
     const {width, height} = scene.scale
     const container = scene.add.container(width/2, height/2)
     const fondo = scene.add.nineslice(0, 
@@ -252,9 +266,12 @@ export function inicioSesion(scene){
 async function intentarlogin(email, password,scene){
     const emailInput = email.value
     const passwordInput = password.value
+    const panel = panelCarga(scene, 'INICIANDO SESIÓN...')
     try{
         const profesor = await getProfesorByCorreo(emailInput)
-        if(profesor.password=== passwordInput){
+        const alumno = await getAlumnoByCorreo(emailInput)
+
+        if(profesor && profesor.password=== passwordInput){
             console.log('Sesion iniciada')
             localStorage.removeItem('usuario')
             localStorage.setItem('usuario', JSON.stringify({
@@ -270,22 +287,20 @@ async function intentarlogin(email, password,scene){
                 puntosTotales: profesor.puntosTotales,
                 estrellasTotales: profesor.estrellasTotales,
             }))
-            scene.time.delayedCall(200, () => {
+            setTimeout(() => {
                 scene.scene.start('MainMenuProfesor')
-            })
-            }
-            else{
-                console.log('Contraseña incorrecta')
-                password.style.border = '4px solid red'
-            }
-    }catch (error) {
-        if (error.response?.status !== 404) {
-            console.error('Error al intentar iniciar sesión:', error);
+            }, 500)
         }
-        try{
-            const alumno = await getAlumnoByCorreo(email.value)
-            if(alumno.password=== password.value){
-                console.log('Sesion iniciada')
+        else if (profesor && profesor.password !== passwordInput){
+            console.log('Contraseña incorrecta')
+            password.style.border = '4px solid red'
+            panel.setMensaje('CONTRASEÑA INCORRECTA')
+            setTimeout(() => {
+                panel.destroy()
+            }, 1000)
+        }
+        else if (alumno && alumno.password === passwordInput) {
+            console.log('Sesion iniciada')
                 localStorage.removeItem('usuario')
                 localStorage.setItem('usuario', JSON.stringify({
                     nombre: alumno.nombre,
@@ -299,20 +314,26 @@ async function intentarlogin(email, password,scene){
                     puntosTotales: alumno.puntosTotales,
                     estrellasTotales: alumno.estrellasTotales,
                 }))
-                scene.time.delayedCall(200, () => {
-                    scene.scene.start('MainMenuJugador')
-                })
-
-            }else{
-                console.log('Contraseña incorrecta')
-                passwordInput.style.border = '4px solid red'
-            }
-        }catch (error2) {
-                if (error2.response?.status === 404) {
-                    console.log('El correo no existe')
-                    email.style.border = '4px solid red'
-                }
-                else (console.log('Error al comprobar el alumno:', error2))
+                setTimeout(() => {
+                    scene.scene.start('MainMenuJugador')                    
+                }, 500)
         }
+        else if (alumno && alumno.password !== passwordInput){
+            console.log('Contraseña incorrecta')
+            password.style.border = '4px solid red'
+            panel.setMensaje('CONTRASEÑA INCORRECTA')
+            setTimeout(() => {
+                panel.destroy()
+            }, 1000)
+        }
+        else{
+            email.style.border = '4px solid red'
+            panel.setMensaje('CORREO NO VALIDO')
+            setTimeout(() => {
+                panel.destroy()
+            }, 1000)
+        }
+    }catch (error) {
+        console.error(error)
     }
 }

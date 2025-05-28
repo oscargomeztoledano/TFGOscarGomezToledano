@@ -15,12 +15,8 @@ export class mundo1nivel1_3 extends Scene {
         super('mundo 1'+'nivel1_3')
     }
 
-    preload(){
-        
-    }
     create() {
-        return new Promise((resolve) => {
-            try {
+        
                 // Variables globales
                 this.formulaLength = 5
                 this.formulaResult = 12
@@ -223,12 +219,6 @@ export class mundo1nivel1_3 extends Scene {
                     }
                 })
                 crearFormula(this)
-                resolve(true)
-            } catch (error) {
-                console.error("Error en create de mundo1nivel1_3:", error)
-                resolve(false)
-            }
-        })
     }
     update() {
         if (this.ishit) return

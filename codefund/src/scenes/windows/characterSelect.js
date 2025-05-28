@@ -46,13 +46,11 @@ export function characterSelect(scene){
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
                                 panel.setMensaje('Avatar actualizado correctamente')
                                 setTimeout(() => {
-                                    scene.buttonEnabledMain = true
+                                    scene.buttonEnableCH = true
                                     panel.destroy()
                                 }, 500)
-                                console.log('avatar actualizado', res.avatar)
-                                disappearance(container, scene)
                             })
-                        }, 1000)
+                        }, 500)
                     }
                 },
                 {character: 'player_idle1', texto: 'PERSONAJE 2',
@@ -68,13 +66,11 @@ export function characterSelect(scene){
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
                                 panel.setMensaje('Avatar actualizado correctamente')
                                 setTimeout(() => {
-                                    scene.buttonEnabledMain = true
+                                    scene.buttonEnableCH = true
                                     panel.destroy()
                                 }, 500)
-                                console.log('avatar actualizado', res.avatar)
-                                disappearance(container, scene)
                             })
-                        }, 1000)
+                        }, 500)
                     }
                 },
                 {character: 'player_idle2', texto: 'PERSONAJE 3',
@@ -90,13 +86,11 @@ export function characterSelect(scene){
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
                                 panel.setMensaje('Avatar actualizado correctamente')
                                 setTimeout(() => {
-                                    scene.buttonEnabledMain = true
+                                    scene.buttonEnableCH = true
                                     panel.destroy()
                                 }, 500)
-                                console.log('avatar actualizado', res.avatar)
-                                disappearance(container, scene)
                             })
-                        }, 1000)
+                        }, 500)
                     }
                 },
                 {character: 'player_idle3', texto: 'PERSONAJE 4',
@@ -112,13 +106,11 @@ export function characterSelect(scene){
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
                                 panel.setMensaje('Avatar actualizado correctamente')
                                 setTimeout(() => {
-                                    scene.buttonEnabledMain = true
+                                    scene.buttonEnableCH = true
                                     panel.destroy()
                                 }, 500)
-                                console.log('avatar actualizado', res.avatar)
-                                disappearance(container, scene)
                             })
-                        }, 1000)
+                        }, 500)
                     }
                 },
             ]

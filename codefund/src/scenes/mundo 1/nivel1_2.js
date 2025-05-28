@@ -15,14 +15,10 @@ export class mundo1nivel1_2 extends Scene
         super('mundo 1'+'nivel1_2')
     }
 
-    preload ()
-    {
-        
-    }
+    
     create()
     {
-        return new Promise((resolve) => {
-            try{
+        
                 // Variables globales   
                 this.isOverlappingCollectible = false
                 this.isOverLappnigScroll = false
@@ -147,12 +143,7 @@ export class mundo1nivel1_2 extends Scene
                 });
 
                 this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
-                resolve(true)
-            } catch (error) {
-                console.error('Error al crear el nivel 1-2:', error)
-                resolve(false)
-            }
-        })
+                
     }
     update()
     {
