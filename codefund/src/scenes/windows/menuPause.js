@@ -106,7 +106,16 @@ export function menuPause(scene,usuario) {
         button.on('pointerdown', () => {
             if (scene.buttonEnabledPause){
                 scene.buttonEnabledPause = false
-                boton.callback()
+                scene.tweens.add({
+                    targets: [button, icon, buttonText],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        boton.callback(); 
+                    }
+                });
             }
         })
         button.on('pointerover', () => {

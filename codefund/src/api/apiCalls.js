@@ -19,7 +19,7 @@ function postAlumno(alumno) {
         });
 }
 
-function guardarProgreso(correo, usuarioActualizado) {
+function guardarProgresoAlumno(correo, usuarioActualizado) {
     return api.patch(`/alumnos/guardarprogreso/${encodeURIComponent(correo)}`,  usuarioActualizado)
         .then(response => response.data)
         .catch(error => {
@@ -76,7 +76,7 @@ function guardarProgresoProfesor(correo, usuarioActualizado) {
 
 
 export { 
-    guardarProgreso, 
+    guardarProgresoAlumno, 
     guardarProgresoProfesor,
     getAllAlumnosPuntosAula,
     getMundosByAula ,

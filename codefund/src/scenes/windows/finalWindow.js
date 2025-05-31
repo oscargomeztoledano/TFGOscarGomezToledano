@@ -1,9 +1,10 @@
 import { appearance,disappearance } from "../../utils/animations"
-import { guardarProgreso, guardarProgresoProfesor } from "../../api/apiCalls"
+import { guardarProgresoAlumno, guardarProgresoProfesor } from "../../api/apiCalls"
 import { panelCarga } from "../../utils/panelCarga"
 
 export function successWindow(scene, timeTaken, puntosFijo) {
 
+    scene.buttonEnabledSuccess = true
     const {width, height} = scene.scale;
     scene.puntosBase= 200
     const puntosThisLevel = scene.puntosBase - timeTaken + puntosFijo
@@ -207,7 +208,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
                 console.error('Error al actualizar los niveles', err)
             })
         }else{
-            guardarProgreso(usuario.correo, usuarioActualizado).then((res) => {
+            guardarProgresoAlumno(usuario.correo, usuarioActualizado).then((res) => {
             localStorage.setItem('usuario', JSON.stringify({
                 ...usuario, 
                 mundos: res.mundos, 
@@ -262,7 +263,19 @@ export function successWindow(scene, timeTaken, puntosFijo) {
         container.add(icon)
 
         button.on('pointerdown', () => {
-            boton.callback()
+            if(scene.buttonEnabledSuccess ){
+                scene.buttonEnabledSuccess = false
+                scene.tweens.add({
+                    targets: [button, icon],
+                    scale: 1.8, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        boton.callback(); 
+                    }
+                });
+            }
         })
         button.on('pointerover', () => {
             button.setScale(2.2);
@@ -329,7 +342,7 @@ function calcularEstrellas(scene, timeTaken){
 
 export function failureWindow(scene, timeTaken){
 
-
+    scene.buttonEnabledFailure = true
     const {width, height} = scene.scale;
     scene.puntosBase= 200
     const container = scene.add.container(width/2, height/2)
@@ -427,7 +440,19 @@ export function failureWindow(scene, timeTaken){
         container.add(icon)
 
         button.on('pointerdown', () => {
-            boton.callback()
+            if(scene.buttonEnabledFailure ){
+                scene.buttonEnabledFailure = false
+                scene.tweens.add({
+                    targets: [button, icon],
+                    scale: 1.8, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        boton.callback(); 
+                    }
+                });
+            }
         })
         button.on('pointerover', () => {
             button.setScale(2.2);

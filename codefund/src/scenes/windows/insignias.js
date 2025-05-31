@@ -1,6 +1,7 @@
 import { appearance,disappearance } from "../../utils/animations";
 import { ALL_ACHIEVEMENTS } from "../../utils/achivements";
 import { panelCarga } from "../../utils/panelCarga";
+import { Scene } from "phaser";
 
 export function insignias(scene, usuario){
     return new Promise((resolve) => {
@@ -36,11 +37,21 @@ export function insignias(scene, usuario){
             container.add(icon)
             buttonClose.on('pointerdown', () => {
                 const panel = panelCarga(scene, 'CERRANDO INSIGNIAS...')
-                setTimeout(() => {
-                panel.destroy()
-                scene.buttonEnabledMain = true
-                disappearance(container, scene)
-                },500)
+                scene.tweens.add({
+                    targets: [buttonClose, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                            panel.destroy()
+                            scene.buttonEnabledMain = true
+                            disappearance(container, scene)
+                        },500) 
+                    }
+                });
+                
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);
@@ -52,7 +63,6 @@ export function insignias(scene, usuario){
             })
 
             const earned = usuario.insignias
-            console.log(earned)          
             const cols = 7;                                  
             const cellW = 65, cellH = 65;
             const startX = -cellW * (cols-1)/2;

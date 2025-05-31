@@ -1,5 +1,5 @@
 import { appearance,disappearance } from "../../utils/animations"
-import { guardarProgreso, guardarProgresoProfesor } from "../../api/apiCalls"
+import { guardarProgresoAlumno, guardarProgresoProfesor } from "../../api/apiCalls"
 import { panelCarga } from "../../utils/panelCarga"
 
 export function characterSelect(scene){
@@ -35,80 +35,52 @@ export function characterSelect(scene){
             const botonesPrincipales = [
                 {character: 'player_idle0', texto: 'PERSONAJE 1',
                     callback: () => {
-                        scene.buttonEnableCH = false
                         const usuarioActualizado ={avatar:0}
-                        const panel = panelCarga(scene, 'Actualizando avatar...')
                         const guardar = usuario.profesor 
                         ? guardarProgresoProfesor(usuario.correo, usuarioActualizado) 
-                        : guardarProgreso(usuario.correo, usuarioActualizado)
+                        : guardarProgresoAlumno(usuario.correo, usuarioActualizado)
                         setTimeout(() => {
                             guardar.then((res) => {
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                                panel.setMensaje('Avatar actualizado correctamente')
-                                setTimeout(() => {
-                                    scene.buttonEnableCH = true
-                                    panel.destroy()
-                                }, 500)
                             })
                         }, 500)
                     }
                 },
                 {character: 'player_idle1', texto: 'PERSONAJE 2',
                     callback: () => {
-                        scene.buttonEnableCH = false
                         const usuarioActualizado ={avatar:1}
-                        const panel = panelCarga(scene, 'Actualizando avatar...')
                         const guardar = usuario.profesor 
                         ? guardarProgresoProfesor(usuario.correo, usuarioActualizado) 
-                        : guardarProgreso(usuario.correo, usuarioActualizado)
+                        : guardarProgresoAlumno(usuario.correo, usuarioActualizado)
                         setTimeout(() => {
                             guardar.then((res) => {
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                                panel.setMensaje('Avatar actualizado correctamente')
-                                setTimeout(() => {
-                                    scene.buttonEnableCH = true
-                                    panel.destroy()
-                                }, 500)
                             })
                         }, 500)
                     }
                 },
                 {character: 'player_idle2', texto: 'PERSONAJE 3',
                     callback: () => {
-                        scene.buttonEnableCH = false
                         const usuarioActualizado ={avatar:2}
-                        const panel = panelCarga(scene, 'Actualizando avatar...')
                         const guardar = usuario.profesor 
                         ? guardarProgresoProfesor(usuario.correo, usuarioActualizado) 
-                        : guardarProgreso(usuario.correo, usuarioActualizado)
+                        : guardarProgresoAlumno(usuario.correo, usuarioActualizado)
                         setTimeout(() => {
                             guardar.then((res) => {
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                                panel.setMensaje('Avatar actualizado correctamente')
-                                setTimeout(() => {
-                                    scene.buttonEnableCH = true
-                                    panel.destroy()
-                                }, 500)
                             })
                         }, 500)
                     }
                 },
                 {character: 'player_idle3', texto: 'PERSONAJE 4',
                     callback: () => {
-                        scene.buttonEnableCH = false
                         const usuarioActualizado ={avatar:3}
-                        const panel = panelCarga(scene, 'Actualizando avatar...')
                         const guardar = usuario.profesor 
                         ? guardarProgresoProfesor(usuario.correo, usuarioActualizado) 
-                        : guardarProgreso(usuario.correo, usuarioActualizado)
+                        : guardarProgresoAlumno(usuario.correo, usuarioActualizado)
                         setTimeout(() => {
                             guardar.then((res) => {
                                 localStorage.setItem('usuario', JSON.stringify({...usuario, avatar: res.avatar}))
-                                panel.setMensaje('Avatar actualizado correctamente')
-                                setTimeout(() => {
-                                    scene.buttonEnableCH = true
-                                    panel.destroy()
-                                }, 500)
                             })
                         }, 500)
                     }
@@ -144,7 +116,25 @@ export function characterSelect(scene){
                 ).setOrigin(0, 0.5)
                 container.add(buttonText)
                 button.on('pointerdown', () => {  
-                    if (scene.buttonEnableCH) boton.callback()
+                    if (scene.buttonEnableCH){ 
+                        scene.buttonEnableCH = false
+                        const panel = panelCarga(scene, 'ACTUALIZANDO PERSONAJE...')
+                        scene.tweens.add({
+                            targets: [button, buttonText],
+                            scale: 0.9, 
+                            duration: 100,
+                            ease: 'Power1',
+                            yoyo: true, 
+                            onComplete: () => {
+                                boton.callback()
+                                panel.setMensaje('PERSONAJE ACTUALIZADO')
+                                setTimeout(() => {
+                                    panel.destroy()
+                                    scene.buttonEnableCH = true
+                                }, 500)
+                            }
+                        });
+                    }
                 })
                 button.on('pointerover', () => {
                     button.setScale(1.1);
@@ -165,9 +155,24 @@ export function characterSelect(scene){
             container.add(buttonClose)
             const icon = scene.add.image(0, 135, 'cross').setOrigin(0.5)
             container.add(icon)
-            buttonClose.on('pointerdown', () => {
-                scene.buttonEnabledMain = true
-                disappearance(container, scene)
+             buttonClose.on('pointerdown', () => {
+                const panel = panelCarga(scene, 'CERRANDO PERSONAJES...')
+                scene.buttonEnableCH = false
+                scene.tweens.add({
+                    targets: [buttonClose, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                        panel.destroy()
+                        scene.buttonEnabledMain = true
+                        disappearance(container, scene)
+                        },400)
+                    }
+                });
+
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);

@@ -5,6 +5,7 @@ var tabla = ''
 export async function tablaClasificaciones(scene, usuario) {
     return new Promise((resolve) => {
         try{
+            scene.buttonEnabledClasificaciones = true
             const {width, height} = scene.scale
             const container = scene.add.container(width/2, height/2).setAlpha(0)
             const fondo = scene.add.nineslice(
@@ -35,12 +36,23 @@ export async function tablaClasificaciones(scene, usuario) {
             const icon = scene.add.image(0,190, 'cross').setOrigin(0.5)
             container.add(icon)
             buttonClose.on('pointerdown', () => {
+                scene.buttonEnabledClasificaciones = false
                 const panel = panelCarga(scene, 'CERRANDO CLASIFICACIONES...')
-                setTimeout(() => {
-                    panel.destroy()
-                    scene.buttonEnabledMain = true
-                    disappearance(container, scene)
-                },500)
+                scene.tweens.add({
+                    targets: [buttonClose, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                            panel.destroy()
+                            scene.buttonEnabledMain = true
+                            disappearance(container, scene)
+                        },500) 
+                    }
+                });
+                
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);

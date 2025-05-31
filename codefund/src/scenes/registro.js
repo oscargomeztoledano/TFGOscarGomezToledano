@@ -74,7 +74,16 @@ export class Registro extends Scene {
             button.on('pointerdown', () => {
                 if (this.buttonEnabled){
                     this.buttonEnabled = false
-                    boton.callback()
+                    this.tweens.add({
+                        targets: [button, buttonText],
+                        scale: 0.9, 
+                        duration: 100,
+                        ease: 'Power1',
+                        yoyo: true, 
+                        onComplete: () => {
+                            boton.callback(); 
+                        }
+                    });
                 } 
             })
             button.on('pointerover', () => {

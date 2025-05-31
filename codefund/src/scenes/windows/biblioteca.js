@@ -9,6 +9,7 @@ export function biblioteca(scene, usuario){
 
     return new Promise((resolve) => {
         try {
+            scene.buttonenabledBlib = true
 
             const {width, height} = scene.scale
             const container = scene.add.container(width/2, height/2)
@@ -41,11 +42,22 @@ export function biblioteca(scene, usuario){
             container.add(icon)
             buttonClose.on('pointerdown', () => {
                 const panel = panelCarga(scene, 'CERRANDO BIBLIOTECA...')
-                setTimeout(() => {
-                    panel.destroy()
-                    scene.buttonEnabledMain = true
-                    disappearance(container, scene)
-                },500)
+                scene.buttonenabledBlib = false
+                scene.tweens.add({
+                    targets: [buttonClose, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                            panel.destroy()
+                            scene.buttonEnabledMain = true
+                            disappearance(container, scene)
+                        },500) 
+                    }
+                });
+                
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);
@@ -113,15 +125,28 @@ export function biblioteca(scene, usuario){
             listContainer.add([bg, txt]);
             if (isearned){
                 bg.on('pointerdown', () => {
+                if (scene.buttonenabledBlib){    
+                scene.buttonenabledBlib = false
                 const panel = panelCarga(scene, 'CARGANDO LECCIÓN...')
-                setTimeout(() => {
-                    html.setAlpha(1)
-                    const mdDiv = html.getChildByID('md');
-                    mdDiv.innerHTML = window.marked.parse(lec.contenido); 
-                    mdDiv.scrollTop = 0;
-                    panel.destroy()
-                }, 500)
-                });
+                scene.tweens.add({
+                    targets: [bg, txt],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                            html.setAlpha(1)
+                            const mdDiv = html.getChildByID('md');
+                            mdDiv.innerHTML = window.marked.parse(lec.contenido); 
+                            mdDiv.scrollTop = 0;
+                            panel.destroy()
+                            scene.buttonenabledBlib = true
+                        }, 500)
+                    }
+                })
+                }
+                })
 
                 bg.on('pointerover', ()=> { bg.setScale(1.05); txt.setScale(1.05); });
                 bg.on('pointerout',  ()=> { bg.setScale(1);    txt.setScale(1);    });

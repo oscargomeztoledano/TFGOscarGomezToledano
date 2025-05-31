@@ -35,13 +35,24 @@ export function levelSelect(scene, nombreMundo, usuario) {
         const icon = scene.add.image(0, 75, 'cross').setOrigin(0.5)
         container.add(icon)
         buttonClose.on('pointerdown', () => {
-            const panel = panelCarga(scene, `CERRANDO ${nombreMundo.toUpperCase()}...`)
+                const panel = panelCarga(scene, 'CERRANDO MUNDOS...')
                 scene.buttonEnabledWorld = true
-                setTimeout(() => {
-                panel.destroy()
-                disappearance(container, scene)
-                },500)
-        })
+                scene.buttonEnabledLevel = false
+                scene.tweens.add({
+                    targets: [buttonClose, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                        panel.destroy()
+                        disappearance(container, scene)
+                        },400)
+                    }
+                });
+
+            })
         buttonClose.on('pointerover', () => {
             buttonClose.setScale(1.1);
             icon.setScale(1.1);
@@ -105,9 +116,18 @@ export function levelSelect(scene, nombreMundo, usuario) {
                 if (nivel.desbloqueado && scene.buttonEnabledLevel) {
                     scene.buttonEnabledLevel = false    
                     panelCarga(scene, `CARGANDO ${nivel.nombre}...`) 
-                    setTimeout(() => {               
-                        scene.scene.start(nombreMundo+nivel.nombre)
-                    }, 500)
+                    scene.tweens.add({
+                        targets: [buttonBackground, buttonText],
+                        scale: 0.9, 
+                        duration: 100,
+                        ease: 'Power1',
+                        yoyo: true, 
+                        onComplete: () => {
+                            setTimeout(() => {               
+                            scene.scene.start(nombreMundo+nivel.nombre)
+                        }, 500)
+                        }
+                    });
                 }
             });
 

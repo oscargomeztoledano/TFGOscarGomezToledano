@@ -7,6 +7,7 @@ var listaMundos = []
 export  function habilitaciones(scene,usuario) {
     return new Promise((resolve) => {
         try {
+            scene.buttonEnabledHabilitaciones = true
             const {width, height} = scene.scale
             const container = scene.add.container(width/2, height/2).setAlpha(0)
             const fondo = scene.add.nineslice(
@@ -66,6 +67,7 @@ export  function habilitaciones(scene,usuario) {
                     }).catch((error) => {
                         console.error("Error updating mundos:", error)
                     })
+                    scene.buttonEnabledHabilitaciones = true
                 }
                 }
             ]
@@ -81,7 +83,17 @@ export  function habilitaciones(scene,usuario) {
                 const icon = scene.add.image(x, y,boton.icon).setOrigin(0.5)
                 container.add(icon)
                 button.on('pointerdown', () => {
-                    boton.callback()
+                scene.buttonEnabledHabilitaciones = false
+                    scene.tweens.add({
+                    targets: [button, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                            boton.callback()
+                    }
+                });
                 })
                 button.on('pointerover', () => {
                     button.setScale(1.1);

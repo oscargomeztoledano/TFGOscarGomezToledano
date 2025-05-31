@@ -15,7 +15,6 @@ export async function worldSelect(scene, usuario){
     return new Promise((resolve) => {
         try{
             scene.buttonEnabledWorld = true
-
             const {width, height} = scene.scale
             const container = scene.add.container(width/2, height/2)
             const fondo = scene.add.nineslice(
@@ -47,11 +46,22 @@ export async function worldSelect(scene, usuario){
             container.add(icon)
             buttonClose.on('pointerdown', () => {
                 const panel = panelCarga(scene, 'CERRANDO MUNDOS...')
-                setTimeout(() => {
-                panel.destroy()
-                scene.buttonEnabledMain = true
-                disappearance(container, scene)
-                },500)
+                scene.buttonEnabledWorld = false
+                scene.tweens.add({
+                    targets: [buttonClose, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                        panel.destroy()
+                        scene.buttonEnabledMain = true
+                        disappearance(container, scene)
+                        },400)
+                    }
+                });
+
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);
@@ -117,11 +127,20 @@ export async function worldSelect(scene, usuario){
                     if (mundos.includes(boton.texto)&& scene.buttonEnabledWorld) {
                         scene.buttonEnabledWorld = false
                         const panel = panelCarga(scene, 'CARGANDO '+ boton.texto + '...')
-                        setTimeout(() => {
-                            levelSelect(scene, boton.texto.toLowerCase(), usuario).then(() => {
-                                panel.destroy()
-                            })
-                        }, 500)
+                        scene.tweens.add({
+                            targets: [buttonBackground, buttonText],
+                            scale: 0.9, 
+                            duration: 100,
+                            ease: 'Power1',
+                            yoyo: true, 
+                            onComplete: () => {
+                                setTimeout(() => {
+                                    levelSelect(scene, boton.texto.toLowerCase(), usuario).then(() => {
+                                        panel.destroy()
+                                    })
+                                }, 500)
+                            }
+                        });
                     }
                 });
 

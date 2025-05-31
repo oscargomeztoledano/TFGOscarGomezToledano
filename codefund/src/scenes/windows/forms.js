@@ -156,7 +156,16 @@ export function registro(scene){
         container.add(icon)
 
         button.on('pointerdown', () => {
-            boton.callback()
+            scene.tweens.add({
+                targets: [button, icon],
+                scale: 0.9, 
+                duration: 100,
+                ease: 'Power1',
+                yoyo: true, 
+                onComplete: () => {
+                    boton.callback(); 
+                }
+            });
         })
         button.on('pointerover', () => {
             button.setScale(1.1);
@@ -227,9 +236,16 @@ export function inicioSesion(scene){
             scene.buttonEnabled = true
             disappearance(container, scene)}},
         {icon:'check', callback: () => {
-            const emailInput = document.getElementById('input-Correo');
-            const passwordInput = document.getElementById('input-Contraseña');
-            intentarlogin(emailInput, passwordInput,scene) 
+            const emailInput = document.getElementById('input-Correo')
+            const passwordInput = document.getElementById('input-Contraseña')
+            if (!emailInput.value || !passwordInput.value) {
+                !emailInput.value ? emailInput.style.border = '4px solid red' : emailInput.style.border = '1px solid #ccc'
+                !passwordInput.value ? passwordInput.style.border = '4px solid red' : passwordInput.style.border = '1px solid #ccc'
+            } else {
+                emailInput.style.border = '1px solid #ccc'
+                passwordInput.style.border = '1px solid #ccc'
+                intentarlogin(emailInput, passwordInput,scene)
+            } 
         }}
     
     ]
@@ -248,7 +264,16 @@ export function inicioSesion(scene){
         container.add(icon)
 
         button.on('pointerdown', () => {
-            boton.callback()
+           scene.tweens.add({
+                targets: [button, icon],
+                scale: 0.9, 
+                duration: 100,
+                ease: 'Power1',
+                yoyo: true, 
+                onComplete: () => {
+                    boton.callback(); 
+                }
+            });
         })
         button.on('pointerover', () => {
             button.setScale(1.1);

@@ -46,11 +46,21 @@ export async function tablaClasificacion(scene, usuario) {
             container.add(icon)
             buttonClose.on('pointerdown', () => {
                 const panel = panelCarga(scene, 'CERRANDO CLASIFICACIÓN...')
-                setTimeout(() => {
-                    panel.destroy()
-                    scene.buttonEnabledMain = true
-                    disappearance(container, scene)
-                },500)
+                scene.tweens.add({
+                    targets: [buttonClose, icon],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        setTimeout(() => {
+                            panel.destroy()
+                            scene.buttonEnabledMain = true
+                            disappearance(container, scene)
+                        },500) 
+                    }
+                });
+                
             })
             buttonClose.on('pointerover', () => {
                 buttonClose.setScale(1.1);
