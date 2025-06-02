@@ -55,7 +55,8 @@ export function registro(scene){
         `)
         container.add(input)
     });
-
+    const emailType = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const passwordType = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/; // Al menos 8 caracteres, una mayúscula, una minúscula y un número
     const botones = [
         {icon:'cross', callback:  () => {
             scene.buttonEnabled = true
@@ -66,6 +67,10 @@ export function registro(scene){
             const passwordInput = document.getElementById('input-Contraseña');
             const classCodeInput = document.getElementById('input-Código de clase');
             const panel = panelCarga(scene, 'REGISTRANDO...')
+            emailInput.style.border = '1px solid #ccc'
+            nameInput.style.border = '1px solid #ccc'
+            passwordInput.style.border = '1px solid #ccc'
+            classCodeInput.style.border = '1px solid #ccc'
 
             if (!emailInput.value || 
             !nameInput.value  || 
@@ -75,7 +80,27 @@ export function registro(scene){
                 !nameInput.value ? nameInput.style.border = '4px solid red' : nameInput.style.border = '1px solid #ccc'
                 !passwordInput.value ? passwordInput.style.border = '4px solid red' : passwordInput.style.border = '1px solid #ccc'
                 !classCodeInput.value ? classCodeInput.style.border = '4px solid red' : classCodeInput.style.border = '1px solid #ccc'
-            }else{
+                panel.setMensaje('FALTAN CAMPOS POR RELLENAR')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+            }else if (!emailType.test(emailInput.value)) { 
+                emailInput.style.border = '4px solid red'
+                panel.setMensaje('CORREO NO VALIDO')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+            }else if (!passwordType.test(passwordInput.value)) {
+                passwordInput.style.border = '4px solid red'
+                panel.setMensaje('CONTRASEÑA NO VALIDA')
+                setTimeout(() => {
+                    panel.setMensaje('Min 8 caracteres, con al menos 1 mayúscula, 1 minúscula y 1 número')
+                    setTimeout(() => {
+                        panel.destroy()
+                    },500)
+                }, 500)
+            }
+            else{
                 emailInput.style.border = '1px solid #ccc'
                 nameInput.style.border = '1px solid #ccc'
                 passwordInput.style.border = '1px solid #ccc'
@@ -92,7 +117,6 @@ export function registro(scene){
                         nameInput.style.border = '1px solid #ccc'
                         passwordInput.style.border = '1px solid #ccc'
                         classCodeInput.style.border = '1px solid #ccc'
-                        disappearance(container, scene)
                         localStorage.removeItem('usuario')
                         localStorage.setItem('usuario', JSON.stringify({
                             nombre: response.nombre,
@@ -115,18 +139,18 @@ export function registro(scene){
 
                             console.log('Error: ',error)
                             emailInput.style.border = '4px solid red'
-                            panel.setMensaje('Error al registrar')
+                            panel.setMensaje('El correo ya existe')
                             setTimeout(() => {
                                 panel.destroy()
-                            }, 1000)
+                            }, 500)
                         }else if (error.response.status === 404) {
                             emailInput.style.border = '1px solid #ccc'
                             console.log('Error: ',error)
                             classCodeInput.style.border = '4px solid red'
-                            panel.setMensaje('Error al registrar')
+                            panel.setMensaje('El aula no existe')
                             setTimeout(() => {
                                 panel.destroy()
-                            }, 1000)
+                            }, 500)
                         } 
                         else {
                             console.log('Error:', error)
@@ -230,6 +254,7 @@ export function inicioSesion(scene){
         `)
         container.add(input)
     });
+    const emailType = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
     const botones = [
         {icon:'cross', callback:  () => {
@@ -241,11 +266,21 @@ export function inicioSesion(scene){
             if (!emailInput.value || !passwordInput.value) {
                 !emailInput.value ? emailInput.style.border = '4px solid red' : emailInput.style.border = '1px solid #ccc'
                 !passwordInput.value ? passwordInput.style.border = '4px solid red' : passwordInput.style.border = '1px solid #ccc'
+                const panel = panelCarga(scene, 'FALTAN CAMPOS POR RELLENAR')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+            } else if (!emailType.test(emailInput.value)) {
+                emailInput.style.border = '4px solid red'
+                const panel = panelCarga(scene, 'CORREO NO VALIDO')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
             } else {
                 emailInput.style.border = '1px solid #ccc'
                 passwordInput.style.border = '1px solid #ccc'
                 intentarlogin(emailInput, passwordInput,scene)
-            } 
+            }
         }}
     
     ]

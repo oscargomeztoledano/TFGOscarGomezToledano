@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var mongoose = require('mongoose')
 var alumnos = require('../models/alumnos')
+var profesores = require('../models/profesores')
 var aulas = require('../models/aulas')
 mongoose.set('strict', false)
 const { defaultMundos } = require('../utils/default')
@@ -44,11 +45,12 @@ router.post('/', async (req, res)=> {
     try{
         const { nombre, correo, password, aula } = req.body
         const existingAlumno = await alumnos.findOne({ correo: correo })
+        const existingProfesor = await profesores.findOne({ correo: correo })
         const existingAula = await aulas.findOne({ codigo: aula })
-        if (existingAlumno) {
-            return res.status(400).send('Alumno already exists')
+        if (existingAlumno||existingProfesor) {
+            return res.status(400).send('Usuario ya existe')
         } else if (!existingAula) {
-            return res.status(404).send('Aula does not exist')
+            return res.status(404).send('Aula no existe')
         }
         else {
             const newAlumno = new alumnos({
