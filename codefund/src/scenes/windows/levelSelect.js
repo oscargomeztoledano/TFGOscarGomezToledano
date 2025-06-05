@@ -10,7 +10,7 @@ export function levelSelect(scene, nombreMundo, usuario) {
         const fondo = scene.add.nineslice(
             0, -60, 'marco3', 0,400,330,10,10,10,10).setOrigin(0.5)
         container.add(fondo)
-        const bannerText = scene.add.text(0, 0, 'SELECCIONA UN NIVEL', {
+        const bannerText = scene.add.text(0, 0, `SELECCIÓN DE NIVELES ${nombreMundo.toUpperCase()}`, {
             fontSize: '20px',
             fontFamily: 'Arial',
             stroke: '#000000',
@@ -18,7 +18,7 @@ export function levelSelect(scene, nombreMundo, usuario) {
             color: '#ffffff'
         }).setOrigin(0.5);
         const padding = 20
-        const widthBannerText = bannerText.width + padding * 2
+        const widthBannerText = bannerText.width + padding 
         const heightBannerText = bannerText.height + padding
         const banner = scene.add.nineslice(
             0, - fondo.height / 2 - 70, 

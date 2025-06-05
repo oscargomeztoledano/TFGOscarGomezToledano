@@ -2,7 +2,7 @@
     "anslevel1_5": [
         {
         "id": "chest1",
-        "question": "¿Que falta en la expresión: 3+?*2=11?",
+        "question": "¿Que falta en la siguiente expresión: 3+?*2=11?",
         "answers": [
             { "body": "1", "isCorrect": false },
             { "body": "4", "isCorrect": true },

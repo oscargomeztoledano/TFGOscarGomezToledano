@@ -12,7 +12,7 @@
         },
         {
         "id": "chest2",
-        "question": "¿Que falta en la expresión: 18%(5+?)=3?",
+        "question": "¿Que falta en la siguiente expresión: 18%(5+?)=3?",
         "answers": [
             { "body": "2", "isCorrect": false },
             { "body": "1", "isCorrect": true },
@@ -22,7 +22,7 @@
         },
         {
         "id": "chest3",
-        "question": "¿Que falta en la expresión: ((?+2)*2)%5=1?",
+        "question": "¿Que falta en la siguiente expresión: ((?+2)*2)%5=1?",
         "answers": [
             { "body": "6", "isCorrect": false },
             { "body": "3", "isCorrect": false },

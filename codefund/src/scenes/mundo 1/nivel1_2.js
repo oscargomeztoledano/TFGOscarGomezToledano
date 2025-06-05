@@ -216,7 +216,7 @@ function initQuestions(scene) {
 
     // Mostrar la pregunta
     const pregunta = '¿Cómo guardarías la variable "' + id + '"?';
-    const preguntaText = scene.add.text(scene.scale.width / 2, 130, pregunta, {
+    const preguntaText = scene.add.text(scene.scale.width / 2, 120, pregunta, {
         fontSize: '18px',
         color: '#fff',
         wordWrap: { width: 400 },
@@ -227,7 +227,7 @@ function initQuestions(scene) {
     }).setOrigin(0.5)
 
     const fondo = scene.add.nineslice(
-        scene.scale.width / 2, 130,
+        scene.scale.width / 2, 120,
         'marco3', 0,
         preguntaText.width + padding * 2,
         preguntaText.height + padding * 2,
@@ -250,7 +250,7 @@ function initQuestions(scene) {
         const spacingY = 135
     
         const baseX = scene.scale.width / 2
-        const baseY = 220
+        const baseY = 240
     
         const posX = baseX + (col === 0 ? -spacingX / 2 : spacingX / 2)
         const posY = baseY + row * spacingY
