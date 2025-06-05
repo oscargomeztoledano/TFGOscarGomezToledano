@@ -1,6 +1,6 @@
 import {Scene} from 'phaser'
 import { registro, inicioSesion } from './windows/forms';
-
+import { panelCarga } from '../utils/panelCarga';
 
     
 export class Registro extends Scene {
@@ -29,11 +29,23 @@ export class Registro extends Scene {
         this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.25)
 
         let botones = [
-            {texto: 'INICIAR SESION', callback: () => { inicioSesion(this) }},
-            {texto: 'REGISTRARSE', callback: () => { registro(this) }},
+            {texto: 'INICIAR SESION', callback: () => { 
+                const panel = panelCarga(this, 'INICIO DE SESION...')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+                inicioSesion(this)
+            }},
+            {texto: 'REGISTRARSE', callback: () => { 
+                const panel = panelCarga(this, 'REGISTRO...')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+                registro(this)
+            }},
         ]
-        
-        const spacing= 10 
+
+        const spacing= 10
         const buttonHeight =  32
         const startY= this.scale.height/2- ((botones.length * (buttonHeight + spacing)) / 2) - 40;
 

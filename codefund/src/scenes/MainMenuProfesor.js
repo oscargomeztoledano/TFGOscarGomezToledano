@@ -75,7 +75,7 @@ export class MainMenuProfesor extends Scene
                     console.error("Error al cargar personajes:", error)
                 })
             }},                    
-            {texto: 'INSÍGNEAS', callback: () => {
+            {texto: 'INSIGNIAS', callback: () => {
                 const panel = panelCarga(this, 'CARGANDO INSIGNIAS...')
                 insignias(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
                     setTimeout(() => {
@@ -114,7 +114,6 @@ export class MainMenuProfesor extends Scene
                     console.error("Error al cargar habilitaciones:", error)
                 })
             }},
-            {texto: 'CRÉDITOS', callback: () => {}},
             {texto: 'SALIR', callback: () => {
                 panelCarga(this, 'SALIENDO...')
                 localStorage.clear()

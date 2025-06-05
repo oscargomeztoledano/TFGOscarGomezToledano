@@ -120,7 +120,7 @@ export class mundo1nivel1_4 extends Scene {
                     this.player,
                     this.checkpoint,
                     (player, checkpoint) => {
-                        bocadilloCheckPoint(this, 'Presiona', 'para comprobar la fórmula')
+                        bocadilloCheckPoint(this,'para comprobar la fórmula')
                     }, null, this)
                 
                 // Scroll
@@ -176,7 +176,6 @@ export class mundo1nivel1_4 extends Scene {
                     else if (this.isOverLappingCheckpoint) {
                         disappearance(this.bocadillo, this)
                         disappearance(this.icon, this)
-                        disappearance(this.textBefore, this)
                         disappearance(this.textAfter, this)
                         const esCorrecta= checkformula(this)
                         if (esCorrecta && this.controlEnabled && !this.formula.includes(null)) {
@@ -255,11 +254,9 @@ export class mundo1nivel1_4 extends Scene {
             if (!stillOverlapping) {
                 disappearance(this.bocadillo, this)
                 disappearance(this.icon, this)
-                disappearance(this.textBefore, this)
                 disappearance(this.textAfter, this)
                 this.bocadillo = null
                 this.icon = null
-                this.textBefore = null
                 this.textAfter = null
                 this.isOverLappingCheckpoint = false
             }

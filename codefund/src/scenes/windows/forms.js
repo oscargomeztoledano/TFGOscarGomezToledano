@@ -139,7 +139,7 @@ export function registro(scene){
 
                             console.log('Error: ',error)
                             emailInput.style.border = '4px solid red'
-                            panel.setMensaje('El correo ya existe')
+                            panel.setMensaje('CORREO YA REGISTRADO')
                             setTimeout(() => {
                                 panel.destroy()
                             }, 500)
@@ -147,14 +147,14 @@ export function registro(scene){
                             emailInput.style.border = '1px solid #ccc'
                             console.log('Error: ',error)
                             classCodeInput.style.border = '4px solid red'
-                            panel.setMensaje('El aula no existe')
+                            panel.setMensaje('AULA NO EXISTE')
                             setTimeout(() => {
                                 panel.destroy()
                             }, 500)
                         } 
                         else {
                             console.log('Error:', error)
-                            panel.setMensaje('Error inesperado ')
+                            panel.setMensaje('ERROR INESPERADO')
                             setTimeout(() => {
                                 panel.destroy()
                             }, 1000)
@@ -347,7 +347,9 @@ async function intentarlogin(email, password,scene){
                 puntosTotales: profesor.puntosTotales,
                 estrellasTotales: profesor.estrellasTotales,
             }))
+            panel.setMensaje(`SESION INICIADA COMO ${profesor.nombre.toUpperCase()}`)
             setTimeout(() => {
+                panel.destroy()
                 scene.scene.start('MainMenuProfesor')
             }, 500)
         }
@@ -374,7 +376,9 @@ async function intentarlogin(email, password,scene){
                     puntosTotales: alumno.puntosTotales,
                     estrellasTotales: alumno.estrellasTotales,
                 }))
+                panel.setMensaje(`SESION INICIADA COMO ${alumno.nombre.toUpperCase()}`)
                 setTimeout(() => {
+                    panel.destroy()
                     scene.scene.start('MainMenuJugador')                    
                 }, 500)
         }

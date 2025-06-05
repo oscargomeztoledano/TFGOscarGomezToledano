@@ -94,7 +94,6 @@ export class MainMenuJugador extends Scene
                     })
                 },500)
             }},
-            {texto: 'CRÉDITOS', callback: () => {}},
             {texto: 'SALIR', callback: () => {
                 panelCarga(this, 'SALIENDO...')
                 localStorage.clear()

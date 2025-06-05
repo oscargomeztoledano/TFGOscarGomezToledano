@@ -148,12 +148,44 @@ export class mundo1nivel1_1 extends Scene
                 });
 
                 this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE') 
-                
+                this.showControls= true
+                const instrucciones = 'Pulsa A o D para moverte. Pulsa SPACE para saltar'
+                this.instruccionesText = this.add.text(0,0,instrucciones, {
+                    fontFamily: 'Arial Black', fontSize: 16, color: '#ffffff',
+                    stroke: '#000000', strokeThickness: 2,
+                    align: 'center',wordWrap: { width: 200 }
+                }).setOrigin(0.5)
+                const instruccionesWidth = this.instruccionesText.width + 20
+                const instruccionesHeight = this.instruccionesText.height + 16
+                this.instruccionesBg = this.add.nineslice(
+                    this.player.x+75, 
+                    this.player.y - this.player.height * this.player.scaleY - instruccionesHeight / 2 - 30,
+                    'marco3', 0,
+                    instruccionesWidth,
+                    instruccionesHeight,
+                    10, 10, 10, 10
+                ).setOrigin(0.5)
+                this.instruccionesText.setPosition(
+                    this.instruccionesBg.x,
+                    this.instruccionesBg.y
+                )
+                this.instruccionesText.setDepth(this.instruccionesBg.depth + 1)
     }
     update()
     {
         if (this.ishit) return
-        
+
+        if (this.showControls) {
+            const movingLeft = this.keys.A.isDown;
+            const movingRight = this.keys.D.isDown;
+            const jumping = this.keys.SPACE.isDown;
+
+            if (movingLeft || movingRight || jumping) {
+                this.showControls = false;
+                disappearance(this.instruccionesBg, this)
+                disappearance(this.instruccionesText, this)
+            }
+        }
         if (this.controlEnabled) controls(this)
 
         if (this.awaitingAnswer && this.controlEnabled) {

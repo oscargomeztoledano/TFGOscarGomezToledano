@@ -65,6 +65,10 @@ export  function habilitaciones(scene,usuario) {
                         }, 500)
                         updateTabla(aulaSelected)
                     }).catch((error) => {
+                        panel.setMensaje('ERROR AL GUARDAR')
+                        setTimeout(() => {
+                            panel.destroy()
+                        }, 500)
                         console.error("Error updating mundos:", error)
                     })
                     scene.buttonEnabledHabilitaciones = true
