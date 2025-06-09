@@ -43,7 +43,7 @@ export class MainMenuJugador extends Scene
             stroke: '#000000',
             strokeThickness: 2
         })
-        this.add.text(16,32, `Aula: ${JSON.parse(localStorage.getItem('usuario')).aula}` ,{
+        this.add.text(16,32, `Rol: Alumno` ,{
             fontFamily: 'Arial Black',
             fontSize: '16px',
             color: '#ffffff',

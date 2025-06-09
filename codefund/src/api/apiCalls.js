@@ -30,7 +30,7 @@ function guardarProgresoAlumno(correo, usuarioActualizado) {
 
 // aulas
 function getMundosByAula(aula) {
-    return api.get(`/aulas/${encodeURIComponent(aula)}`)
+    return api.get(`/aulas/${aula}`)
         .then(response => response.data)
         .catch(error => {
             console.error("Error fetching mundos by aula:", error);
@@ -38,7 +38,7 @@ function getMundosByAula(aula) {
         });
 }
 function guardarMundoAula(aula, aulaActualizada) {
-    return api.patch(`/aulas/guardarMundo/${encodeURIComponent(aula)}`, aulaActualizada)
+    return api.patch(`/aulas/guardarMundo/${aula}`, aulaActualizada)
         .then(response => response.data)
         .catch(error => {
             console.error("Error updating mundos:", error);

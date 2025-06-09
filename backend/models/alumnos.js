@@ -40,7 +40,8 @@ var alumnosSchema = new Schema({
         required: true
     },
     aula: {
-        type: Number,
+        type: Schema.Types.ObjectId,
+        ref: 'aulas',
         required: true
     },
     avatar: {type: Number, default: 0},

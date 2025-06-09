@@ -6,8 +6,10 @@ import {panelCarga} from "../../utils/panelCarga"
 var mundos = []
 export async function worldSelect(scene, usuario){
     try{
+        if(!usuario.profesor){
         const response = await getMundosByAula(usuario.aula)
         mundos = response.mundos
+        }
     }catch (error) {
         console.error("Error fetching worlds:", error)
         return Promise.reject(error)
@@ -114,7 +116,7 @@ export async function worldSelect(scene, usuario){
                 buttonText.setDepth(buttonBackground.depth + 1);
                 container.add([buttonBackground, buttonText]);
 
-                if (!mundos.includes(boton.texto)) {
+                if (!mundos.includes(boton.texto)&& !usuario.profesor) {
                     buttonBackground.setAlpha(0.5);
                     buttonText.setAlpha(0.5)
                     const lockIcon = scene.add.image(buttonBackground.x, buttonBackground.y, 'iconLock')
@@ -124,7 +126,8 @@ export async function worldSelect(scene, usuario){
                 }
 
                 buttonBackground.on('pointerdown', () => {
-                    if (mundos.includes(boton.texto)&& scene.buttonEnabledWorld) {
+                    if ((mundos.includes(boton.texto)&& scene.buttonEnabledWorld)
+                        ||(usuario.profesor&&scene.buttonEnabledWorld)){
                         scene.buttonEnabledWorld = false
                         const panel = panelCarga(scene, 'CARGANDO '+ boton.texto + '...')
                         scene.tweens.add({

@@ -70,16 +70,9 @@ export async function tablaClasificacion(scene, usuario) {
                 buttonClose.setScale(1);
                 icon.setScale(1);
             })
-
-            
-
             const tablaFondo = scene.add.nineslice(0, -40, 'fondoBoton', 0, 300, 350
                 , 10, 10, 10, 10).setOrigin(0.5);
             container.add(tablaFondo);
-
-
-            
-            
             const tabla = scene.add.dom(0, -40).createFromHTML(`<div id="tabla" style="width:300px;height:350px;overflow-y:auto;color:#fff">
             </div>`).setOrigin(0.5)
 

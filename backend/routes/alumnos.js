@@ -30,9 +30,12 @@ router.get('/correo/:correo', function (req, res) {
 })
 
 router.get('/clasificacion/:aula', async (req, res) => {
-    var codigoAula = Number(req.params.aula)
+    var aula= req.params.aula
+    if (!mongoose.Types.ObjectId.isValid(aula)) {
+        return res.status(400).send('Invalid aula ID')
+    }
     try {
-            const alumnosOrdenados = await alumnos.find({ aula: codigoAula }).sort({ puntosTotales: -1 })
+            const alumnosOrdenados = await alumnos.find({ aula: aula }).sort({ puntosTotales: -1 })
             res.status(200).json(alumnosOrdenados)
         }
      catch (err) {
@@ -57,7 +60,7 @@ router.post('/', async (req, res)=> {
                 nombre,
                 correo,
                 password,
-                aula,
+                aula: existingAula._id,
                 mundos: defaultMundos(),
             })
             await newAlumno.save()

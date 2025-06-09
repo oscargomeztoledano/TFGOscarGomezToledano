@@ -4,7 +4,23 @@ import { panelCarga } from "../../utils/panelCarga"
 
 var tabla = ''
 var listaMundos = []
-export  function habilitaciones(scene,usuario) {
+var aulasID = []
+var aulas = []
+export async function habilitaciones(scene,usuario) {
+        try{
+        aulasID = usuario.aulas
+        const respuesta = await Promise.all(
+            aulasID.map(async aula => {
+                const response = await getMundosByAula(aula)
+                return { id: aula, codigo: response.codigo }
+            })
+        )
+        aulas = respuesta
+        }catch (error) {
+            console.error("Error fetching aulas:", error)
+            return Promise.reject(error)
+        }
+    
     return new Promise((resolve) => {
         try {
             scene.buttonEnabledHabilitaciones = true
@@ -45,7 +61,7 @@ export  function habilitaciones(scene,usuario) {
                 },
                 {icon: 'check', callback: async () => {
                     const panel = panelCarga(scene, 'GUARDANDO...')
-                    const aulaSelected = selectorDom.getChildByID('selAula').value
+                    const aulaSelectedID = selectorDom.getChildByID('selAula').value
                     const habilitados = [];
                     tabla.getChildByID('tabla')
                         .querySelectorAll('.selEstado')
@@ -58,12 +74,12 @@ export  function habilitaciones(scene,usuario) {
                     const aulaActualizada={
                         mundos: habilitados
                     }
-                    await guardarMundoAula(aulaSelected, aulaActualizada).then((response) => {
+                    await guardarMundoAula(aulaSelectedID, aulaActualizada).then((response) => {
                         panel.setMensaje('GUARDADO CORRECTAMENTE')
                         setTimeout(() => {
                             panel.destroy()
                         }, 500)
-                        updateTabla(aulaSelected)
+                        updateTabla(aulaSelectedID)
                     }).catch((error) => {
                         panel.setMensaje('ERROR AL GUARDAR')
                         setTimeout(() => {
@@ -120,7 +136,7 @@ export  function habilitaciones(scene,usuario) {
                 .dom(10, -250)
                 .createFromHTML(`
                     <select id="selAula" style="width:70px;height:25px;font-size:14px;text-align:center">
-                        ${usuario.aulas.map(a => `<option value="${a}">${a}</option>`).join('')}
+                        ${aulas.map(a => `<option value="${a.id}">${a.codigo}</option>`).join('')}
                     </select>
                 `)
                 .setOrigin(0, 0.5);
@@ -146,7 +162,7 @@ export  function habilitaciones(scene,usuario) {
                 }, 500)
                 updateTabla(e.target.value)
             })
-            updateTabla(usuario.aulas[0])
+            updateTabla(aulas[0].id)
             resolve(true)
         } catch (error) {
             console.error("Error in habilitaciones:", error);
@@ -154,9 +170,9 @@ export  function habilitaciones(scene,usuario) {
         }
     })
 
-    async function updateTabla(aula) {
+    async function updateTabla(aulaID) {
         let mundos = []
-        await getMundosByAula(aula).then((response) => {
+        await getMundosByAula(aulaID).then((response) => {
             mundos = response.mundos
         }).catch((error) => {
             console.error("Error fetching mundos by aula:", error);

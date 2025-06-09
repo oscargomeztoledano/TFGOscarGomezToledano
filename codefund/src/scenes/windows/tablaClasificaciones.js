@@ -1,10 +1,28 @@
 import { appearance, disappearance } from "../../utils/animations"
-import {getAllAlumnosPuntosAula} from "../../api/apiCalls"
+import { getMundosByAula, getAllAlumnosPuntosAula } from "../../api/apiCalls"
 import { panelCarga } from "../../utils/panelCarga"
 var tabla = ''
+var aulasID = []
+var aulas = []
+
 export async function tablaClasificaciones(scene, usuario) {
+    try{
+        aulasID = usuario.aulas
+        const respuesta = await Promise.all(
+            aulasID.map(async aula => {
+                const response = await getMundosByAula(aula)
+                return { id: aula, codigo: response.codigo }
+            })
+        )
+        aulas = respuesta
+    }catch (error) {
+        console.error("Error fetching aulas:", error)
+        return Promise.reject(error)
+    }
+
     return new Promise((resolve) => {
         try{
+
             scene.buttonEnabledClasificaciones = true
             const {width, height} = scene.scale
             const container = scene.add.container(width/2, height/2).setAlpha(0)
@@ -73,7 +91,7 @@ export async function tablaClasificaciones(scene, usuario) {
                 .dom(10, -250)
                 .createFromHTML(`
                     <select id="selAula" style="width:70px;height:25px;font-size:14px;text-align:center">
-                        ${usuario.aulas.map(a => `<option value="${a}">${a}</option>`).join('')}
+                        ${aulas.map(a => `<option value="${a.id}">${a.codigo}</option>`).join('')}
                     </select>
                 `)
                 .setOrigin(0, 0.5);
@@ -97,7 +115,9 @@ export async function tablaClasificaciones(scene, usuario) {
                     panel.destroy()
                 }, 500)
             })
-            updateTabla(usuario.aulas[0])
+            
+            updateTabla(aulas[0].id)
+            
             resolve(true)
         } catch (error) {
             console.error("Error in tablaClasificaciones:", error);
