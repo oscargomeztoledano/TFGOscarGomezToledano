@@ -19,7 +19,7 @@ function postAlumno(alumno) {
         });
 }
 
-function guardarProgreso(correo, usuarioActualizado) {
+function guardarProgresoAlumno(correo, usuarioActualizado) {
     return api.patch(`/alumnos/guardarprogreso/${encodeURIComponent(correo)}`,  usuarioActualizado)
         .then(response => response.data)
         .catch(error => {
@@ -30,7 +30,7 @@ function guardarProgreso(correo, usuarioActualizado) {
 
 // aulas
 function getMundosByAula(aula) {
-    return api.get(`/aulas/${encodeURIComponent(aula)}`)
+    return api.get(`/aulas/${aula}`)
         .then(response => response.data)
         .catch(error => {
             console.error("Error fetching mundos by aula:", error);
@@ -38,7 +38,7 @@ function getMundosByAula(aula) {
         });
 }
 function guardarMundoAula(aula, aulaActualizada) {
-    return api.patch(`/aulas/guardarMundo/${encodeURIComponent(aula)}`, aulaActualizada)
+    return api.patch(`/aulas/guardarMundo/${aula}`, aulaActualizada)
         .then(response => response.data)
         .catch(error => {
             console.error("Error updating mundos:", error);
@@ -74,9 +74,19 @@ function guardarProgresoProfesor(correo, usuarioActualizado) {
         });
 }
 
+// mundos
+function getAllMundos() {
+    return api.get('/mundos')
+        .then(response => response.data)
+        .catch(error => {
+            console.error("Error fetching all mundos:", error);
+            throw error;
+        });
+}   
 
 export { 
-    guardarProgreso, 
+    getAllMundos,
+    guardarProgresoAlumno, 
     guardarProgresoProfesor,
     getAllAlumnosPuntosAula,
     getMundosByAula ,

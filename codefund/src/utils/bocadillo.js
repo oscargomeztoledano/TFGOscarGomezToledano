@@ -24,7 +24,7 @@ export function bocadilloCollectible (scene, collectible){
         
     }
 }
-export function bocadilloCheckPoint (scene, prevText, postText){
+export function bocadilloCheckPoint (scene, postText){
     if (!scene.bocadillo) {
         scene.isOverLappingCheckpoint = true;
         const padding = 10;
@@ -33,20 +33,15 @@ export function bocadilloCheckPoint (scene, prevText, postText){
         scene.icon = scene.add.sprite(0, 0, 'E0').setScale(0.5);
         scene.icon.anims.play('press_e', true);
 
-        // Texto adicional
-        scene.textBefore = scene.add.text(0, 0, prevText, {
-            fontFamily: 'Arial Blanck', fontSize: 14, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 2
-        }).setOrigin(0.5, 0.5);
 
         scene.textAfter = scene.add.text(0, 0, postText, {
-            fontFamily: 'Arial Blanck', fontSize: 14, color: '#ffffff',
+            fontFamily: 'Arial Black', fontSize: 14, color: '#ffffff',
             stroke: '#000000', strokeThickness: 2
         }).setOrigin(0.5, 0.5);
 
         // Calcular dimensiones
-        const totalWidth = scene.textBefore.displayWidth + scene.icon.displayWidth + scene.textAfter.displayWidth + (padding * 4);
-        const h = Math.max(scene.textBefore.displayHeight, scene.icon.displayHeight, scene.textAfter.displayHeight) + (padding * 2);
+        const totalWidth =  scene.icon.displayWidth + scene.textAfter.displayWidth + (padding * 4);
+        const h = Math.max(scene.icon.displayHeight, scene.textAfter.displayHeight) + (padding * 2);
 
         scene.bocadillo = scene.add.nineslice(
             scene.checkpoint.x - 80, scene.checkpoint.y - 100,
@@ -57,9 +52,6 @@ export function bocadilloCheckPoint (scene, prevText, postText){
         let xStart = scene.bocadillo.x - totalWidth / 2 + padding;
         const y = scene.bocadillo.y;
 
-        scene.textBefore.setPosition(xStart + scene.textBefore.displayWidth / 2, y);
-        xStart += scene.textBefore.displayWidth + padding;
-
         scene.icon.setPosition(xStart + scene.icon.displayWidth / 2, y);
         xStart += scene.icon.displayWidth + padding;
 
@@ -68,12 +60,10 @@ export function bocadilloCheckPoint (scene, prevText, postText){
         // Capas
         const depth = scene.bocadillo.depth + 1;
         scene.icon.setDepth(depth);
-        scene.textBefore.setDepth(depth);
         scene.textAfter.setDepth(depth);
 
         appearance(scene.bocadillo, scene, 0);
         appearance(scene.icon, scene, 50);
-        appearance(scene.textBefore, scene, 50);
         appearance(scene.textAfter, scene, 50);
     }
 }
@@ -81,11 +71,11 @@ export function bocadilloScroll(scene, text){
     if (!scene.bocadillo) {
         scene.isOverLappingScroll = true;
         scene.text= scene.add.text(0, 0, text, {
-            fontSize: '16px',
+            fontSize: 16,
             color: '#fff',
             wordWrap: { width: 200, useAdvancedWrap: true  }, // más espacio
             align: 'center',
-            fontFamily: 'Arial Blanck',
+            fontFamily: 'Arial Black',
             stroke: '#000000',
             strokeThickness: 2
         }).setOrigin(0.5);

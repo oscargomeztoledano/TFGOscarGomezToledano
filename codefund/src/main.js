@@ -1,4 +1,4 @@
-import { MainMenu } from './scenes/MainMenu';
+import { MainMenuJugador } from './scenes/MainMenuJugador';
 import { MainMenuProfesor } from './scenes/MainMenuProfesor';
 import { mundo1nivel1_1 } from './scenes/mundo 1/nivel1_1';
 import { mundo1nivel1_2 } from './scenes/mundo 1/nivel1_2';
@@ -7,8 +7,8 @@ import {mundo1nivel1_4} from './scenes/mundo 1/nivel1_4';
 import {mundo1nivel1_5} from './scenes/mundo 1/nivel1_5';
 import {mundo1nivel1_6} from './scenes/mundo 1/nivel1_6';
 import { Preloader } from './preloader'; 
-import { SecondScene } from './scenes/second';
-import { FirstScene } from './scenes/first';
+import { Registro } from './scenes/registro';
+import { Inicio } from './scenes/inicio';
 
 const config = {
     type: Phaser.AUTO,
@@ -19,8 +19,7 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
-            
+            debug: false,
             gravity: { y: 0 }
         }
     },
@@ -41,9 +40,9 @@ const config = {
         mundo1nivel1_5,
         mundo1nivel1_6,
         MainMenuProfesor,
-        MainMenu,
-        SecondScene,
-        FirstScene
+        MainMenuJugador,
+        Registro,
+        Inicio
     ],
     dom: {
         createContainer: true  

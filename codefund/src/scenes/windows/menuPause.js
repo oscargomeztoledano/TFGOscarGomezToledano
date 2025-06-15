@@ -1,8 +1,9 @@
-import { appearance, disappearance} from "./animations";
-
+import { appearance, disappearance} from "../../utils/animations";
+import { panelCarga } from "../../utils/panelCarga";
 
 
 export function menuPause(scene,usuario) {
+    scene.buttonEnabledPause = true
     const {width, height} = scene.scale;
     const container = scene.add.container(width/2, height/2)
 
@@ -36,41 +37,46 @@ export function menuPause(scene,usuario) {
     container.add([banner, bannerText])
 
     const botones = [
-        {icono: 'iconResume', texto: 'RESUME', callback: () => {
+        {icono: 'iconResume', texto: 'CONTINUAR', callback: () => {
+            const panel = panelCarga(scene, 'CONTINUAR JUEGO')
+            setTimeout(() => {
             overlay.destroy()
             disappearance(container, scene)
-            scene.controlEnabled = true   
+            scene.controlEnabled = true 
+            panel.destroy()
+            },500)  
         }
         },
-        {icono: 'iconRestart', texto: 'RESTART', callback: () => {
-            scene.scene.start(scene.currentLevel)
+        {icono: 'iconRestart', texto: 'REINICIAR', callback: () => {
+            panelCarga(scene, 'REINICIANDO NIVEL...')
+            setTimeout(() => {
+                scene.scene.start(scene.currentLevel)                
+            }, 500)
+        }
+        },
+        {icono: 'iconLevels', texto: 'MUNDOS', callback: () => {
+            const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
+            panelCarga(scene, 'CARGANDO SELECCIÓN DE MUNDO...')
+            localStorage.removeItem('mundoSeleccionado')
+            localStorage.removeItem('nivelSeleccionado')
+            setTimeout(() => {
+                scene.scene.start(tipoMenu, {openWorldSelect: true})
+            }, 500)
             }
         },
-        {icono: 'iconLevels', texto: 'LEVELS', callback: () => {
-            if (usuario.profesor){
-                scene.scene.start('MainMenuProfesor', {openWorldSelect: true})
-            }else{
-                scene.scene.start('MainMenu', {openWorldSelect: true})
-            }
-            console.log('Levels')
-            }
-        },
-        {icono: 'iconSettings', texto: 'SETTINGS', callback: () => {
-            //TODO abrir menu de configuracion cuando esté implementado
-            console.log('Settings')
-            }
-        },
-        {icono: 'iconExit', texto: 'EXIT', callback: () => {
-            if (usuario.profesor)
-                scene.scene.start('MainMenuProfesor', {openWorldSelect: false})
-            else scene.scene.start('MainMenu', {openWorldSelect: false})
-            console.log('Exit')
+        {icono: 'iconExit', texto: 'SALIR', callback: () => {
+            const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
+            panelCarga(scene, 'SALIENDO...')
+            localStorage.removeItem('mundoSeleccionado')
+            localStorage.removeItem('nivelSeleccionado')
+            setTimeout(() => {
+                scene.scene.start(tipoMenu, {openWorldSelect: false})
+            }, 500)
             }
         }
-
     ]
 
-    const buttonSpacing = 10
+    const buttonSpacing = 15
     const buttonHeight =  32
     const buttonWidth =  160
     const startY = - ((botones.length * (buttonHeight + buttonSpacing)) / 2) -30;
@@ -102,7 +108,19 @@ export function menuPause(scene,usuario) {
         ).setOrigin(0, 0.5)
         container.add(buttonText)
         button.on('pointerdown', () => {
-            boton.callback()
+            if (scene.buttonEnabledPause){
+                scene.buttonEnabledPause = false
+                scene.tweens.add({
+                    targets: [button, icon, buttonText],
+                    scale: 0.9, 
+                    duration: 100,
+                    ease: 'Power1',
+                    yoyo: true, 
+                    onComplete: () => {
+                        boton.callback(); 
+                    }
+                });
+            }
         })
         button.on('pointerover', () => {
             button.setScale(1.1);

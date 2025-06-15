@@ -1,6 +1,6 @@
 import {Scene} from 'phaser'
-import { initSpritesheet } from './scenes/utils/spritesheet';
-import { initAnimations } from './scenes/utils/animations'
+import { initSpritesheet } from './utils/spritesheet';
+import { initAnimations } from './utils/animations'
 
 export class Preloader extends Scene {
     constructor() {
@@ -9,10 +9,14 @@ export class Preloader extends Scene {
     preload(){
         
         this.load.image('logo', '/assets/ui/logo_ccss_talavera.jpg')  
+
+        
         this.load.json('kahootLevel1_1', 'assets/json/anslevel1_1.json') 
         this.load.json('kahootLevel1_2', 'assets/json/anslevel1_2.json')
         this.load.json('kahootLevel1_5', 'assets/json/anslevel1_5.json')
         this.load.json('kahootLevel1_6', 'assets/json/anslevel1_6.json')
+
+
         this.load.image('background1', '/assets/Backgrounds/1.png')
         this.load.image('background2', '/assets/Backgrounds/2.png')
         this.load.image('background3', '/assets/Backgrounds/3.png')
@@ -116,6 +120,6 @@ export class Preloader extends Scene {
     }
     create() {
         initAnimations(this)
-        this.scene.start('SecondScene');
+        this.scene.start('Inicio');
     }
 }

@@ -1,11 +1,11 @@
 import {Scene} from 'phaser'
-import { registro, inicioSesion } from './utils/forms';
-
+import { registro, inicioSesion } from './windows/forms';
+import { panelCarga } from '../utils/panelCarga';
 
     
-export class SecondScene extends Scene {
+export class Registro extends Scene {
     constructor() {
-        super('SecondScene')
+        super('Registro')
     }
     create() {
         this.add.image(0,0, 'background7').setOrigin(0,0).setScale(1.5);
@@ -29,11 +29,23 @@ export class SecondScene extends Scene {
         this.add.image(16, 55, 'logo').setOrigin(0, 0).setScale(0.25)
 
         let botones = [
-            {texto: 'INICIAR SESION', callback: () => { inicioSesion(this) }},
-            {texto: 'REGISTRARSE', callback: () => { registro(this) }},
+            {texto: 'INICIAR SESION', callback: () => { 
+                const panel = panelCarga(this, 'INICIO DE SESION...')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+                inicioSesion(this)
+            }},
+            {texto: 'REGISTRARSE', callback: () => { 
+                const panel = panelCarga(this, 'REGISTRO...')
+                setTimeout(() => {
+                    panel.destroy()
+                }, 500)
+                registro(this)
+            }},
         ]
-        
-        const spacing= 10 
+
+        const spacing= 10
         const buttonHeight =  32
         const startY= this.scale.height/2- ((botones.length * (buttonHeight + spacing)) / 2) - 40;
 
@@ -74,7 +86,16 @@ export class SecondScene extends Scene {
             button.on('pointerdown', () => {
                 if (this.buttonEnabled){
                     this.buttonEnabled = false
-                    boton.callback()
+                    this.tweens.add({
+                        targets: [button, buttonText],
+                        scale: 0.9, 
+                        duration: 100,
+                        ease: 'Power1',
+                        yoyo: true, 
+                        onComplete: () => {
+                            boton.callback(); 
+                        }
+                    });
                 } 
             })
             button.on('pointerover', () => {

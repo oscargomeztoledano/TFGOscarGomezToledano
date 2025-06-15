@@ -1,29 +1,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var nivelesSchema = new Schema({
-    nombre: {
-        type: String,
-        required: true
-    },
-    desbloqueado: {
-        type: Boolean,
-        default: false
-    },
-    puntos: {type:Number, default: 0},
-    num: {type:Number, default: 0},
-    estrellas: {type:Number, default: 0},
-})
-var mundosSchema = new Schema({
-    nombre: {
-        type: String,
+var progresoSchema = new Schema({
+    mundoID: {
+        type: Schema.Types.ObjectId,
+        ref: 'mundos',
         required: true
     },
     completado: {
         type: Boolean,
         default: false
     },
-    niveles:[nivelesSchema]
+    niveles:[{ nombre: String,completado: Boolean, puntos: Number, estrellas: Number , _id:false}]
 })
 
 var alumnosSchema = new Schema({
@@ -40,11 +28,14 @@ var alumnosSchema = new Schema({
         required: true
     },
     aula: {
-        type: Number,
+        type: Schema.Types.ObjectId,
+        ref: 'aulas',
         required: true
     },
     avatar: {type: Number, default: 0},
-    mundos:[mundosSchema],
+    progreso:{
+        type: [progresoSchema], _id: false
+    },
     insignias:{type: [String], default: []},
     biblioteca:{type: [String], default: ['Conceptos básicos']},
     puntosTotales: {type: Number, default: 0},

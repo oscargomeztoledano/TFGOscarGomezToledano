@@ -21,8 +21,6 @@ router.get('/correo/:correo', function (req, res) {
     profesores.findOne({ correo: correo }, function (err, profesor) {
         if (err) {
             res.status(500).send('Error retrieving alumno')
-        } else if(!profesor) {
-            res.status(404).send('profesor not found')
         }else {
             res.status(200).json(profesor)
         }
@@ -33,12 +31,11 @@ router.get('/correo/:correo', function (req, res) {
 router.patch('/guardarprogreso/:correo', async (req, res) => {
     try {
         var correo = decodeURIComponent(req.params.correo).trim().toLowerCase()
-        const { mundos, puntosTotales, estrellasTotales, insignias,biblioteca,avatar } = req.body
-        const update= {}
-        if (biblioteca) update.biblioteca = biblioteca
+        const { progreso, puntosTotales, estrellasTotales, insignias, avatar } = req.body
+        const update = {}
         if (avatar) update.avatar = avatar
         if (insignias) update.insignias = insignias
-        if (mundos) update.mundos = mundos
+        if (progreso) update.progreso = progreso
         if (puntosTotales && typeof puntosTotales === 'number') update.puntosTotales = puntosTotales
         if (estrellasTotales && typeof estrellasTotales === 'number') update.estrellasTotales = estrellasTotales
         console.log(correo, update)
