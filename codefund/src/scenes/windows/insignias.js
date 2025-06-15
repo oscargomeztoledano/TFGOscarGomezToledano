@@ -1,7 +1,6 @@
 import { appearance,disappearance } from "../../utils/animations";
 import { ALL_ACHIEVEMENTS } from "../../utils/achivements";
 import { panelCarga } from "../../utils/panelCarga";
-import { Scene } from "phaser";
 
 export function insignias(scene, usuario){
     return new Promise((resolve) => {

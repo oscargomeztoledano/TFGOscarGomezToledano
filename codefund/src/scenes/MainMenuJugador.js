@@ -57,7 +57,7 @@ export class MainMenuJugador extends Scene
             {texto: 'JUGAR', callback: () => { 
                 const panel = panelCarga(this, 'CARGANDO MUNDOS...') 
                 setTimeout(() => {
-                    worldSelect(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                    worldSelect(this, JSON.parse(localStorage.getItem('usuario')), JSON.parse(localStorage.getItem('mundos'))).then(() => {
                         panel.destroy()
                     })
                 }, 500)

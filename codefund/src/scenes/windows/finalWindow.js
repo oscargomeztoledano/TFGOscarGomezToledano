@@ -29,7 +29,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     ]
     // Añadir el fondo
     const overlay =scene.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
-    
+
     const fondo = scene.add.nineslice( 0, -50, 'marco3', 0,300,300,10,10,10,10).setOrigin(0.5)
     container.add(fondo)
     //Texto final nivel
@@ -46,9 +46,9 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     const heightBannerText = bannerText.height + padding
 
     const banner = scene.add.nineslice(
-        0, - fondo.height / 2 - 60, 
-        'marco1', 0, 
-        widthBannerText, heightBannerText, 
+        0, - fondo.height / 2 - 60,
+        'marco1', 0,
+        widthBannerText, heightBannerText,
         10, 10, 10, 10
     ).setOrigin(0.5)
 
@@ -57,7 +57,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     container.add([banner, bannerText])
 
     //info puntos y tiempo
-    const puntosText =scene.add.text(0, -60, 
+    const puntosText =scene.add.text(0, -60,
         'Puntos: '+ (puntosThisLevel), {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -66,7 +66,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
         color: '#ffffff'
     }).setOrigin(0.5);
     container.add(puntosText)
-    const tiempoText = scene.add.text(0,  -30, 
+    const tiempoText = scene.add.text(0,  -30,
         'Tiempo: '+ timeTaken + 's', {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -84,68 +84,104 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     scene.emptyStars=[]
     scene.stars=[]
     for (let i =0; i<3; i++){
-        if (scene.starsToPrint[i]===1) 
+        if (scene.starsToPrint[i]===1)
             scene.stars.push(scene.add.image(posx[i], starsHeight, 'star').setOrigin(0.5))
         else
             scene.emptyStars.push(scene.add.image(posx[i], starsHeight, 'starOutline').setOrigin(0.5))
-            
+
     }
     container.add(scene.emptyStars)
     container.add(scene.stars)
 
-    // actualizar el usuario 
+    // obtención de datos usuario y mundo
     const usuario = JSON.parse(localStorage.getItem('usuario'))
-    const mundos = usuario.mundos
+    const mundos = JSON.parse(localStorage.getItem('mundos'))
+
+    const mundoID= localStorage.getItem('mundoSeleccionado')
+    const mundo = mundos.find(m => m._id === mundoID)
+
+    const nivelNombre= localStorage.getItem('nivelSeleccionado')
+    const thisLevel = mundo.niveles.find(n => n.nombre === nivelNombre)
+    const num = thisLevel.num
+
+    const progreso = usuario.progreso
+    let progresoMundo = progreso?.find(p => p.mundoID === mundoID)
+    let progresoNivelActual = progresoMundo?.niveles.find(n => n.nombre === nivelNombre)
+
+    if (!progresoMundo) {
+        let progresoMundotmp = {
+            mundoID: mundoID,
+            completado: false,
+            niveles: [
+            {
+                nombre: nivelNombre,
+                completado: true,
+                puntos: 0,
+                estrellas: 0
+            }
+
+            ]
+        }
+        progreso.push(progresoMundotmp)
+    } else if( !progresoNivelActual){
+            let progresoNivelActualtmp = {
+                nombre: nivelNombre,
+                completado: true,
+                puntos: 0,
+                estrellas: 0
+            }
+            progresoMundo.niveles.push(progresoNivelActualtmp)
+    }
+
+    progresoMundo = progreso.find(p => p.mundoID === mundoID)
+    progresoNivelActual = progresoMundo.niveles.find(n => n.nombre === nivelNombre)
+
+    const nextLevel = mundo.niveles[scene.currentLevelIndex+1]
+
     var puntosTotales = usuario.puntosTotales
     var estrellasTotales = usuario.estrellasTotales
-    const nextLevel = mundos[scene.currentWorldIndex].niveles[scene.currentLevelIndex+1]
-    const thisLevel = mundos[scene.currentWorldIndex].niveles[scene.currentLevelIndex]
+
+
     var logrosConseguidos = []
 
-    //desbloqueo siguiente nivel si existe
-    if ( mundos && nextLevel) 
-        nextLevel.desbloqueado = true
-    
-    //Si los nuevos puntos son mayores que los anteriores, actualiza el nivel. La primera vez siempre entra
-    if ( thisLevel.puntos < puntosThisLevel) {
-        const difPuntos = (puntosThisLevel) - thisLevel.puntos
-        const difEstrellas = scene.stars.length - thisLevel.estrellas
+    if ( progresoNivelActual.puntos < puntosThisLevel ) {
+        const difPuntos = (puntosThisLevel) - progresoNivelActual.puntos
+        const difEstrellas = scene.stars.length - progresoNivelActual.estrellas
+        progresoNivelActual.puntos = puntosThisLevel
+        progresoNivelActual.estrellas = scene.starsToPrint.length
 
-        thisLevel.puntos = puntosThisLevel
-        thisLevel.estrellas = scene.stars.length
-        
         puntosTotales += difPuntos
         estrellasTotales += difEstrellas
-        
+
         //Comprobar logros al finalizar un nivel
-        if (!usuario.insignias.includes(thisLevel.num+'Done')){
-            usuario.insignias.push(thisLevel.num+'Done')
-            logrosConseguidos.push(thisLevel.num+'Done')
+        if (!usuario.insignias.includes(num+'Done')){
+            usuario.insignias.push(num+'Done')
+            logrosConseguidos.push(num+'Done')
         }
-        if (thisLevel.estrellas === 3 && !usuario.insignias.includes(thisLevel.num+'Estrellas')){
-            usuario.insignias.push(thisLevel.num+'Estrellas')
-            logrosConseguidos.push(thisLevel.num+'Estrellas')
+        if (progresoNivelActual.estrellas === 3 && !usuario.insignias.includes(num+'Estrellas')){
+            usuario.insignias.push(num+'Estrellas')
+            logrosConseguidos.push(num+'Estrellas')
         }
         // Comprobar entradas a la biblioteca
-        if (thisLevel.nombre ==='nivel1_1' && !usuario.biblioteca.includes('Tipos de datos I')){
+        if (nivelNombre ==='Nivel 1_1' && !usuario.biblioteca.includes('Tipos de datos I')){
             usuario.biblioteca.push('Tipos de datos I')
             logrosConseguidos.push('Tipos de datos I')
-        }        
-        if (thisLevel.nombre === 'nivel1_2' && !usuario.biblioteca.includes('Tipos de datos II')){
+        }
+        if (nivelNombre === 'Nivel 1_2' && !usuario.biblioteca.includes('Tipos de datos II')){
             usuario.biblioteca.push('Tipos de datos II')
             logrosConseguidos.push('Tipos de datos II')
         }
-        if (thisLevel.nombre === 'nivel1_4' && !usuario.biblioteca.includes('Operadores I')){
+        if (nivelNombre === 'Nivel 1_4' && !usuario.biblioteca.includes('Operadores I')){
             usuario.biblioteca.push('Operadores I')
             logrosConseguidos.push('Operadores I')
         }
-        if (thisLevel.nombre === 'nivel1_6' && !usuario.biblioteca.includes('Operadores II')){
+        if (nivelNombre === 'Nivel 1_6' && !usuario.biblioteca.includes('Operadores II')){
             usuario.biblioteca.push('Operadores II')
             logrosConseguidos.push('Operadores II')
-        }   
+        }
         // Comprobar logro mundo done
         if (!nextLevel && !usuario.insignias.includes(scene.currentWorldIndex+1+'Done')){
-            mundos[scene.currentWorldIndex+1].completado = true
+            progresoMundo.completado = true
             usuario.insignias.push(scene.currentWorldIndex+1+'Done')
             logrosConseguidos.push(scene.currentWorldIndex+1+'Done')
         }
@@ -153,7 +189,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
         if (estrellasTotales>= 5 && !usuario.insignias.includes('5Estrellas')){
             usuario.insignias.push('5Estrellas')
             logrosConseguidos.push('5Estrellas')
-        }        
+        }
         if (estrellasTotales>= 10 && !usuario.insignias.includes('10Estrellas')){
             usuario.insignias.push('10Estrellas')
             logrosConseguidos.push('10Estrellas')
@@ -186,20 +222,21 @@ export function successWindow(scene, timeTaken, puntosFijo) {
             usuario.insignias.push('45Estrellas')
             logrosConseguidos.push('45Estrellas')
         }
-        
+
         // llamar a actualizar usuario y guardamos en localStorage
         const usuarioActualizado = {
-            mundos: mundos,
+            progreso: progreso,
             puntosTotales: puntosTotales,
             estrellasTotales: estrellasTotales,
             insignias: usuario.insignias,
             biblioteca: usuario.biblioteca
         }
+        console.log('Usuario actualizado:', usuarioActualizado)
         if (usuario.profesor){
             guardarProgresoProfesor(usuario.correo, usuarioActualizado).then((res) => {
             localStorage.setItem('usuario', JSON.stringify({
-                ...usuario, 
-                mundos: res.mundos, 
+                ...usuario,
+                progreso: res.progreso,
                 puntosTotales: res.puntosTotales,
                 estrellasTotales: res.estrellasTotales,
                 insignias: res.insignias,
@@ -210,8 +247,8 @@ export function successWindow(scene, timeTaken, puntosFijo) {
         }else{
             guardarProgresoAlumno(usuario.correo, usuarioActualizado).then((res) => {
             localStorage.setItem('usuario', JSON.stringify({
-                ...usuario, 
-                mundos: res.mundos, 
+                ...usuario,
+                progreso: res.progreso,
                 puntosTotales: res.puntosTotales,
                 estrellasTotales: res.estrellasTotales,
                 insignias: res.insignias,
@@ -223,15 +260,17 @@ export function successWindow(scene, timeTaken, puntosFijo) {
         }
     }
 
-    
+
     // Botones success window
     const botones = [
         {icon: 'iconExit', callback: ()=> {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
             panelCarga(scene, 'CARGANDO MENÚ...')
+            localStorage.removeItem('mundoSeleccionado')
+            localStorage.removeItem('nivelSeleccionado')
             setTimeout(() => {
-                scene.scene.start(tipoMenu, {openWorldSelect: false})         
-            },500) 
+                scene.scene.start(tipoMenu, {openWorldSelect: false})
+            },500)
         }},
         {icon: 'iconRestart', callback: ()=> {
             panelCarga(scene, 'REINICIANDO NIVEL...')
@@ -240,7 +279,8 @@ export function successWindow(scene, timeTaken, puntosFijo) {
             }, 500)
         }},
         {icon: 'iconResume', callback: ()=> {
-            panelCarga(scene, 'CARGANDO SIGUIENTE NIVEL...')
+            panelCarga(scene, `CARGANDO SIGUIENTE NIVEL ${nextLevel.nombre}...`)
+            localStorage.setItem('nivelSeleccionado', nextLevel.nombre)
             setTimeout(() => {
             scene.scene.start(scene.nextLevel)
             },500)
@@ -251,9 +291,9 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     const buttonSpacing = 100
 
     botones.forEach((boton, i) => {
-        if (boton.icon === 'iconResume' && 
-            !mundos[scene.currentWorldIndex].niveles[scene.currentLevelIndex+1]) return
-            
+        if (boton.icon === 'iconResume' &&
+            !nextLevel) return
+
         const y = buttonheight
         const x = (i - 1) * buttonSpacing
 
@@ -267,12 +307,12 @@ export function successWindow(scene, timeTaken, puntosFijo) {
                 scene.buttonEnabledSuccess = false
                 scene.tweens.add({
                     targets: [button, icon],
-                    scale: 1.8, 
+                    scale: 1.8,
                     duration: 100,
                     ease: 'Power1',
-                    yoyo: true, 
+                    yoyo: true,
                     onComplete: () => {
-                        boton.callback(); 
+                        boton.callback();
                     }
                 });
             }
@@ -294,19 +334,19 @@ export function successWindow(scene, timeTaken, puntosFijo) {
         const texto    = isBiblioteca ? logro : 'Insignia desbloqueada';
 
         const logroBox = scene.add.container(
-            baseX,                               
-            baseY + index * (fondoHeight + marginLogros) 
+            baseX,
+            baseY + index * (fondoHeight + marginLogros)
         );
 
         const fondo = scene.add.nineslice(
             0, 0, 'fondoBoton', 0,
             fondoWidth, fondoHeight,
             10, 10, 10, 10
-        ).setOrigin(1, 0);   
+        ).setOrigin(1, 0);
         logroBox.add(fondo);
 
         const icon = scene.add.image(
-            -fondoWidth + 25,      
+            -fondoWidth + 25,
             fondoHeight / 2,
             iconKey
         ).setOrigin(0.5);
@@ -314,7 +354,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
 
         // Texto
         const text = scene.add.text(
-            -fondoWidth + 55,      
+            -fondoWidth + 55,
             fondoHeight / 2,
             texto,
             {
@@ -329,7 +369,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
     })
     appearance(container, scene)
     container.setDepth(overlay.depth + 1)
-    
+
 }
 
 // Función para calcular los puntos
@@ -349,7 +389,7 @@ export function failureWindow(scene, timeTaken){
     const usuario = JSON.parse(localStorage.getItem('usuario'))
     // Añadir el fondo
     const overlay =scene.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
-    
+
     const fondo = scene.add.nineslice( 0, -50, 'marco3', 0,300,300,10,10,10,10).setOrigin(0.5)
     container.add(fondo)
 
@@ -368,9 +408,9 @@ export function failureWindow(scene, timeTaken){
     const heightBannerText = bannerText.height + padding
 
     const banner = scene.add.nineslice(
-        0, - fondo.height / 2 - 60, 
-        'marco1', 0, 
-        widthBannerText, heightBannerText, 
+        0, - fondo.height / 2 - 60,
+        'marco1', 0,
+        widthBannerText, heightBannerText,
         10, 10, 10, 10
     ).setOrigin(0.5)
 
@@ -379,7 +419,7 @@ export function failureWindow(scene, timeTaken){
     container.add([banner, bannerText])
 
    //info puntos y tiempo
-    const puntosText =scene.add.text(0, -60, 
+    const puntosText =scene.add.text(0, -60,
         'Puntos: 0', {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -389,7 +429,7 @@ export function failureWindow(scene, timeTaken){
     }).setOrigin(0.5);
     container.add(puntosText)
 
-    const tiempoText = scene.add.text(0,  -30, 
+    const tiempoText = scene.add.text(0,  -30,
         'Tiempo: '+ timeTaken + 's', {
         fontSize: '20px',
         fontFamily: 'Arial',
@@ -399,25 +439,27 @@ export function failureWindow(scene, timeTaken){
     }).setOrigin(0.5);
     container.add(tiempoText)
 
-    
+
     const starsHeight = -130
     const starsSpacing = 100
     const posx=[- starsSpacing, 0,  starsSpacing]
     scene.emptyStars=[]
     for (let i =0; i<3; i++){
             scene.emptyStars.push(scene.add.image(posx[i], starsHeight, 'starOutline').setOrigin(0.5))
-            
+
     }
     container.add(scene.emptyStars)
-    
+
     // Botones
     const botones = [
         {icon: 'iconExit', callback: ()=> {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
             panelCarga(scene, 'CARGANDO MENÚ...')
+            localStorage.removeItem('mundoSeleccionado')
+            localStorage.removeItem('nivelSeleccionado')
             setTimeout(() => {
-                scene.scene.start(tipoMenu, {openWorldSelect: false})         
-            },500) 
+                scene.scene.start(tipoMenu, {openWorldSelect: false})
+            },500)
         }},
         {icon: 'iconRestart', callback: ()=> {
             panelCarga(scene, 'REINICIANDO NIVEL...')
@@ -444,12 +486,12 @@ export function failureWindow(scene, timeTaken){
                 scene.buttonEnabledFailure = false
                 scene.tweens.add({
                     targets: [button, icon],
-                    scale: 1.8, 
+                    scale: 1.8,
                     duration: 100,
                     ease: 'Power1',
-                    yoyo: true, 
+                    yoyo: true,
                     onComplete: () => {
-                        boton.callback(); 
+                        boton.callback();
                     }
                 });
             }
@@ -466,6 +508,6 @@ export function failureWindow(scene, timeTaken){
 
     appearance(container, scene)
     container.setDepth(overlay.depth + 1)
-    
-    
+
+
 }

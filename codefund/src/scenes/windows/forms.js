@@ -1,5 +1,5 @@
 import { disappearance,appearance } from "../../utils/animations"
-import { getAlumnoByCorreo, postAlumno, getProfesorByCorreo } from "../../api/apiCalls"
+import { getAlumnoByCorreo, postAlumno, getProfesorByCorreo, getAllMundos } from "../../api/apiCalls"
 import { panelCarga } from "../../utils/panelCarga"
 
 export function registro(scene){
@@ -111,56 +111,62 @@ export function registro(scene){
                     password: passwordInput.value,
                     aula: classCodeInput.value
                 };
-                postAlumno(alumno)
-                    .then((response) => {
-                        emailInput.style.border = '1px solid #ccc'
-                        nameInput.style.border = '1px solid #ccc'
-                        passwordInput.style.border = '1px solid #ccc'
-                        classCodeInput.style.border = '1px solid #ccc'
-                        localStorage.removeItem('usuario')
-                        localStorage.setItem('usuario', JSON.stringify({
-                            nombre: response.nombre,
-                            correo: response.correo,
-                            aula: response.aula,
-                            avatar: response.avatar,
-                            mundos: response.mundos,
-                            insignias: response.insignias,
-                            biblioteca: response.biblioteca,
-                            puntosTotales: response.puntosTotales,
-                            estrellasTotales: response.estrellasTotales,
-                        }))
-                        panel.setMensaje('REGISTRO EXITOSO') 
+                
+                postAlumno(alumno).then((response) => {
+                    emailInput.style.border = '1px solid #ccc'
+                    nameInput.style.border = '1px solid #ccc'
+                    passwordInput.style.border = '1px solid #ccc'
+                    classCodeInput.style.border = '1px solid #ccc'
+                    localStorage.removeItem('usuario')
+                    localStorage.setItem('usuario', JSON.stringify({
+                        nombre: response.nombre,
+                        correo: response.correo,
+                        aula: response.aula,
+                        avatar: response.avatar,
+                        progreso: response.progreso,
+                        insignias: response.insignias,
+                        biblioteca: response.biblioteca,
+                        puntosTotales: response.puntosTotales,
+                        estrellasTotales: response.estrellasTotales,
+                    }))
+                    panel.setMensaje('REGISTRO EXITOSO') 
+                    setTimeout(() => {
+                        scene.scene.start('MainMenuJugador')  
+                    }, 500)
+                })
+                .catch((error) => {
+                    if (error.response.status === 400) {
+
+                        console.log('Error: ',error)
+                        emailInput.style.border = '4px solid red'
+                        panel.setMensaje('CORREO YA REGISTRADO')
                         setTimeout(() => {
-                            scene.scene.start('MainMenuJugador')  
+                            panel.destroy()
                         }, 500)
-                    })
-                    .catch((error) => {
-                        if (error.response.status === 400) {
+                    }else if (error.response.status === 404) {
+                        emailInput.style.border = '1px solid #ccc'
+                        console.log('Error: ',error)
+                        classCodeInput.style.border = '4px solid red'
+                        panel.setMensaje('AULA NO EXISTE')
+                        setTimeout(() => {
+                            panel.destroy()
+                        }, 500)
+                    } 
+                    else {
+                        console.log('Error:', error)
+                        panel.setMensaje('ERROR INESPERADO')
+                        setTimeout(() => {
+                            panel.destroy()
+                        }, 1000)
+                    }
+                });
 
-                            console.log('Error: ',error)
-                            emailInput.style.border = '4px solid red'
-                            panel.setMensaje('CORREO YA REGISTRADO')
-                            setTimeout(() => {
-                                panel.destroy()
-                            }, 500)
-                        }else if (error.response.status === 404) {
-                            emailInput.style.border = '1px solid #ccc'
-                            console.log('Error: ',error)
-                            classCodeInput.style.border = '4px solid red'
-                            panel.setMensaje('AULA NO EXISTE')
-                            setTimeout(() => {
-                                panel.destroy()
-                            }, 500)
-                        } 
-                        else {
-                            console.log('Error:', error)
-                            panel.setMensaje('ERROR INESPERADO')
-                            setTimeout(() => {
-                                panel.destroy()
-                            }, 1000)
-                        }
-                    });
-
+                getAllMundos().then((mundos) => {
+                    localStorage.removeItem('mundos')
+                    localStorage.setItem('mundos', JSON.stringify(mundos))
+                }).catch((error) => {
+                    console.error("Error fetching worlds:", error)
+                })
             }
         }
     }
@@ -333,6 +339,12 @@ async function intentarlogin(email, password,scene){
 
         if(profesor && profesor.password=== passwordInput){
             console.log('Sesion iniciada')
+            localStorage.removeItem('mundos')
+            getAllMundos().then((mundos) => {
+                localStorage.setItem('mundos', JSON.stringify(mundos))
+            }).catch((error) => {
+                console.error("Error fetching worlds:", error)
+            })
             localStorage.removeItem('usuario')
             localStorage.setItem('usuario', JSON.stringify({
                 nombre: profesor.nombre,
@@ -341,7 +353,7 @@ async function intentarlogin(email, password,scene){
                 aula: profesor.aula,
                 avatar: profesor.avatar,
                 aulas: profesor.aulas,
-                mundos: profesor.mundos,
+                progreso: profesor.progreso,
                 insignias: profesor.insignias,
                 biblioteca: profesor.biblioteca,
                 puntosTotales: profesor.puntosTotales,
@@ -363,24 +375,30 @@ async function intentarlogin(email, password,scene){
         }
         else if (alumno && alumno.password === passwordInput) {
             console.log('Sesion iniciada')
-                localStorage.removeItem('usuario')
-                localStorage.setItem('usuario', JSON.stringify({
-                    nombre: alumno.nombre,
-                    correo: alumno.correo,
-                    profesor: false,
-                    aula: alumno.aula,
-                    avatar: alumno.avatar,
-                    mundos: alumno.mundos,
-                    insignias: alumno.insignias,
-                    biblioteca: alumno.biblioteca,
-                    puntosTotales: alumno.puntosTotales,
-                    estrellasTotales: alumno.estrellasTotales,
-                }))
-                panel.setMensaje(`SESION INICIADA COMO ${alumno.nombre.toUpperCase()}`)
-                setTimeout(() => {
-                    panel.destroy()
-                    scene.scene.start('MainMenuJugador')                    
-                }, 500)
+            localStorage.removeItem('mundos')
+            getAllMundos().then((mundos) => {
+                localStorage.setItem('mundos', JSON.stringify(mundos))
+            }).catch((error) => {
+                console.error("Error fetching worlds:", error)
+            })
+            localStorage.removeItem('usuario')
+            localStorage.setItem('usuario', JSON.stringify({
+                nombre: alumno.nombre,
+                correo: alumno.correo,
+                profesor: false,
+                aula: alumno.aula,
+                avatar: alumno.avatar,
+                progreso: alumno.progreso,
+                insignias: alumno.insignias,
+                biblioteca: alumno.biblioteca,
+                puntosTotales: alumno.puntosTotales,
+                estrellasTotales: alumno.estrellasTotales,
+            }))
+            panel.setMensaje(`SESION INICIADA COMO ${alumno.nombre.toUpperCase()}`)
+            setTimeout(() => {
+                panel.destroy()
+                scene.scene.start('MainMenuJugador')                    
+            }, 500)
         }
         else if (alumno && alumno.password !== passwordInput){
             console.log('Contraseña incorrecta')

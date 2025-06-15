@@ -96,7 +96,6 @@ export function biblioteca(scene, usuario){
             html.setAlpha(0)
             container.add(html);
             const earned = usuario.biblioteca
-            console.log(usuario.biblioteca)
             var texto = ''
             lecciones.forEach((lec, i) => {
             const y = i * (btnH + spacing)

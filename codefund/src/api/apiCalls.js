@@ -74,8 +74,18 @@ function guardarProgresoProfesor(correo, usuarioActualizado) {
         });
 }
 
+// mundos
+function getAllMundos() {
+    return api.get('/mundos')
+        .then(response => response.data)
+        .catch(error => {
+            console.error("Error fetching all mundos:", error);
+            throw error;
+        });
+}   
 
 export { 
+    getAllMundos,
     guardarProgresoAlumno, 
     guardarProgresoProfesor,
     getAllAlumnosPuntosAula,

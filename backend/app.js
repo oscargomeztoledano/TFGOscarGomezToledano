@@ -11,6 +11,7 @@ var logger = require('morgan');
 var alumnosRouter = require('./routes/alumnos.js');
 var aulasRouter = require('./routes/aulas.js');
 var profesoresRouter = require('./routes/profesores.js');
+var mundosRouter = require('./routes/mundos.js');
 
 var app = express();
 var debug = require('debug')('backend:server');
@@ -56,6 +57,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/alumnos', alumnosRouter);
 app.use('/aulas', aulasRouter);
 app.use('/profesores', profesoresRouter);
+app.use('/mundos', mundosRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

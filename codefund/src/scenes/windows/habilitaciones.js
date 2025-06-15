@@ -6,7 +6,7 @@ var tabla = ''
 var listaMundos = []
 var aulasID = []
 var aulas = []
-export async function habilitaciones(scene,usuario) {
+export async function habilitaciones(scene,usuario,mundos) {
         try{
         aulasID = usuario.aulas
         const respuesta = await Promise.all(
@@ -153,7 +153,7 @@ export async function habilitaciones(scene,usuario) {
             appearance(container, scene)
 
 
-            listaMundos = usuario.mundos.map(m => m.nombre.toUpperCase())
+            listaMundos = mundos.map(m => m.nombre)
 
             selectorDom.getChildByID('selAula').addEventListener('change', e=> {
                 const panel = panelCarga(scene, 'ACTUALIZANDO TABLA...')

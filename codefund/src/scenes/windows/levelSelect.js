@@ -1,8 +1,8 @@
 import { appearance, disappearance } from "../../utils/animations"
 import { panelCarga } from "../../utils/panelCarga"
 
-export function levelSelect(scene, nombreMundo, usuario) {
-    return new Promise((resolve) => {
+export function levelSelect(scene, nombreMundo, niveles, usuario) {
+    return new Promise((resolve, reject) => {
         try{
         scene.buttonEnabledLevel  = true
         const {width, height} = scene.scale
@@ -62,14 +62,10 @@ export function levelSelect(scene, nombreMundo, usuario) {
             icon.setScale(1);
         })
 
+        const mundoID= localStorage.getItem('mundoSeleccionado')
+        const progreso = usuario.progreso
 
-        const mundo = usuario.mundos.find(m=>m.nombre === nombreMundo)
-        if (!mundo) {
-            console.error("Mundo no encontrado")
-            return
-        }
-        const niveles = mundo.niveles
-
+        const progresoMundo = progreso?.find(m => m.mundoID === mundoID)
         niveles.forEach((nivel, index) => {
             const row = Math.floor(index / 3)
             const col = index % 3
@@ -99,11 +95,22 @@ export function levelSelect(scene, nombreMundo, usuario) {
             const starsX =[buttonBackground.x-20, buttonBackground.x, buttonBackground.x+20]
             const starsY = [buttonBackground.y+25, buttonBackground.y+20, buttonBackground.y+25]
 
-            for (let i = 0; i < nivel.estrellas; i++) {
+            const progresoNivel = progresoMundo?.niveles.find(n => n.nombre === nivel.nombre)
+            const estrellas = progresoNivel?.estrellas || 0
+
+            let nivelDesbloqueado = false
+            if (index === 0 || usuario.profesor) {
+                nivelDesbloqueado = true
+            }else {
+                const nivelAnterior = niveles[index - 1]
+                const progresoAnterior = progresoMundo?.niveles.find(n => n.nombre === nivelAnterior.nombre) 
+                nivelDesbloqueado = progresoAnterior?.completado === true
+            }
+            for (let i = 0; i < estrellas; i++) {
                 const star = scene.add.image(starsX[i], starsY[i], 'star').setOrigin(0.5).setScale(0.2)
                 container.add(star);
             }
-            if (!nivel.desbloqueado) {
+            if (!nivelDesbloqueado) {
                 buttonBackground.setAlpha(0.5);
                 buttonText.setAlpha(0.5)
                 const lockIcon = scene.add.image(buttonBackground.x, buttonBackground.y, 'iconLock')
@@ -113,9 +120,11 @@ export function levelSelect(scene, nombreMundo, usuario) {
             }
 
             buttonBackground.on('pointerdown', () => {
-                if (nivel.desbloqueado && scene.buttonEnabledLevel) {
+                if (nivelDesbloqueado && scene.buttonEnabledLevel) {
                     scene.buttonEnabledLevel = false    
                     panelCarga(scene, `CARGANDO ${nivel.nombre}...`) 
+                    localStorage.removeItem('nivelSeleccionado')
+                    localStorage.setItem('nivelSeleccionado', nivel.nombre)
                     scene.tweens.add({
                         targets: [buttonBackground, buttonText],
                         scale: 0.9, 
@@ -124,7 +133,7 @@ export function levelSelect(scene, nombreMundo, usuario) {
                         yoyo: true, 
                         onComplete: () => {
                             setTimeout(() => {               
-                            scene.scene.start(nombreMundo+nivel.nombre)
+                            scene.scene.start(nombreMundo.toLowerCase()+ nivel.nombre.toLowerCase().replace(/\s+/g,''))
                         }, 500)
                         }
                     });

@@ -5,7 +5,6 @@ var alumnos = require('../models/alumnos')
 var profesores = require('../models/profesores')
 var aulas = require('../models/aulas')
 mongoose.set('strict', false)
-const { defaultMundos } = require('../utils/default')
 
 // GET all alumnos
 router.get('/', async (req, res) => {
@@ -51,9 +50,9 @@ router.post('/', async (req, res)=> {
         const existingProfesor = await profesores.findOne({ correo: correo })
         const existingAula = await aulas.findOne({ codigo: aula })
         if (existingAlumno||existingProfesor) {
-            return res.status(400).send('Usuario ya existe')
+            return res.status(400).send('Usuario existente')
         } else if (!existingAula) {
-            return res.status(404).send('Aula no existe')
+            return res.status(404).send('El aula no existe')
         }
         else {
             const newAlumno = new alumnos({
@@ -61,7 +60,6 @@ router.post('/', async (req, res)=> {
                 correo,
                 password,
                 aula: existingAula._id,
-                mundos: defaultMundos(),
             })
             await newAlumno.save()
             res.status(201).json(newAlumno)
@@ -76,12 +74,12 @@ router.post('/', async (req, res)=> {
 router.patch('/guardarprogreso/:correo', async (req, res) => {
     try {
         var correo = decodeURIComponent(req.params.correo).trim().toLowerCase()
-        const { mundos, puntosTotales, estrellasTotales, insignias, biblioteca, avatar} = req.body
+        const { progreso, puntosTotales, estrellasTotales, insignias, biblioteca, avatar} = req.body
         const update= {}
         if (avatar) update.avatar = avatar
         if (biblioteca) update.biblioteca = biblioteca
         if (insignias) update.insignias = insignias
-        if (mundos) update.mundos = mundos
+        if (progreso) update.progreso = progreso
         if (puntosTotales && typeof puntosTotales === 'number') update.puntosTotales = puntosTotales
         if (estrellasTotales && typeof estrellasTotales === 'number') update.estrellasTotales = estrellasTotales
         console.log(correo, update)

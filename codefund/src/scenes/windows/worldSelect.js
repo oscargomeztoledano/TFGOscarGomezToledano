@@ -3,12 +3,14 @@ import { getMundosByAula } from "../../api/apiCalls"
 import { levelSelect } from "./levelSelect"
 import {panelCarga} from "../../utils/panelCarga"
 
-var mundos = []
-export async function worldSelect(scene, usuario){
+var mundosAula = []
+export async function worldSelect(scene, usuario, mundos){
     try{
         if(!usuario.profesor){
         const response = await getMundosByAula(usuario.aula)
-        mundos = response.mundos
+        
+        mundosAula = response.mundos
+        console.log("Mundos del aula:", mundosAula)
         }
     }catch (error) {
         console.error("Error fetching worlds:", error)
@@ -74,27 +76,17 @@ export async function worldSelect(scene, usuario){
                 icon.setScale(1);
             })
 
-            // TODO : llamadas a level select con el mundo seleccionado.
-            const botonesPrincipales = [
-                {texto: "MUNDO 1"},
-                {texto: "MUNDO 2"},
-                {texto: "MUNDO 3"},
-                {texto: "MUNDO 4"},
-                {texto: "MUNDO 5"},
-                {texto: "MUNDO 6"},
-            ]
+            const mundosMap = mundos.map(mundo => ({ texto: mundo.nombre, id: mundo._id, niveles: mundo.niveles }))
 
-
-            botonesPrincipales.forEach((boton, index) => {
-                const row = Math.floor(index / 3); 
-                const col = index % 3; 
+            mundosMap.forEach((mundo, index) => {
+                const row = Math.floor(index / 3);
+                const col = index % 3;
 
                 const xOffset = (col - 1) * 130;
 
                 const yOffset = row * 100 -140+col*20;
 
-                
-                const buttonText = scene.add.text(0, 0, boton.texto, {
+                const buttonText = scene.add.text(0, 0, mundo.texto, {
                     fontSize: '16px',
                     fontFamily: 'Arial',
                     stroke: '#000000',
@@ -115,8 +107,8 @@ export async function worldSelect(scene, usuario){
                 buttonText.setPosition(buttonBackground.x, buttonBackground.y).setOrigin(0.5);
                 buttonText.setDepth(buttonBackground.depth + 1);
                 container.add([buttonBackground, buttonText]);
-
-                if (!mundos.includes(boton.texto)&& !usuario.profesor) {
+                console.log(mundo.texto)
+                if (!mundosAula.includes(mundo.texto) && !usuario.profesor) {
                     buttonBackground.setAlpha(0.5);
                     buttonText.setAlpha(0.5)
                     const lockIcon = scene.add.image(buttonBackground.x, buttonBackground.y, 'iconLock')
@@ -126,10 +118,12 @@ export async function worldSelect(scene, usuario){
                 }
 
                 buttonBackground.on('pointerdown', () => {
-                    if ((mundos.includes(boton.texto)&& scene.buttonEnabledWorld)
+                    if ((mundosAula.includes(mundo.texto)&&scene.buttonEnabledWorld)
                         ||(usuario.profesor&&scene.buttonEnabledWorld)){
                         scene.buttonEnabledWorld = false
-                        const panel = panelCarga(scene, 'CARGANDO '+ boton.texto + '...')
+                        const panel = panelCarga(scene, 'CARGANDO '+ mundo.texto + '...')
+                        localStorage.removeItem('mundoSeleccionado')
+                        localStorage.setItem('mundoSeleccionado', mundo.id)
                         scene.tweens.add({
                             targets: [buttonBackground, buttonText],
                             scale: 0.9, 
@@ -138,7 +132,7 @@ export async function worldSelect(scene, usuario){
                             yoyo: true, 
                             onComplete: () => {
                                 setTimeout(() => {
-                                    levelSelect(scene, boton.texto.toLowerCase(), usuario).then(() => {
+                                    levelSelect(scene, mundo.texto.toLowerCase(), mundo.niveles, usuario).then(() => {
                                         panel.destroy()
                                     })
                                 }, 500)

@@ -57,6 +57,8 @@ export function menuPause(scene,usuario) {
         {icono: 'iconLevels', texto: 'MUNDOS', callback: () => {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
             panelCarga(scene, 'CARGANDO SELECCIÓN DE MUNDO...')
+            localStorage.removeItem('mundoSeleccionado')
+            localStorage.removeItem('nivelSeleccionado')
             setTimeout(() => {
                 scene.scene.start(tipoMenu, {openWorldSelect: true})
             }, 500)
@@ -65,6 +67,8 @@ export function menuPause(scene,usuario) {
         {icono: 'iconExit', texto: 'SALIR', callback: () => {
             const tipoMenu = usuario.profesor ? 'MainMenuProfesor' : 'MainMenuJugador'
             panelCarga(scene, 'SALIENDO...')
+            localStorage.removeItem('mundoSeleccionado')
+            localStorage.removeItem('nivelSeleccionado')
             setTimeout(() => {
                 scene.scene.start(tipoMenu, {openWorldSelect: false})
             }, 500)

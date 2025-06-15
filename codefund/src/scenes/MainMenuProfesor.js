@@ -57,7 +57,7 @@ export class MainMenuProfesor extends Scene
         const botones = [
             {texto: 'JUGAR', callback: () => {
                 const panel = panelCarga(this, 'CARGANDO MUNDOS...') 
-                worldSelect(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                worldSelect(this, JSON.parse(localStorage.getItem('usuario')), JSON.parse(localStorage.getItem('mundos'))).then(() => {
                     setTimeout(() => {
                     panel.destroy()
                     }, 500)
@@ -106,7 +106,7 @@ export class MainMenuProfesor extends Scene
             }},                    
             {texto: 'HABILITAR MUNDOS', callback: () => {
                 const panel = panelCarga(this, 'CARGANDO HABILITACIONES...')
-                habilitaciones(this, JSON.parse(localStorage.getItem('usuario'))).then(() => {
+                habilitaciones(this, JSON.parse(localStorage.getItem('usuario')), JSON.parse(localStorage.getItem('mundos'))).then(() => {
                     setTimeout(() => {
                         panel.destroy()
                     }, 500)
