@@ -64,7 +64,7 @@ export class mundo1nivel1_4 extends Scene {
                 crearVidas(this)
                 
                 //Título
-                this.add.text(16, 16, '2-2. Nivel con Formula II', {
+                this.add.text(16, 16, '1-4. Nivel con Formula II', {
                     fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
                     stroke: '#000000', strokeThickness: 8,
                     align: 'left'

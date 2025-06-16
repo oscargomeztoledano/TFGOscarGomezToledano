@@ -59,7 +59,7 @@ export class mundo1nivel1_5 extends Scene {
                 crearVidas(this)
                 
                 // Título
-                this.add.text(16, 16, '1-3. Cofres con acertijo', {
+                this.add.text(16, 16, '1-5. Cofres con acertijo I', {
                     fontFamily: 'Arial Black', fontSize: 30, color: '#ffffff',
                     stroke: '#000000', strokeThickness: 8,
                     align: 'left'

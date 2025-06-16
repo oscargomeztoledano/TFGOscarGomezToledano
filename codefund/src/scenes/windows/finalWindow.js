@@ -148,7 +148,7 @@ export function successWindow(scene, timeTaken, puntosFijo) {
         const difPuntos = (puntosThisLevel) - progresoNivelActual.puntos
         const difEstrellas = scene.stars.length - progresoNivelActual.estrellas
         progresoNivelActual.puntos = puntosThisLevel
-        progresoNivelActual.estrellas = scene.starsToPrint.length
+        progresoNivelActual.estrellas = scene.stars.length
 
         puntosTotales += difPuntos
         estrellasTotales += difEstrellas

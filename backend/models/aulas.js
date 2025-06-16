@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var aulasSchema = new Schema({
     codigo: {
-        type: Number,
+        type: String,
         required: true
     },
     mundos: { type: [String], default: [] },
