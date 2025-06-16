@@ -97,7 +97,7 @@ export function registro(scene){
                     panel.setMensaje('Min 8 caracteres, con al menos 1 mayúscula, 1 minúscula y 1 número')
                     setTimeout(() => {
                         panel.destroy()
-                    },500)
+                    },1000)
                 }, 500)
             }
             else{
@@ -130,6 +130,12 @@ export function registro(scene){
                         estrellasTotales: response.estrellasTotales,
                     }))
                     panel.setMensaje('REGISTRO EXITOSO') 
+                    getAllMundos().then((mundos) => {
+                    localStorage.removeItem('mundos')
+                    localStorage.setItem('mundos', JSON.stringify(mundos))
+                    }).catch((error) => {
+                        console.error("Error fetching worlds:", error)
+                    })
                     setTimeout(() => {
                         scene.scene.start('MainMenuJugador')  
                     }, 500)
@@ -161,12 +167,7 @@ export function registro(scene){
                     }
                 });
 
-                getAllMundos().then((mundos) => {
-                    localStorage.removeItem('mundos')
-                    localStorage.setItem('mundos', JSON.stringify(mundos))
-                }).catch((error) => {
-                    console.error("Error fetching worlds:", error)
-                })
+                
             }
         }
     }
@@ -336,7 +337,8 @@ async function intentarlogin(email, password,scene){
     try{
         const profesor = await getProfesorByCorreo(emailInput)
         const alumno = await getAlumnoByCorreo(emailInput)
-
+        console.log('Profesor:', profesor)
+        console.log('Alumno:', alumno)
         if(profesor && profesor.password=== passwordInput){
             console.log('Sesion iniciada')
             localStorage.removeItem('mundos')

@@ -150,6 +150,32 @@ export function levelSelect(scene, nombreMundo, niveles, usuario) {
                 buttonText.setScale(1);
             });
         })
+        if (!niveles || niveles.length === 0) {
+            const mensaje = scene.add.text(0, -80, 'Los niveles se están construyendo, lamentamos la espera.', {
+                fontSize: '18px',
+                fontFamily: 'Arial',
+                color: '#ffffff',
+                stroke: '#000000',
+                strokeThickness: 3,
+                align: 'center',
+                wordWrap: { width: 300 }
+            }).setOrigin(0.5);
+
+            const paddingX = 40;
+            const paddingY = 30;
+            const bgWidth = mensaje.width + paddingX;
+            const bgHeight = mensaje.height + paddingY;
+
+            const fondoMensaje = scene.add.nineslice(
+                0, -80, 
+                'marco1', 0, 
+                bgWidth, bgHeight, 
+                10, 10, 10, 10
+            ).setOrigin(0.5);
+
+            container.add([fondoMensaje, mensaje]);
+        }
+
         appearance(container, scene)
         resolve(true)
     }catch (error) {

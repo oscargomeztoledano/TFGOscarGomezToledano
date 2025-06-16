@@ -158,7 +158,7 @@ export class MainMenuJugador extends Scene
         })
         if (data.openWorldSelect){
             this.buttonEnabledMain = false
-            worldSelect(this, JSON.parse(localStorage.getItem('usuario')))
+            worldSelect(this, JSON.parse(localStorage.getItem('usuario')), JSON.parse(localStorage.getItem('mundos')))
         }   
         const panelBienvenida = panelCarga(this, `HOLA ${JSON.parse(localStorage.getItem('usuario')).nombre.toUpperCase()}`)
         setTimeout(() => {
