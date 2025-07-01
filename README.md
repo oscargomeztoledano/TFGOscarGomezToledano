@@ -6,7 +6,7 @@ Este repositorio va a contener todo el desarrollo realizado, dese la obtención 
 ## 1. Backend o APIREST
 
 ------
-## 2. Frontend o Interfaz de Usuario y webassembly
+## 2. Frontend o Interfaz de Usuario 
 
 ------
 ## 3. Gamificación
